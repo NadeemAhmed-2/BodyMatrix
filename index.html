@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinetic Performance - Design System Launcher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Hanken+Grotesk:wght@400;600;800&family=JetBrains+Mono:wght@500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #131313;
+            --surface-low: #0e0e0e;
+            --surface: #201f1f;
+            --surface-high: #2a2a2a;
+            --primary: #ccff00;
+            --secondary: #ff5625;
+            --on-surface: #e5e2e1;
+            --on-surface-variant: #c4c9ac;
+            --outline: #8e9379;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--on-surface);
+            font-family: 'Hanken Grotesk', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            border-bottom: 2px solid var(--surface-high);
+            padding: 2rem;
+            position: relative;
+            background: linear-gradient(180deg, rgba(20,20,20,0.8) 0%, rgba(19,19,19,0.95) 100%);
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        h1 {
+            font-family: 'Anton', sans-serif;
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+            line-height: 1;
+        }
+
+        h1 span {
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(204, 255, 0, 0.3);
+        }
+
+        .tagline {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--on-surface-variant);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tagline .bullet {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 3rem;
+            flex: 1;
+        }
+
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .panel {
+            background-color: var(--surface-low);
+            border: 1px solid var(--surface-high);
+            border-radius: 4px;
+            padding: 2rem;
+        }
+
+        .panel-title {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--surface-high);
+            padding-bottom: 0.5rem;
+        }
+
+        .color-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .color-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .color-swatch {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .font-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .font-item h4 {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--primary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .font-item p {
+            font-size: 1.25rem;
+        }
+
+        .content-area h2 {
+            font-family: 'Anton', sans-serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--surface-low);
+            border: 1px solid var(--surface-high);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 10px rgba(204, 255, 0, 0.1);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .card-title {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .card:hover .card-title {
+            color: var(--primary);
+        }
+
+        .card-path {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--on-surface-variant);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .card-meta {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--surface-high);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .launch-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: gap 0.2s ease;
+        }
+
+        .card:hover .launch-btn {
+            gap: 0.5rem;
+        }
+
+        .icon {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 20px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        footer.site-footer {
+            border-top: 2px solid var(--surface-high);
+            padding: 2rem;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--on-surface-variant);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div>
+                <h1>Elite Fitness Architect <span>Launcher</span></h1>
+                <p class="tagline"><span class="bullet"></span> Kinetic Performance Engine v2.0</p>
+            </div>
+            <div>
+                <span class="icon" style="font-size: 2.5rem; color: var(--primary);">bolt</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <aside class="sidebar">
+            <div class="panel">
+                <h3 class="panel-title"><span class="icon">palette</span> Color Tokens</h3>
+                <div class="color-list">
+                    <div class="color-item">
+                        <div class="color-swatch" style="background-color: #131313;"></div>
+                        <div>
+                            <div>Surface (Main)</div>
+                            <div style="color: var(--on-surface-variant)">#131313</div>
+                        </div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch" style="background-color: #ccff00;"></div>
+                        <div>
+                            <div>Electric Lime</div>
+                            <div style="color: var(--on-surface-variant)">#CCFF00</div>
+                        </div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch" style="background-color: #ff5625;"></div>
+                        <div>
+                            <div>Blaze Orange</div>
+                            <div style="color: var(--on-surface-variant)">#FF5625</div>
+                        </div>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-swatch" style="background-color: #e5e2e1;"></div>
+                        <div>
+                            <div>On Surface</div>
+                            <div style="color: var(--on-surface-variant)">#E5E2E1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3 class="panel-title"><span class="icon">text_fields</span> Typography</h3>
+                <div class="font-list">
+                    <div class="font-item">
+                        <h4>Display & Headings</h4>
+                        <p style="font-family: 'Anton'; text-transform: uppercase;">Anton (Brutalist)</p>
+                    </div>
+                    <div class="font-item">
+                        <h4>Body Copy</h4>
+                        <p style="font-family: 'Hanken Grotesk'; font-weight: 600;">Hanken Grotesk</p>
+                    </div>
+                    <div class="font-item">
+                        <h4>Data & Labels</h4>
+                        <p style="font-family: 'JetBrains Mono';">JetBrains Mono</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="content-area">
+            <h2><span class="icon" style="color: var(--primary);">splitscreen</span> Gathered Screens (${11})</h2>
+            
+            <div class="grid">
+                <!-- Card 1 -->
+                <a href="screens/fuel_flow_auth_landing_rebuild.html" class="card" target="_blank">
+                    <div class="card-body">
+                        <div class="card-title">Fuel & Flow: Auth Landing Rebuild</div>
+                        <div class="card-path"><span class="icon" style="font-size: 14px;">description</span> fuel_flow_auth_landing_rebuild.html</div>
+                        <div class="card-meta">
+                            <span class="launch-btn">Open Page <span class="icon">arrow_forward</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 2 -->
+                <a href="screens/sign_up_start_the_grind.html" class="card" target="_blank">
+                    <div class="card-body">
+                        <div class="card-title">Sign Up: Start the Grind</div>
+                        <div class="card-path"><span class="icon" style="font-size: 14px;">description</span> sign_up_start_the_grind.html</div>
+                        <div class="card-meta">
+                            <span class="launch-btn">Open Page <span class="icon">arrow_forward</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 3 -->
+                <a href="screens/login_unleash_power.html" class="card" target="_blank">
+                    <div class="card-body">
+                        <div class="card-title">Login: Unleash Power</div>
+                        <div class="card-path"><span class="icon" style="font-size: 14px;">description</span> login_unleash_power.html</div>
+                        <div class="card-meta">
+                            <span class="launch-btn">Open Page <span class="icon">arrow_forward</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 4 -->
+                <a href="screens/train_hub_kinetic_rebuild.html" class="card" target="_blank">
+                    <div class="card-body">
+                        <div class="card-title">Train Hub: Kinetic Rebuild</div>
+                        <div class="card-path"><span class="icon" style="font-size: 14px;">description</span> train_hub_kinetic_rebuild.html</div>
+                        <div class="card-meta">
+                            <span class="launch-btn">Open Page <span class="icon">arrow_forward</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 5 -->
+                <a href="screens/verify_protocol.html" class="card" target="_blank">
+                    <div class="card-body">
+                        <div class="card-title">Verify Protocol</div>
+                        <div class="card-path"><span class="icon" style="font-size: 14px;">description</span> verify_protocol.html</div>
+                        <div class="card-meta">
+                            <span class="launch-btn">Open Page <span class="icon">arrow_forward</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 6 -->
+                <a href="screens/meal_lab_dynamic_plan.html" class="card" target="_blank">
+                    <div class="card-body">
+                        <div class="card-title">Meal Lab: Dynamic Plan</div>
+                        <div class="card-path"><span class="icon" style="font-size: 14px;">description</span> meal_lab_dynamic_plan.html</div>
+                        <div class="card-meta">
+                            <span class="launch-btn">Open Page <span class="icon">arrow_forward</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 7 -->
+                <a href="screens/home_control_mission_control.html" class="card" target="_blank">
+                    <div class="card-body">
+                        <div class="card-title">Home Control: Mission Control</div>
+                        <div class="card-path"><span class="icon" style="font-size: 14px;">description</span> home_control_mission_control.html</div>
+                        <div class="card-meta">
+                            <span class="launch-btn">Open Page <span class="icon">arrow_forward</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 8 -->
+                <a href="screens/fuel_calc_updated_nav_v2.html" class="card" target="_blank">
+                    <div class="card-body">
+                        <div class="card-title">Fuel Calc - Updated Nav v2</div>
+                        <div class="card-path"><span class="icon" style="font-size: 14px;">description</span> fuel_calc_updated_nav_v2.html</div>
+                        <div class="card-meta">
+                            <span class="launch-btn">Open Page <span class="icon">arrow_forward</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 9 -->
+                <a href="screens/meal_lab_precision_config_original_layout.html" class="card" target="_blank">
+                    <div class="card-body">
+                        <div class="card-title">Meal Lab: Precision Config Original Layout</div>
+                        <div class="card-path"><span class="icon" style="font-size: 14px;">description</span> meal_lab_precision_config_original_layout.html</div>
+                        <div class="card-meta">
+                            <span class="launch-btn">Open Page <span class="icon">arrow_forward</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 10 -->
+                <a href="screens/fuel_flow_performance_app.html" class="card" target="_blank">
+                    <div class="card-body">
+                        <div class="card-title">Fuel & Flow Performance App</div>
+                        <div class="card-path"><span class="icon" style="font-size: 14px;">description</span> fuel_flow_performance_app.html</div>
+                        <div class="card-meta">
+                            <span class="launch-btn">Open Page <span class="icon">arrow_forward</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 11 -->
+                <a href="screens/basic_profile_updated_metrics_nav.html" class="card" target="_blank">
+                    <div class="card-body">
+                        <div class="card-title">Basic Profile: Updated Metrics & Nav</div>
+                        <div class="card-path"><span class="icon" style="font-size: 14px;">description</span> basic_profile_updated_metrics_nav.html</div>
+                        <div class="card-meta">
+                            <span class="launch-btn">Open Page <span class="icon">arrow_forward</span></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        ELITE FITNESS ARCHITECT • KINETIC DESIGN SYSTEM
+    </footer>
+</body>
+</html>

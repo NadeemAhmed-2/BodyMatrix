@@ -1,0 +1,213 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Elite Fit - Verify Identity</title>
+<!-- Google Fonts: Anton for headers, Hanken Grotesk for body, JetBrains Mono for technical text -->
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Hanken+Grotesk:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Subtle inner glow for primary buttons as per style guidance */
+    .btn-glow {
+      box-shadow: inset 0 0 12px rgba(195, 244, 0, 0.4);
+    }
+    /* High-contrast focus state */
+    .input-glow:focus {
+      outline: none;
+      box-shadow: 0 0 15px rgba(195, 244, 0, 0.3);
+      border-color: #c3f400;
+    }
+    /* Dramatic shadow overlay for background image */
+    .vignette-overlay {
+      background: radial-gradient(circle, transparent 20%, #131313 100%);
+    }
+    /* Custom animation for code input */
+    @keyframes pulse-border {
+      0% { border-color: #444933; }
+      50% { border-color: #c3f400; }
+      100% { border-color: #444933; }
+    }
+    .input-pulse:focus {
+      animation: pulse-border 2s infinite;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "outline-variant": "#444933",
+                  "on-primary-fixed-variant": "#3c4d00",
+                  "tertiary-container": "#d2e5f5",
+                  "secondary-fixed": "#ffdbd1",
+                  "secondary-container": "#ff5625",
+                  "surface-bright": "#393939",
+                  "primary": "#ffffff",
+                  "on-tertiary": "#21323e",
+                  "on-background": "#e5e2e1",
+                  "outline": "#8e9379",
+                  "surface-dim": "#131313",
+                  "on-secondary-fixed-variant": "#872000",
+                  "inverse-surface": "#e5e2e1",
+                  "on-tertiary-fixed": "#0b1d29",
+                  "surface-container-high": "#2a2a2a",
+                  "background": "#131313",
+                  "surface": "#131313",
+                  "error": "#ffb4ab",
+                  "on-secondary-fixed": "#3b0900",
+                  "surface-container-low": "#1c1b1b",
+                  "on-surface": "#e5e2e1",
+                  "on-primary-fixed": "#161e00",
+                  "surface-container-lowest": "#0e0e0e",
+                  "primary-fixed": "#c3f400",
+                  "on-primary-container": "#556d00",
+                  "tertiary-fixed": "#d2e5f5",
+                  "secondary": "#ffb5a0",
+                  "secondary-fixed-dim": "#ffb5a0",
+                  "inverse-on-surface": "#313030",
+                  "surface-container": "#201f1f",
+                  "on-primary": "#283500",
+                  "on-error": "#690005",
+                  "on-secondary": "#601400",
+                  "surface-tint": "#abd600",
+                  "tertiary-fixed-dim": "#b6c9d8",
+                  "on-error-container": "#ffdad6",
+                  "surface-container-highest": "#353534",
+                  "tertiary": "#ffffff",
+                  "inverse-primary": "#506600",
+                  "on-tertiary-container": "#556774",
+                  "error-container": "#93000a"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0px",
+                  "lg": "0.25rem",
+                  "xl": "0.5rem",
+                  "full": "0.75rem"
+          },
+          "spacing": {
+                  "stack-lg": "32px",
+                  "stack-sm": "4px",
+                  "gutter": "16px",
+                  "container-padding": "20px",
+                  "stack-md": "12px",
+                  "base": "8px"
+          },
+          "fontFamily": {
+                  "headline-lg-mobile": ["Anton"],
+                  "display-xl": ["Anton"],
+                  "body-md": ["Hanken Grotesk"],
+                  "headline-lg": ["Anton"],
+                  "label-sm": ["JetBrains Mono"]
+          },
+          "fontSize": {
+                  "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+                  "display-xl": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                  "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                  "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "400"}],
+                  "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Top Navigation Shell (Suppressed Nav, but showing Brand Anchor) -->
+<header class="bg-background border-b border-outline-variant/30 flex justify-between items-center w-full px-container-padding py-stack-md h-20 fixed top-0 left-0 z-50">
+<div class="flex items-center gap-4">
+<button class="w-12 h-12 flex items-center justify-center text-primary-fixed hover:bg-surface-variant/20 transition-colors rounded-full active:scale-95 duration-100">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-display-xl text-[24px] md:text-display-xl text-primary-fixed tracking-tight italic uppercase">ELITE FIT</h1>
+</div>
+<div class="flex items-center">
+<button class="w-12 h-12 flex items-center justify-center text-on-surface-variant hover:bg-surface-variant/20 transition-colors rounded-full active:scale-95 duration-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow flex flex-col justify-center items-center relative px-container-padding pt-24 pb-12 overflow-hidden">
+<!-- Hero Background Image (Atmospheric Background) -->
+<div class="absolute inset-0 z-0">
+<img alt="Atmospheric gym background" class="w-full h-full object-cover grayscale opacity-20" data-alt="A gritty, high-intensity gym environment captured in low light with dramatic, harsh shadows. A muscular athlete is depicted in a moment of intense focus, surrounded by industrial gym equipment like iron plates and steel racks. The lighting is cold and cinematic, featuring a primary light source from above that creates sharp highlights on the skin. The global color palette is dominated by deep blacks and cool grays, accented with electric lime green glows reflecting off metallic surfaces to maintain a modern, premium fitness aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX6LRwVyhAD0xvTwUVxOZYOfJJNZK6jysWSqFEVMjq-1D9yOqUezUTVZnOsNlQRSOiVN_bs-5BXuJx1S2-DLJEEHRb6hRifzQP5-CE0b7osUTFg990ix1eyLILsTyA9qrU_44w0X50Z7V-rywLnGydd6PN4OQ0hJJeSKJ6Q94_QQTpJXfyyMzUsRZCpuZgs6EVfN0SuHc5DpVxPT3TSJ4GvRe-jfgAraYn7ayXu63DGXwXA-W2G4bcU_g5T6NahFBajpa-C3VaOgqU">
+<div class="absolute inset-0 vignette-overlay"></div>
+</div>
+<!-- Verification Card -->
+<section class="relative z-10 w-full max-w-md bg-surface-container-low/40 backdrop-blur-md p-8 border border-outline-variant/20 shadow-2xl">
+<div class="text-center mb-10">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary-fixed italic uppercase mb-stack-md tracking-wider">
+          VERIFY YOUR IDENTITY
+        </h2>
+<p class="text-on-surface-variant font-body-md max-w-[280px] mx-auto leading-relaxed">
+          We've sent a code to your email. Enter it below to unlock your protocol.
+        </p>
+</div>
+<!-- Verification Code Inputs -->
+<form class="space-y-10" id="verify-form">
+<div class="flex justify-between gap-4">
+<input class="w-16 h-20 bg-surface-container-highest border-b-4 border-outline-variant text-center font-headline-lg text-primary-fixed focus:border-primary-fixed input-glow transition-all input-pulse" maxlength="1" required="" type="text">
+<input class="w-16 h-20 bg-surface-container-highest border-b-4 border-outline-variant text-center font-headline-lg text-primary-fixed focus:border-primary-fixed input-glow transition-all input-pulse" maxlength="1" required="" type="text">
+<input class="w-16 h-20 bg-surface-container-highest border-b-4 border-outline-variant text-center font-headline-lg text-primary-fixed focus:border-primary-fixed input-glow transition-all input-pulse" maxlength="1" required="" type="text">
+<input class="w-16 h-20 bg-surface-container-highest border-b-4 border-outline-variant text-center font-headline-lg text-primary-fixed focus:border-primary-fixed input-glow transition-all input-pulse" maxlength="1" required="" type="text">
+</div>
+<div class="space-y-6">
+<button class="w-full h-16 bg-primary-fixed text-on-primary-fixed font-headline-lg text-[20px] uppercase italic tracking-widest btn-glow hover:bg-primary-fixed-dim active:scale-[0.98] transition-all duration-200" type="submit">
+            VERIFY
+          </button>
+<div class="flex flex-col items-center gap-2">
+<button class="group text-on-surface-variant hover:text-primary-fixed transition-colors flex items-center gap-2" type="button">
+<span class="font-label-sm text-label-sm">RESEND CODE</span>
+<span class="material-symbols-outlined text-[18px] group-hover:rotate-180 transition-transform duration-500">refresh</span>
+</button>
+</div>
+</div>
+</form>
+</section>
+<!-- Footer Identity -->
+<div class="mt-auto relative z-10 py-stack-lg text-center opacity-40">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-[0.3em]">
+        SECURE ACCESS GRANTED • EST. MMXXIV
+      </p>
+</div>
+</main>
+<!-- Interactive Logic for code inputs -->
+<script>
+    const inputs = document.querySelectorAll('#verify-form input');
+    
+    inputs.forEach((input, index) => {
+      input.addEventListener('keyup', (e) => {
+        if (e.key >= 0 && e.key <= 9) {
+          if (index < inputs.length - 1) {
+            inputs[index + 1].focus();
+          }
+        } else if (e.key === "Backspace") {
+          if (index > 0) {
+            inputs[index - 1].focus();
+          }
+        }
+      });
+
+      // Select text on focus for easier editing
+      input.addEventListener('focus', () => input.select());
+    });
+
+    document.getElementById('verify-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const code = Array.from(inputs).map(i => i.value).join('');
+      console.log("Verifying code:", code);
+      // Logic for verification would go here
+    });
+  </script>
+</body></html>

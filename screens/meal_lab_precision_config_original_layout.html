@@ -1,0 +1,286 @@
+<!DOCTYPE html><html class="dark" lang="en" style="width: 390px; height: 1339px; overflow: hidden; position: relative;"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Fuel &amp; Flow - Nutrition Architecture</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Hanken Grotesk', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .active-lime-glow {
+            box-shadow: inset 0 0 15px rgba(195, 244, 0, 0.2);
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .bg-mesh-dark {
+            background-image: radial-gradient(circle at 2px 2px, #2a2a2a 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-lowest": "#0e0e0e",
+                      "surface-container-high": "#2a2a2a",
+                      "on-tertiary": "#21323e",
+                      "surface-bright": "#393939",
+                      "tertiary-fixed": "#d2e5f5",
+                      "surface-tint": "#abd600",
+                      "on-error": "#690005",
+                      "surface-variant": "#353534",
+                      "tertiary-fixed-dim": "#b6c9d8",
+                      "background": "#131313",
+                      "primary": "#ffffff",
+                      "on-secondary-fixed": "#3b0900",
+                      "on-secondary-container": "#541100",
+                      "tertiary-container": "#d2e5f5",
+                      "on-primary-fixed-variant": "#3c4d00",
+                      "inverse-primary": "#506600",
+                      "primary-fixed-dim": "#abd600",
+                      "secondary-fixed": "#ffdbd1",
+                      "on-surface": "#e5e2e1",
+                      "surface": "#131313",
+                      "surface-container-low": "#1c1b1b",
+                      "surface-container": "#201f1f",
+                      "on-tertiary-fixed-variant": "#374956",
+                      "error-container": "#93000a",
+                      "primary-container": "#c3f400",
+                      "tertiary": "#ffffff",
+                      "surface-container-highest": "#353534",
+                      "on-tertiary-container": "#556774",
+                      "on-background": "#e5e2e1",
+                      "on-secondary-fixed-variant": "#872000",
+                      "on-primary-fixed": "#161e00",
+                      "inverse-on-surface": "#313030",
+                      "on-primary-container": "#556d00",
+                      "on-error-container": "#ffdad6",
+                      "inverse-surface": "#e5e2e1",
+                      "secondary-container": "#ff5625",
+                      "on-tertiary-fixed": "#0b1d29",
+                      "secondary": "#ffb5a0",
+                      "outline": "#8e9379",
+                      "on-surface-variant": "#c4c9ac",
+                      "on-secondary": "#601400",
+                      "error": "#ffb4ab",
+                      "secondary-fixed-dim": "#ffb5a0",
+                      "surface-dim": "#131313",
+                      "on-primary": "#283500",
+                      "primary-fixed": "#c3f400",
+                      "outline-variant": "#444933"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-sm": "4px",
+                      "gutter": "16px",
+                      "stack-md": "12px",
+                      "container-padding": "20px",
+                      "stack-lg": "32px",
+                      "base": "8px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Anton"],
+                      "display-xl": ["Anton"],
+                      "body-md": ["Hanken Grotesk"],
+                      "label-sm": ["JetBrains Mono"],
+                      "headline-lg": ["Anton"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+                      "display-xl": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-mesh-dark min-h-screen flex flex-col">
+<!-- Top Navigation Anchor -->
+<header class="bg-surface sticky top-0 z-40 w-full">
+<div class="flex items-center justify-between px-container-padding py-base w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary-fixed" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile tracking-tighter text-primary-container">FUEL &amp; FLOW</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional close-up portrait of a high-performance athlete in a dimly lit, high-contrast gym setting. The lighting is dramatic, highlighting muscle definition with sharp shadows. The athlete has a focused and determined expression, wearing sleek black performance gear. The overall aesthetic is dark, gritty, and premium, consistent with a high-end fitness brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn7DjW2odvc0kpM1tqV__93dgbPmg48ke4y2V9w32XWYeFfn3V73edxnL6c1RA9WrRX4Q27vFDQMNsu-rmye9ZD3KB-mNW04o6bQqdbU-45Ln8ItoRv-RJJHee-e3N-2XDj1Fg3AinJQRGWwZxUSdHs77Eb_NaZf5T0O6STskKzzU0ekOO3pHj3hCBJnU9WcYCoyZvRcdrGZBR88d_Vz-SlndMGEG2jNKF7P617Bhix30bQXykfW75UNgiMBayMlZaZVZNFvG-GI1k">
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-2xl mx-auto px-container-padding pt-stack-lg pb-32">
+<!-- Section Header -->
+<div class="mb-stack-lg">
+<h1 class="font-display-xl text-display-xl uppercase italic text-primary leading-none mb-base">NUTRITION<br>ARCHITECTURE</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-[0.2em]">MEAL LAB // SYSTEM CONFIGURATION</p>
+</div>
+<form class="space-y-10">
+<!-- Calorie Input Section -->
+<section class="space-y-base">
+<div class="flex justify-between items-end border-b border-outline-variant pb-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase">TARGET CALORIES</label>
+<!-- Per Day / Per Week Segmented Control -->
+<div class="flex bg-surface-container p-1 rounded-none border border-outline-variant"><button class="px-4 py-1 font-label-sm text-label-sm bg-primary-container text-on-primary-container transition-all" onclick="updateFrequency(this, 'LOW')" type="button">LOW</button><button class="px-4 py-1 font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-all" onclick="updateFrequency(this, 'HIGH')" type="button">HIGH</button></div>
+</div>
+<div class="relative group">
+<input class="w-full bg-transparent border-none p-0 font-display-xl text-[80px] leading-none text-primary-fixed focus:ring-0 placeholder:text-surface-container-high" placeholder="0000" type="number" value="2850">
+<span class="absolute bottom-4 right-0 font-display-xl text-headline-lg-mobile text-on-surface-variant opacity-30 italic uppercase">KCAL</span>
+<div class="absolute -bottom-1 left-0 w-full h-[2px] bg-outline-variant group-focus-within:bg-primary-container transition-colors shadow-[0_0_10px_rgba(195,244,0,0.4)]"></div>
+</div>
+</section>
+<!-- Meal Frequency Chips -->
+<section class="space-y-stack-lg">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest block border-l-4 border-primary-container pl-3">NUMBER OF MEALS PER DAY</label>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-base">
+<button class="meal-chip group border border-outline-variant p-stack-lg text-center transition-all hover:border-primary-container active:scale-95 bg-surface-container-low" onclick="selectMealCount(this, '1')" type="button">
+<span class="block font-display-xl text-headline-lg group-[.active]:text-on-primary-container">01</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-[.active]:text-on-primary-container">SOLO</span>
+</button>
+<button class="meal-chip group border border-outline-variant p-stack-lg text-center transition-all hover:border-primary-container active:scale-95 bg-surface-container-low" onclick="selectMealCount(this, '2')" type="button">
+<span class="block font-display-xl text-headline-lg group-[.active]:text-on-primary-container">02</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-[.active]:text-on-primary-container">DUAL</span>
+</button>
+<button class="meal-chip group border border-primary-container active p-stack-lg text-center transition-all bg-primary-container" onclick="selectMealCount(this, '3')" type="button">
+<span class="block font-display-xl text-headline-lg text-on-primary-container">03</span>
+<span class="font-label-sm text-label-sm text-on-primary-container">TRIAD</span>
+</button>
+<button class="meal-chip group border border-outline-variant p-stack-lg text-center transition-all hover:border-primary-container active:scale-95 bg-surface-container-low" onclick="selectMealCount(this, '4')" type="button">
+<span class="block font-display-xl text-headline-lg group-[.active]:text-on-primary-container">04+</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-[.active]:text-on-primary-container">EXPERT</span>
+</button>
+</div>
+</section>
+<!-- Dietary Priority Cards (Bento Style) -->
+<section class="space-y-stack-lg">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest block border-l-4 border-outline-variant pl-3">DIETARY PROFILE</label>
+<div class="grid grid-cols-2 gap-base">
+<button class="meal-chip group border border-primary-container active p-stack-lg text-center transition-all bg-primary-container" onclick="selectMealCount(this, 'VEG')" type="button">
+<span class="block font-display-xl text-headline-lg text-on-primary-container">VEG</span>
+<span class="font-label-sm text-label-sm text-on-primary-container">VEGETARIAN</span>
+</button>
+<button class="meal-chip group border border-outline-variant p-stack-lg text-center transition-all hover:border-primary-container active:scale-95 bg-surface-container-low" onclick="selectMealCount(this, 'NON-VEG')" type="button">
+<span class="block font-display-xl text-headline-lg group-[.active]:text-on-primary-container">NON</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-[.active]:text-on-primary-container">NON-VEGETARIAN</span>
+</button>
+</div>
+</section><section class="space-y-stack-lg">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest block border-l-4 border-outline-variant pl-3">REGIONAL ARCHITECTURE</label>
+<div class="grid grid-cols-2 gap-base">
+<button class="meal-chip group border border-outline-variant p-stack-lg text-center transition-all hover:border-primary-container active:scale-95 bg-surface-container-low" onclick="selectMealCount(this, 'NORTH')" type="button">
+<span class="block font-display-xl text-headline-lg group-[.active]:text-on-primary-container">NORTH</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-[.active]:text-on-primary-container">INDIAN</span>
+</button>
+<button class="meal-chip group border border-outline-variant p-stack-lg text-center transition-all hover:border-primary-container active:scale-95 bg-surface-container-low" onclick="selectMealCount(this, 'SOUTH')" type="button">
+<span class="block font-display-xl text-headline-lg group-[.active]:text-on-primary-container">SOUTH</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-[.active]:text-on-primary-container">INDIAN</span>
+</button>
+</div>
+</section></form>
+<div class="mt-stack-lg px-container-padding">
+  <button class="w-full bg-primary-container py-stack-lg border-none active:scale-95 transition-all shadow-[0_0_20px_rgba(195,244,0,0.3)] group" type="submit" onclick="this.querySelector('span').innerText = 'GENERATING...'; setTimeout(() =&gt; { this.querySelector('span').innerText = 'PLAN GENERATED'; this.classList.replace('bg-primary-container', 'bg-surface-container-highest'); }, 1500);">
+    <span class="font-display-xl text-headline-lg text-on-primary-container uppercase italic tracking-widest">GENERATE PLAN</span>
+  </button>
+</div></main>
+<!-- Fixed Action Bar -->
+<!-- Bottom Navigation Shell (Consistent with Shared Components) -->
+<nav class="fixed bottom-0 left-0 w-full bg-surface-container z-[60] flex justify-around items-center px-base py-stack-sm border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-stack-sm hover:bg-surface-container-highest transition-all active:scale-90" href="/home">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">HOME</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-stack-sm hover:bg-surface-container-highest transition-all active:scale-90" href="/calculator">
+<span class="material-symbols-outlined">calculate</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">CALC</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-stack-sm hover:bg-surface-container-highest transition-all active:scale-90" href="/training">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">TRAIN</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-none p-stack-sm active:scale-90" href="/nutrition">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">FUEL</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-stack-sm hover:bg-surface-container-highest transition-all active:scale-90" href="/profile">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">ME</span>
+</a>
+</nav>
+<script>
+        function selectMealCount(element, count) {
+            // Remove active classes from all chips
+            document.querySelectorAll('.meal-chip').forEach(chip => {
+                chip.classList.remove('active', 'border-primary-container', 'bg-primary-container');
+                chip.classList.add('border-outline-variant', 'bg-surface-container-low');
+                
+                // Reset text colors within chip
+                const labels = chip.querySelectorAll('span');
+                labels[0].classList.remove('text-on-primary-container');
+                labels[1].classList.remove('text-on-primary-container');
+                labels[1].classList.add('text-on-surface-variant');
+            });
+
+            // Set active state for clicked chip
+            element.classList.add('active', 'border-primary-container', 'bg-primary-container');
+            element.classList.remove('border-outline-variant', 'bg-surface-container-low');
+            
+            const labels = element.querySelectorAll('span');
+            labels[0].classList.add('text-on-primary-container');
+            labels[1].classList.add('text-on-primary-container');
+            labels[1].classList.remove('text-on-surface-variant');
+        }
+
+        function updateFrequency(element, type) {
+            const container = element.parentElement;
+            const buttons = container.querySelectorAll('button');
+            
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-primary-container', 'text-on-primary-container');
+                btn.classList.add('text-on-surface-variant', 'hover:text-primary');
+            });
+
+            element.classList.add('bg-primary-container', 'text-on-primary-container');
+            element.classList.remove('text-on-surface-variant', 'hover:text-primary');
+        }
+    </script>
+
+
+
+
+</body></html>

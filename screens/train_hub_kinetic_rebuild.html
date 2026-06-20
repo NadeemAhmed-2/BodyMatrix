@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en" style="scroll-behavior: smooth;"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KINETIC - Train Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Hanken+Grotesk:wght@300;400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#ccff00",
+                    "on-primary-container": "#161e00",
+                    "primary": "#ffffff",
+                    "background": "#0e0e0e",
+                    "surface": "#131313",
+                    "surface-container": "#1c1b1b",
+                    "surface-container-high": "#2a2a2a",
+                    "surface-container-highest": "#353534",
+                    "on-background": "#e5e2e1",
+                    "on-surface": "#e5e2e1",
+                    "on-surface-variant": "#c4c9ac",
+                    "outline": "#8e9379",
+                    "outline-variant": "#444933",
+                    "secondary-container": "#ff5625",
+                    "primary-fixed": "#ccff00",
+                    "primary-fixed-dim": "#abd600"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0px",
+                    "lg": "0px",
+                    "xl": "0px",
+                    "full": "0px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "container-padding": "20px",
+                    "stack-sm": "4px",
+                    "stack-lg": "32px",
+                    "gutter": "16px",
+                    "stack-md": "12px"
+            },
+            "fontFamily": {
+                    "label-sm": ["JetBrains Mono"],
+                    "display-xl": ["Anton"],
+                    "headline-lg": ["Anton"],
+                    "headline-lg-mobile": ["Anton"],
+                    "body-md": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "display-xl": ["48px", {"lineHeight": "44px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                    "headline-lg": ["36px", {"lineHeight": "36px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .kinetic-border {
+            border-left: 4px solid #ccff00;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0e0e0e; }
+        ::-webkit-scrollbar-thumb { background: #ccff00; }
+        
+        .active-nav {
+            background-color: #ccff00 !important;
+            color: #161e00 !important;
+        }
+        .active-nav .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        @keyframes kinetic-pulse {
+            0% { box-shadow: 0 0 0px 0px rgba(204, 255, 0, 0.4); }
+            50% { box-shadow: 0 0 24px 8px rgba(204, 255, 0, 0.7); }
+            100% { box-shadow: 0 0 0px 0px rgba(204, 255, 0, 0.4); }
+        }
+
+        .kinetic-pulse-active {
+            animation: kinetic-pulse 1.5s infinite ease-in-out;
+            z-index: 10;
+        }
+
+        @keyframes shimmer-fast {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .shimmer-active {
+            background: linear-gradient(90deg, #ccff00 0%, #e0ff66 50%, #ccff00 100%);
+            background-size: 200% 100%;
+            animation: shimmer-fast 2s infinite linear;
+        }
+
+        @keyframes video-sim-loop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .video-sim-img {
+            animation: video-sim-loop 15s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container overflow-hidden h-screen flex flex-col">
+<!-- Top App Bar -->
+<header class="bg-background/95 backdrop-blur-md z-50 border-b border-white/10">
+<div class="flex items-center justify-between px-container-padding py-base w-full max-w-7xl mx-auto">
+<button class="w-10 h-10 flex items-center justify-center active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-on-background">menu</span>
+</button>
+<div class="flex flex-col items-center">
+<h1 class="font-headline-lg-mobile text-[24px] tracking-tighter text-primary-container leading-none">TRAIN HUB</h1>
+<span class="font-label-sm text-[9px] tracking-[0.3em] opacity-50 uppercase">Kinetic Performance</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center active:scale-95 transition-transform relative">
+<span class="material-symbols-outlined text-on-background">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-secondary-container rounded-full"></span>
+</button>
+</div>
+</header>
+<!-- Main Scrollable Content -->
+<main class="flex-1 overflow-y-auto pb-32">
+<!-- Hero Section -->
+<section class="relative h-[300px] overflow-hidden">
+<img alt="High Performance Training" class="w-full h-full object-cover grayscale opacity-60" src="https://lh3.googleusercontent.com/aida/AP1WRLvQrRN1BzciJrejbjQWv4-NIMQya00fiDN8Y26Cbrx2xJClRKtNIBbEwFaCQoJhjH-t98QONSWpokfbbQ5VxlV5iw2FYAsMbBDGHuHUjQRIDwqidwh1XF8ZHOweHsp2a0YbmJ4JIfCJbv3a9ihy_Twa4KbmKkDAaZy1lS6TEmigt3YNLUHNA6QUzsGiT1mB4cUWjRDFQpLhWopasd-s7HHlWxoqBG2_ZY7IRE_kIsave4bP4Co-KDEjjPSL"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
+<div class="absolute bottom-stack-lg left-container-padding right-container-padding">
+<p class="font-label-sm text-label-sm text-primary-container uppercase tracking-[0.2em] mb-1">Current Protocol</p>
+<h2 class="font-display-xl text-display-xl uppercase italic tracking-tighter leading-none mb-4">REBIRTH<br/>PHASE I</h2>
+<!-- Muscle Focus Tabs - Hero Integration -->
+<div class="flex gap-2">
+<button class="flex-1 py-3 px-2 bg-primary-container text-on-primary-container kinetic-pulse-active flex flex-col items-center justify-center active:scale-95 transition-all" id="focus-chest">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+<span class="font-label-sm text-[10px] mt-1">CHEST</span>
+</button>
+<button class="flex-1 py-3 px-2 bg-surface-container-highest text-on-surface-variant flex flex-col items-center justify-center active:scale-95 transition-all" id="focus-back">
+<span class="material-symbols-outlined text-[20px]">back_hand</span>
+<span class="font-label-sm text-[10px] mt-1">BACK</span>
+</button>
+<button class="flex-1 py-3 px-2 bg-surface-container-highest text-on-surface-variant flex flex-col items-center justify-center active:scale-95 transition-all" id="focus-legs">
+<span class="material-symbols-outlined text-[20px]">directions_run</span>
+<span class="font-label-sm text-[10px] mt-1">LEGS</span>
+</button>
+<button class="flex-1 py-3 px-2 bg-surface-container-highest text-on-surface-variant flex flex-col items-center justify-center active:scale-95 transition-all" id="focus-arms">
+<span class="material-symbols-outlined text-[20px]">accessibility_new</span>
+<span class="font-label-sm text-[10px] mt-1">ARMS</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Configuration -->
+<section class="px-container-padding py-stack-lg space-y-gutter">
+<div class="grid grid-cols-2 gap-gutter">
+<div class="bg-surface-container p-4 border border-white/5 kinetic-border">
+<p class="font-label-sm text-[10px] text-on-surface-variant mb-2 uppercase">ENVIRONMENT</p>
+<div class="flex bg-black/40 p-1">
+<button class="flex-1 py-2 font-label-sm text-[11px] bg-primary-container text-on-primary-container active:scale-95 transition-all" id="gym-toggle">GYM</button>
+<button class="flex-1 py-2 font-label-sm text-[11px] text-on-surface-variant active:scale-95 transition-all" id="home-toggle">HOME</button>
+</div>
+</div>
+<div class="bg-surface-container p-4 border border-white/5 kinetic-border">
+<p class="font-label-sm text-[10px] text-on-surface-variant mb-2 uppercase">DURATION</p>
+<div class="flex bg-black/40 p-1">
+<button class="flex-1 py-2 font-label-sm text-[11px] text-on-surface-variant active:scale-95 transition-all" id="dur-short">30M</button>
+<button class="flex-1 py-2 font-label-sm text-[11px] bg-primary-container text-on-primary-container active:scale-95 transition-all" id="dur-med">45M</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Exercise List -->
+<section class="px-container-padding space-y-gutter">
+<div class="flex items-center justify-between border-b border-primary-container/30 pb-2">
+<h3 class="font-headline-lg text-headline-lg-mobile tracking-tighter uppercase italic">EXERCISES</h3>
+<span class="font-label-sm text-primary-container">4 TOTAL</span>
+</div>
+<!-- Card 1 -->
+<div class="group bg-surface-container border border-white/5 overflow-hidden">
+<div class="flex">
+<div class="w-1/3 aspect-square bg-black overflow-hidden">
+<img alt="Incline Barbell Press" class="w-full h-full object-cover grayscale opacity-80 video-sim-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8BcHjPMJ-P4XPR9rU0AOJXBrpL2NLP9xiC2O7m5XTokoXEWgP0HfjAFBadOKgrS47_l0zhB1I9qCGbH65ut3xkKvLF6IND1L6v6hJ82C8iu-aYeBPNoDy-MzfawtJ4R3kl0UgSy5C_bGqyrSMwTJCAsxPnXXnFYS_XJqLnCxPQY8xXWP8XheywC-Fa1EA2lidvPoVU6UCIuNVkzKx_ToIgpFDXSDrvYsJYDgDOQ6uKGhcYoFEzFzMz5FYcQ9vvV_lIL5FeVS4MqSC"/>
+</div>
+<div class="flex-1 p-4 flex flex-col justify-center">
+<span class="font-label-sm text-[9px] text-primary-container tracking-widest uppercase mb-1">UPPER CHEST</span>
+<h4 class="font-headline-lg-mobile text-[20px] leading-tight uppercase tracking-tighter mb-2">INCLINE BARBELL PRESS</h4>
+<div class="flex gap-4">
+<div>
+<p class="text-[9px] font-label-sm text-on-surface-variant">SETS</p>
+<p class="font-headline-lg text-[18px]">4</p>
+</div>
+<div>
+<p class="text-[9px] font-label-sm text-on-surface-variant">REPS</p>
+<p class="font-headline-lg text-[18px]">10</p>
+</div>
+<div>
+<p class="text-[9px] font-label-sm text-on-surface-variant">RPE</p>
+<p class="font-headline-lg text-[18px]">8.5</p>
+</div>
+</div>
+</div>
+<button class="w-12 flex items-center justify-center text-on-surface-variant active:text-primary-container active:scale-95 transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-surface-container border border-white/5 overflow-hidden">
+<div class="flex">
+<div class="w-1/3 aspect-square bg-black overflow-hidden">
+<img alt="Cable Crossovers" class="w-full h-full object-cover grayscale opacity-80 video-sim-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBweeoRkI1u6536lw-sr_JRc3cHz0btehzihJUoO1LLNxm9VvD_d1tF2UbDPi0pg6j63WFTl49m_natGSs66AAMC8aVhTobP3G3WI5-NwWo1mbOaFSTHNOHkVE_L_ZNfm6mLuw9MZO-zZJN38MYTtC8G9w5h8oZ3dSRC9EOGhaYENH34L1j_uA8hygusj7uBp8nCcirmqvDeJjBqYRphowqRoPgaShS0XYvrMK8MFxm_fByzTBUVtmAZaE7D9X7qJueYhcX0Km0mqjB"/>
+</div>
+<div class="flex-1 p-4 flex flex-col justify-center">
+<span class="font-label-sm text-[9px] text-primary-container tracking-widest uppercase mb-1">INNER CHEST</span>
+<h4 class="font-headline-lg-mobile text-[20px] leading-tight uppercase tracking-tighter mb-2">CABLE CROSSOVERS</h4>
+<div class="flex gap-4">
+<div>
+<p class="text-[9px] font-label-sm text-on-surface-variant">SETS</p>
+<p class="font-headline-lg text-[18px]">3</p>
+</div>
+<div>
+<p class="text-[9px] font-label-sm text-on-surface-variant">REPS</p>
+<p class="font-headline-lg text-[18px]">15</p>
+</div>
+<div>
+<p class="text-[9px] font-label-sm text-on-surface-variant">RPE</p>
+<p class="font-headline-lg text-[18px]">9.0</p>
+</div>
+</div>
+</div>
+<button class="w-12 flex items-center justify-center text-on-surface-variant active:text-primary-container active:scale-95 transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group bg-surface-container border border-white/5 overflow-hidden">
+<div class="flex">
+<div class="w-1/3 aspect-square bg-black overflow-hidden">
+<img alt="Dumbbell Flat Press" class="w-full h-full object-cover grayscale opacity-80 video-sim-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmqhWSePDo2sdg-o_OxKuTa702HJbEL2b0Oow851pZEbCwXqeI6tlJGDeM6P5vzpOf__ET1O3_xlB3guGkKRLSQCjdccDxKThUGUXtol19AghEVQ-GAVxfcXaJ-lvzwWjfIdsmQpNSa-Psv1VH_5aQJmhC_E5TtXI2RcY-hMTAFRVx-surcPqkT5RX40rLGaN9Yp8xlf80EAQGKm3pmB7YykNGNQ5wYa2NZYEE89L40y75lLSFlzdfyl-S93R2akrBsAI_1eHDeUJe"/>
+</div>
+<div class="flex-1 p-4 flex flex-col justify-center">
+<span class="font-label-sm text-[9px] text-primary-container tracking-widest uppercase mb-1">MID CHEST</span>
+<h4 class="font-headline-lg-mobile text-[20px] leading-tight uppercase tracking-tighter mb-2">DUMBBELL FLAT PRESS</h4>
+<div class="flex gap-4">
+<div>
+<p class="text-[9px] font-label-sm text-on-surface-variant">SETS</p>
+<p class="font-headline-lg text-[18px]">4</p>
+</div>
+<div>
+<p class="text-[9px] font-label-sm text-on-surface-variant">REPS</p>
+<p class="font-headline-lg text-[18px]">12</p>
+</div>
+<div>
+<p class="text-[9px] font-label-sm text-on-surface-variant">RPE</p>
+<p class="font-headline-lg text-[18px]">8.0</p>
+</div>
+</div>
+</div>
+<button class="w-12 flex items-center justify-center text-on-surface-variant active:text-primary-container active:scale-95 transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Primary CTA -->
+<button class="fixed bottom-24 right-container-padding left-container-padding h-14 z-[60] shimmer-active text-on-primary-container flex items-center justify-center gap-base font-label-sm text-[14px] uppercase font-bold tracking-[0.3em] shadow-[0_0_40px_rgba(204,255,0,0.4)] active:scale-95 transition-all group" onclick="window.location.href='#generate'">
+<span class="material-symbols-outlined group-hover:rotate-180 transition-transform duration-700">sync</span>
+<span>INITIALIZE PROTOCOL</span>
+</button>
+<!-- Bottom Navigation Bar -->
+<nav class="w-full z-[70] flex justify-around items-center px-2 py-2 bg-background/95 backdrop-blur-xl border-t border-white/10">
+<a class="flex flex-col items-center justify-center p-2 text-on-surface-variant transition-colors active:scale-95" href="{{DATA:SCREEN:SCREEN_56}}">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="font-label-sm text-[9px] mt-1 tracking-tighter">HOME</span>
+</a>
+<a class="flex flex-col items-center justify-center p-2 text-on-surface-variant transition-colors active:scale-95" href="{{DATA:SCREEN:SCREEN_60}}">
+<span class="material-symbols-outlined text-[24px]">calculate</span>
+<span class="font-label-sm text-[9px] mt-1 tracking-tighter">CALC</span>
+</a>
+<a class="flex flex-col items-center justify-center p-2 active-nav px-4 active:scale-95" href="{{DATA:SCREEN:SCREEN_21}}">
+<span class="material-symbols-outlined text-[24px]">fitness_center</span>
+<span class="font-label-sm text-[9px] mt-1 tracking-tighter">TRAIN</span>
+</a>
+<a class="flex flex-col items-center justify-center p-2 text-on-surface-variant transition-colors active:scale-95" href="{{DATA:SCREEN:SCREEN_46}}">
+<span class="material-symbols-outlined text-[24px]">restaurant</span>
+<span class="font-label-sm text-[9px] mt-1 tracking-tighter">FUEL</span>
+</a>
+<a class="flex flex-col items-center justify-center p-2 text-on-surface-variant transition-colors active:scale-95" href="{{DATA:SCREEN:SCREEN_62}}">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<span class="font-label-sm text-[9px] mt-1 tracking-tighter">ME</span>
+</a>
+</nav>
+<script>
+        // Interactive Toggle Logic
+        const setupToggle = (btn1Id, btn2Id) => {
+            const btn1 = document.getElementById(btn1Id);
+            const btn2 = document.getElementById(btn2Id);
+            const activeClasses = ['bg-primary-container', 'text-on-primary-container'];
+            const inactiveClasses = ['text-on-surface-variant'];
+
+            const setActive = (active, inactive) => {
+                active.classList.add(...activeClasses);
+                active.classList.remove(...inactiveClasses);
+                inactive.classList.remove(...activeClasses);
+                inactive.classList.add(...inactiveClasses);
+            };
+
+            btn1.addEventListener('click', () => setActive(btn1, btn2));
+            btn2.addEventListener('click', () => setActive(btn2, btn1));
+        };
+
+        setupToggle('gym-toggle', 'home-toggle');
+        setupToggle('dur-short', 'dur-med');
+
+        // Muscle Focus Tabs
+        const focusIds = ['focus-chest', 'focus-back', 'focus-legs', 'focus-arms'];
+        focusIds.forEach(id => {
+            document.getElementById(id).addEventListener('click', () => {
+                focusIds.forEach(fid => {
+                    const el = document.getElementById(fid);
+                    el.classList.remove('bg-primary-container', 'text-on-primary-container', 'kinetic-pulse-active');
+                    el.classList.add('bg-surface-container-highest', 'text-on-surface-variant');
+                    el.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 0";
+                });
+                const activeEl = document.getElementById(id);
+                activeEl.classList.add('bg-primary-container', 'text-on-primary-container', 'kinetic-pulse-active');
+                activeEl.classList.remove('bg-surface-container-highest', 'text-on-surface-variant');
+                activeEl.querySelector('.material-symbols-outlined').style.fontVariationSettings = "'FILL' 1";
+            });
+        });
+    </script>
+</body></html>

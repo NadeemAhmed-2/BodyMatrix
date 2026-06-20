@@ -1,0 +1,213 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Fuel &amp; Flow - Sign Up</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Hanken+Grotesk:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton:wght@100..900&amp;family=Hanken+Grotesk:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#444933",
+                        "on-primary-fixed-variant": "#3c4d00",
+                        "tertiary-container": "#d2e5f5",
+                        "secondary-fixed": "#ffdbd1",
+                        "secondary-container": "#ff5625",
+                        "surface-bright": "#393939",
+                        "primary": "#ffffff",
+                        "on-tertiary": "#21323e",
+                        "on-background": "#e5e2e1",
+                        "outline": "#8e9379",
+                        "surface-dim": "#131313",
+                        "on-secondary-fixed-variant": "#872000",
+                        "inverse-surface": "#e5e2e1",
+                        "on-tertiary-fixed": "#0b1d29",
+                        "surface-container-high": "#2a2a2a",
+                        "background": "#131313",
+                        "surface": "#131313",
+                        "error": "#ffb4ab",
+                        "on-secondary-fixed": "#3b0900",
+                        "surface-container-low": "#1c1b1b",
+                        "on-surface": "#e5e2e1",
+                        "on-primary-fixed": "#161e00",
+                        "surface-container-lowest": "#0e0e0e",
+                        "primary-fixed": "#c3f400",
+                        "on-secondary-container": "#541100",
+                        "on-tertiary-fixed-variant": "#374956",
+                        "on-surface-variant": "#c4c9ac",
+                        "surface-variant": "#353534",
+                        "primary-fixed-dim": "#abd600",
+                        "primary-container": "#c3f400",
+                        "on-primary-container": "#556d00",
+                        "tertiary-fixed": "#d2e5f5",
+                        "secondary": "#ffb5a0",
+                        "secondary-fixed-dim": "#ffb5a0",
+                        "inverse-on-surface": "#313030",
+                        "surface-container": "#201f1f",
+                        "on-primary": "#283500",
+                        "on-error": "#690005",
+                        "on-secondary": "#601400",
+                        "surface-tint": "#abd600",
+                        "tertiary-fixed-dim": "#b6c9d8",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#353534",
+                        "tertiary": "#ffffff",
+                        "inverse-primary": "#506600",
+                        "on-tertiary-container": "#556774",
+                        "error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "stack-sm": "4px",
+                        "gutter": "16px",
+                        "container-padding": "20px",
+                        "stack-md": "12px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Anton"],
+                        "display-xl": ["Anton"],
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Anton"],
+                        "label-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+                        "display-xl": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        input:focus + label, input:not(:placeholder-shown) + label {
+            transform: translateY(-24px) scale(0.85);
+            color: #c3f400;
+        }
+        .glow-button {
+            box-shadow: 0 0 15px rgba(195, 244, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .glow-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 0 5px rgba(195, 244, 0, 0.6);
+        }
+        .bg-overlay {
+            background: linear-gradient(to bottom, rgba(19, 19, 19, 0.6) 0%, rgba(19, 19, 19, 0.95) 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Hero Background Layer -->
+<div class="fixed inset-0 z-0">
+<img alt="Motivational fitness background" class="w-full h-full object-cover grayscale brightness-50" src="https://lh3.googleusercontent.com/aida/AP1WRLvQrRN1BzciJrejbjQWv4-NIMQya00fiDN8Y26Cbrx2xJClRKtNIBbEwFaCQoJhjH-t98QONSWpokfbbQ5VxlV5iw2FYAsMbBDGHuHUjQRIDwqidwh1XF8ZHOweHsp2a0YbmJ4JIfCJbv3a9ihy_Twa4KbmKkDAaZy1lS6TEmigt3YNLUHNA6QUzsGiT1mB4cUWjRDFQpLhWopasd-s7HHlWxoqBG2_ZY7IRE_kIsave4bP4Co-KDEjjPSL">
+<div class="absolute inset-0 bg-overlay backdrop-blur-[2px]"></div>
+</div>
+<!-- Main Content Shell -->
+<main class="relative z-10 flex flex-col items-center justify-center min-h-screen px-container-padding py-stack-lg">
+<!-- Brand Identity Header -->
+<header class="mb-stack-lg text-center animate-fade-in">
+<h1 class="font-display-xl text-display-xl text-primary-fixed tracking-tight italic uppercase mb-2">
+                FUEL &amp; FLOW
+            </h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">
+                Elite Performance Protocol
+            </p>
+</header>
+<!-- Sign Up Container -->
+<div class="w-full max-w-md bg-surface-container-lowest/80 border border-outline-variant/30 backdrop-blur-xl p-8 shadow-2xl relative overflow-hidden group">
+<!-- Decorative Accent Line -->
+<div class="absolute top-0 left-0 w-full h-[2px] bg-primary-fixed opacity-50 group-hover:opacity-100 transition-opacity"></div>
+<div class="mb-stack-lg">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary uppercase italic mb-2">Join the Elite</h2>
+<p class="text-on-surface-variant text-body-md">Forge your path to absolute strength.</p>
+</div>
+<form class="space-y-6" onsubmit="event.preventDefault();">
+<!-- Full Name Input -->
+<div class="relative border-b border-outline-variant focus-within:border-primary-fixed transition-colors">
+<input class="block w-full px-0 py-stack-md bg-transparent border-none focus:ring-0 text-on-surface font-body-md placeholder-transparent" id="fullname" placeholder=" " type="text">
+<label class="absolute left-0 top-3 text-on-surface-variant transition-all pointer-events-none uppercase font-label-sm tracking-wider" for="fullname">Full Name</label>
+</div>
+<!-- Email Input -->
+<div class="relative border-b border-outline-variant focus-within:border-primary-fixed transition-colors">
+<input class="block w-full px-0 py-stack-md bg-transparent border-none focus:ring-0 text-on-surface font-body-md placeholder-transparent" id="email" placeholder=" " type="email">
+<label class="absolute left-0 top-3 text-on-surface-variant transition-all pointer-events-none uppercase font-label-sm tracking-wider" for="email">Email Address</label>
+</div>
+<!-- Password Input -->
+<div class="relative border-b border-outline-variant focus-within:border-primary-fixed transition-colors">
+<input class="block w-full px-0 py-stack-md bg-transparent border-none focus:ring-0 text-on-surface font-body-md placeholder-transparent" id="password" placeholder=" " type="password">
+<label class="absolute left-0 top-3 text-on-surface-variant transition-all pointer-events-none uppercase font-label-sm tracking-wider" for="password">Password</label>
+<button class="absolute right-0 top-3 text-on-surface-variant hover:text-primary-fixed transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+<div class="pt-stack-md">
+<button class="glow-button w-full bg-primary-fixed text-on-primary-fixed py-4 font-headline-lg-mobile text-headline-lg-mobile uppercase italic tracking-wider hover:bg-primary-fixed-dim transition-all flex items-center justify-center gap-2" type="submit" onclick="this.disabled=true; this.innerHTML='&lt;span class=\'material-symbols-outlined animate-spin\'&gt;progress_activity&lt;/span&gt; PROCESSING...'; setTimeout(() =&gt; { this.disabled=false; this.innerHTML='CREATE ACCOUNT'; }, 2000);">
+                        CREATE ACCOUNT
+                    </button>
+</div>
+</form>
+<div class="mt-8 text-center">
+<a class="inline-block font-label-sm text-label-sm text-on-surface-variant hover:text-primary-fixed transition-colors group" href="#login">
+                    ALREADY HAVE AN ACCOUNT? <span class="text-primary-fixed group-hover:underline underline-offset-4">LOGIN</span>
+</a>
+</div>
+</div>
+<!-- Footer Visual Tokens -->
+<footer class="mt-stack-lg flex flex-col items-center gap-stack-sm opacity-40">
+<div class="flex items-center gap-gutter">
+<span class="h-[1px] w-12 bg-outline-variant"></span>
+<span class="font-label-sm text-[10px] tracking-widest text-on-surface-variant">EST. 2024</span>
+<span class="h-[1px] w-12 bg-outline-variant"></span>
+</div>
+</footer>
+</main>
+<!-- Interactive Layer: Mouse Glow Tracking -->
+<div class="fixed top-0 left-0 w-[400px] h-[400px] bg-primary-fixed/5 rounded-full blur-[100px] pointer-events-none -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 opacity-0 z-0" id="glow-cursor"></div>
+<script>
+        // Micro-interaction for the glow cursor
+        const glow = document.getElementById('glow-cursor');
+        window.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+            glow.style.opacity = '1';
+        });
+
+        // Toggle visibility for password
+        const passInput = document.getElementById('password');
+        const passToggle = passInput.nextElementSibling.nextElementSibling;
+        passToggle.addEventListener('click', () => {
+            const isPass = passInput.type === 'password';
+            passInput.type = isPass ? 'text' : 'password';
+            passToggle.querySelector('.material-symbols-outlined').textContent = isPass ? 'visibility_off' : 'visibility';
+        });
+
+        // Form Focus effect for input grouping
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.classList.add('scale-[1.02]');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.classList.remove('scale-[1.02]');
+            });
+        });
+    </script>
+
+
+</body></html>

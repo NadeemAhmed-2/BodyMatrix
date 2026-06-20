@@ -1,0 +1,287 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>FUEL &amp; FLOW - Smart Calorie Calculator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Hanken+Grotesk:wght@300;400;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton:wght@100..900&amp;family=Hanken+Grotesk:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-container": "#556d00",
+                        "primary-fixed-dim": "#abd600",
+                        "on-primary-fixed": "#161e00",
+                        "on-background": "#e5e2e1",
+                        "surface-container-high": "#2a2a2a",
+                        "on-error-container": "#ffdad6",
+                        "error": "#ffb4ab",
+                        "surface-container": "#201f1f",
+                        "on-primary-fixed-variant": "#3c4d00",
+                        "outline": "#8e9379",
+                        "secondary-container": "#ff5625",
+                        "on-tertiary-container": "#556774",
+                        "tertiary-fixed": "#d2e5f5",
+                        "tertiary-container": "#d2e5f5",
+                        "on-secondary-fixed-variant": "#872000",
+                        "secondary-fixed": "#ffdbd1",
+                        "surface": "#131313",
+                        "surface-tint": "#abd600",
+                        "primary-fixed": "#c3f400",
+                        "surface-container-low": "#1c1b1b",
+                        "on-surface-variant": "#c4c9ac",
+                        "surface-dim": "#131313",
+                        "background": "#131313",
+                        "surface-container-highest": "#353534",
+                        "on-tertiary": "#21323e",
+                        "tertiary": "#ffffff",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary": "#283500",
+                        "inverse-on-surface": "#313030",
+                        "secondary": "#ffb5a0",
+                        "error-container": "#93000a",
+                        "primary-container": "#c3f400",
+                        "on-secondary-fixed": "#3b0900",
+                        "on-tertiary-fixed-variant": "#374956",
+                        "on-error": "#690005",
+                        "surface-variant": "#353534",
+                        "on-secondary-container": "#541100",
+                        "inverse-primary": "#506600",
+                        "surface-bright": "#393939",
+                        "tertiary-fixed-dim": "#b6c9d8",
+                        "outline-variant": "#444933",
+                        "secondary-fixed-dim": "#ffb5a0",
+                        "on-secondary": "#601400",
+                        "primary": "#ffffff",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-tertiary-fixed": "#0b1d29",
+                        "on-surface": "#e5e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "container-padding": "20px",
+                        "stack-sm": "4px",
+                        "stack-lg": "32px",
+                        "gutter": "16px",
+                        "stack-md": "12px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["JetBrains Mono"],
+                        "display-xl": ["Anton"],
+                        "headline-lg": ["Anton"],
+                        "headline-lg-mobile": ["Anton"],
+                        "body-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-xl": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-goal-btn {
+            background-color: #c3f400;
+            color: #161e00;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+        .glow-button:active {
+            box-shadow: 0 0 20px #c3f400;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top App Bar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface dark:bg-surface">
+<div class="flex items-center justify-between px-container-padding py-base w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-base"><button class="flex items-center justify-center w-10 h-10 rounded-none hover:bg-surface-container-highest active:scale-95 transition-all text-primary-container"><span class="material-symbols-outlined">arrow_back</span></button>
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: &quot;FILL&quot; 1;">bolt</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg tracking-tighter text-primary-container dark:text-primary-container">FUEL &amp; FLOW</h1>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border-2 border-primary-container overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional close-up portrait of a high-performance athlete with intense focus, captured in a dark gym setting with cinematic high-contrast lighting. The lighting emphasizes muscular definition and a determined expression, utilizing deep shadows and sharp highlights of electric lime and charcoal tones to match a premium fitness brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAis1-y1xR8xDVCpYfPSg3lSQzAnd1WgQTSjVljmcluuvmEp_tdmxS5hfuhP5rUoOXaw6NLexDl0JAQv56eds3SY86eTtg9eA2VoF9gcbm0asxWACjBiT2X3O2Xexgj4znDt62b0WvZ3KmuITl4Y8-z77dZa492lqYLldR9DiiohPLP4q1hDT781ygt9E6R2w3BmY4H-KS5ZBXD309gn-k1fnH5WetK5VEuu3JeJ2AU0ZGGvyYekQ28eo9c404v3CBV657vsuujmXgS">
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-container-padding max-w-7xl mx-auto overflow-y-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Input Section -->
+<section class="lg:col-span-5 flex flex-col gap-stack-lg">
+<div class="bg-surface-container p-stack-lg border-l-4 border-primary-container">
+<h2 class="font-display-xl text-display-xl uppercase italic tracking-tighter mb-stack-md">BIO METRICS</h2>
+<form class="flex flex-col gap-gutter" id="calcForm">
+<div class="grid grid-cols-2 gap-gutter">
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase">Age</label>
+<input class="bg-surface-container-low border-0 border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 text-headline-lg-mobile font-display-xl text-primary transition-all p-stack-sm" placeholder="25" type="number">
+</div>
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase">Gender</label>
+<select class="bg-surface-container-low border-0 border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 text-body-md font-bold text-primary transition-all p-stack-sm h-[58px]">
+<option>MALE</option>
+<option>FEMALE</option>
+<option>NON-BINARY</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-gutter">
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase">Weight (kg)</label>
+<input class="bg-surface-container-low border-0 border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 text-headline-lg-mobile font-display-xl text-primary transition-all p-stack-sm" placeholder="85" type="number">
+</div>
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase">Height (cm)</label>
+<input class="bg-surface-container-low border-0 border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 text-headline-lg-mobile font-display-xl text-primary transition-all p-stack-sm" placeholder="182" type="number">
+</div>
+</div>
+<div class="flex flex-col gap-stack-sm">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase">Activity Level</label>
+<select class="bg-surface-container-low border-0 border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 text-body-md font-bold text-primary transition-all p-stack-sm">
+<option>SEDENTARY (Office Job)</option>
+<option>LIGHTLY ACTIVE (1-2 days/week)</option>
+<option selected="">MODERATELY ACTIVE (3-5 days/week)</option>
+<option>VERY ACTIVE (6-7 days/week)</option>
+<option>ATHLETE (2x training/day)</option>
+</select>
+</div>
+<button class="mt-stack-lg w-full bg-primary-container text-on-primary-container font-display-xl text-headline-lg py-stack-md uppercase glow-button active:scale-95 transition-all active:scale-90" onclick="showResults()" type="button">
+                            CALCULATE
+                        </button>
+</form>
+</div>
+<div class="hidden lg:block relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-40" data-alt="Close-up of a weightlifter's hands applying white chalk in a gritty, high-contrast urban gym environment. The lighting is cinematic and dramatic, with strong side-lighting highlighting the texture of the chalk and the muscular tension in the hands. The overall mood is raw, powerful, and professional, echoing the bold brutalist aesthetic of the brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAElW5dXIqQOjVDpX6qZmA1RiQWZq74X3nXY6g1MBWlOJwO2wKwV_IKkOxuOOyFWKQI84b9A3f2Gp3B-9AE9pDTkB5QRD79FichfUbJpijL9k9J_f_kwe0Wuf9GL3vT8bs8XP9ZhDz3SgAy1IB9s1c0cB9rjVXDymj9N5yQlbuOzUKrA8UupfgfJC2oHsz88k6J743eQhOaXR2aMyMpi5101U6D7S6IrhI2OA7PbKoyH5zYY6XcWsWfwpSkpbhRUFEUp9eF-am24Utt">
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
+</div>
+</section>
+<!-- Results Section (Initially Hidden or Placeholder State) -->
+<section class="lg:col-span-7 flex flex-col gap-gutter" id="resultsSection">
+<!-- TDEE Hero Card -->
+<div class="bg-surface-container-high p-stack-lg flex flex-col items-center justify-center text-center relative overflow-hidden group">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+</div>
+<span class="font-label-sm text-label-sm text-primary-fixed-dim uppercase mb-stack-sm z-10">Total Daily Energy Expenditure</span>
+<h3 class="font-display-xl text-[80px] leading-none text-primary mb-stack-sm z-10">2,840 <span class="text-headline-lg">KCAL</span></h3>
+<p class="font-body-md text-on-surface-variant max-w-md z-10">This is the energy your body burns every 24 hours to maintain your current weight at your current activity level.</p>
+</div>
+<!-- Goal Selector -->
+<div class="bg-surface-container p-stack-lg">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-stack-md">DEFINE YOUR TARGET</h4>
+<div class="grid grid-cols-3 gap-base">
+<button class="border-2 border-outline-variant py-stack-md font-display-xl text-body-md uppercase transition-all hover:border-primary-container active:scale-95">LOSE</button>
+<button class="border-2 border-primary-container bg-primary-container text-on-primary-container py-stack-md font-display-xl text-body-md uppercase transition-all active:scale-95">MAINTAIN</button>
+<button class="border-2 border-outline-variant py-stack-md font-display-xl text-body-md uppercase transition-all hover:border-primary-container active:scale-95">GAIN</button>
+</div>
+<div class="mt-stack-lg p-stack-md bg-surface-container-highest border-l-2 border-secondary-container">
+<div class="flex justify-between items-center">
+<span class="font-label-sm text-label-sm text-secondary-container">DAILY TARGET</span>
+<span class="font-display-xl text-headline-lg text-primary">2,590 KCAL</span>
+</div>
+<div class="w-full bg-surface-container-low h-1 mt-stack-sm">
+<div class="bg-secondary-container h-full w-[85%]"></div>
+</div>
+<p class="font-label-sm text-[10px] text-on-surface-variant mt-stack-sm italic">-250 KCAL DEFICIT APPLIED</p>
+</div>
+</div>
+<!-- Macros Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Protein -->
+<div class="bg-surface-container p-stack-md flex flex-col items-center">
+<div class="relative w-24 h-24 mb-stack-md">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-low" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251" stroke-dashoffset="62" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-display-xl text-headline-lg text-primary">30%</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">PROTEIN</span>
+<span class="font-display-xl text-body-md text-primary mt-stack-sm">194G</span>
+</div>
+<!-- Carbs -->
+<div class="bg-surface-container p-stack-md flex flex-col items-center">
+<div class="relative w-24 h-24 mb-stack-md">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-low" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-secondary-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251" stroke-dashoffset="125" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-display-xl text-headline-lg text-primary">50%</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">CARBS</span>
+<span class="font-display-xl text-body-md text-primary mt-stack-sm">323G</span>
+</div>
+<!-- Fats -->
+<div class="bg-surface-container p-stack-md flex flex-col items-center">
+<div class="relative w-24 h-24 mb-stack-md">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-low" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-tertiary-fixed-dim" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251" stroke-dashoffset="200" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-display-xl text-headline-lg text-primary">20%</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">FATS</span>
+<span class="font-display-xl text-body-md text-primary mt-stack-sm">58G</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-base py-stack-sm bg-surface-container dark:bg-surface-container border-t border-outline-variant"><a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant p-stack-sm hover:bg-surface-container-highest transition-all active:scale-90" href="#{{DATA:SCREEN:SCREEN_56}}"><span class="material-symbols-outlined">home</span><span class="font-label-sm text-label-sm uppercase tracking-widest mt-1">HOME</span></a><a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary-container text-on-primary-container dark:text-on-primary-container rounded-none p-stack-sm active:scale-90 transition-all duration-150" href="#{{DATA:SCREEN:SCREEN_60}}"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calculate</span><span class="font-label-sm text-label-sm uppercase tracking-widest mt-1">CALC</span></a><a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant p-stack-sm hover:bg-surface-container-highest transition-all active:scale-90" href="#{{DATA:SCREEN:SCREEN_21}}"><span class="material-symbols-outlined">fitness_center</span><span class="font-label-sm text-label-sm uppercase tracking-widest mt-1">TRAIN</span></a><a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant p-stack-sm hover:bg-surface-container-highest transition-all active:scale-90" href="#{{DATA:SCREEN:SCREEN_46}}"><span class="material-symbols-outlined">restaurant</span><span class="font-label-sm text-label-sm uppercase tracking-widest mt-1">FUEL</span></a><a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant p-stack-sm hover:bg-surface-container-highest transition-all active:scale-90" href="#{{DATA:SCREEN:SCREEN_62}}"><span class="material-symbols-outlined">person</span><span class="font-label-sm text-label-sm uppercase tracking-widest mt-1">ME</span></a></nav>
+<script>
+        function showResults() {
+            const results = document.getElementById('resultsSection');
+            results.classList.remove('opacity-0');
+            results.classList.add('animate-pulse');
+            setTimeout(() => {
+                results.classList.remove('animate-pulse');
+            }, 500);
+        }
+
+        // Add subtle interaction to goal buttons
+        const goalBtns = document.querySelectorAll('#resultsSection .grid button');
+        goalBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                goalBtns.forEach(b => {
+                    b.classList.remove('bg-primary-container', 'text-on-primary-container', 'border-primary-container');
+                    b.classList.add('border-outline-variant');
+                });
+                this.classList.remove('border-outline-variant');
+                this.classList.add('bg-primary-container', 'text-on-primary-container', 'border-primary-container');
+            });
+        });
+    </script>
+
+
+
+
+
+
+</body></html>

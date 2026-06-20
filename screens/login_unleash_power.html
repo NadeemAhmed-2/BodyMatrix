@@ -1,0 +1,220 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Fuel &amp; Flow | Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Hanken+Grotesk:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton:wght@100..900&amp;family=Hanken+Grotesk:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "outline-variant": "#444933",
+            "on-primary-fixed-variant": "#3c4d00",
+            "tertiary-container": "#d2e5f5",
+            "secondary-fixed": "#ffdbd1",
+            "secondary-container": "#ff5625",
+            "surface-bright": "#393939",
+            "primary": "#ffffff",
+            "on-tertiary": "#21323e",
+            "on-background": "#e5e2e1",
+            "outline": "#8e9379",
+            "surface-dim": "#131313",
+            "on-secondary-fixed-variant": "#872000",
+            "inverse-surface": "#e5e2e1",
+            "on-tertiary-fixed": "#0b1d29",
+            "surface-container-high": "#2a2a2a",
+            "background": "#131313",
+            "surface": "#131313",
+            "error": "#ffb4ab",
+            "on-secondary-fixed": "#3b0900",
+            "surface-container-low": "#1c1b1b",
+            "on-surface": "#e5e2e1",
+            "on-primary-fixed": "#161e00",
+            "surface-container-lowest": "#0e0e0e",
+            "primary-fixed": "#c3f400",
+            "on-secondary-container": "#541100",
+            "on-tertiary-fixed-variant": "#374956",
+            "on-surface-variant": "#c4c9ac",
+            "surface-variant": "#353534",
+            "primary-fixed-dim": "#abd600",
+            "primary-container": "#c3f400",
+            "on-primary-container": "#556d00",
+            "tertiary-fixed": "#d2e5f5",
+            "secondary": "#ffb5a0",
+            "secondary-fixed-dim": "#ffb5a0",
+            "inverse-on-surface": "#313030",
+            "surface-container": "#201f1f",
+            "on-primary": "#283500",
+            "on-error": "#690005",
+            "on-secondary": "#601400",
+            "surface-tint": "#abd600",
+            "tertiary-fixed-dim": "#b6c9d8",
+            "on-error-container": "#ffdad6",
+            "surface-container-highest": "#353534",
+            "tertiary": "#ffffff",
+            "inverse-primary": "#506600",
+            "on-tertiary-container": "#556774",
+            "error-container": "#93000a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "stack-lg": "32px",
+            "stack-sm": "4px",
+            "gutter": "16px",
+            "container-padding": "20px",
+            "stack-md": "12px",
+            "base": "8px"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Anton"],
+            "display-xl": ["Anton"],
+            "body-md": ["Hanken Grotesk"],
+            "headline-lg": ["Anton"],
+            "label-sm": ["JetBrains Mono"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["28px", { "lineHeight": "32px", "fontWeight": "400" }],
+            "display-xl": ["48px", { "lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400" }],
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "36px", "fontWeight": "400" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #131313;
+      color: #e5e2e1;
+      font-family: 'Hanken Grotesk', sans-serif;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .glow-effect:focus-within {
+      box-shadow: 0 0 15px rgba(195, 244, 0, 0.3);
+    }
+    .vignette {
+      background: radial-gradient(circle, transparent 20%, rgba(19, 19, 19, 0.9) 100%);
+    }
+  </style>
+</head>
+<body class="min-h-screen relative flex flex-col overflow-hidden">
+<!-- Background Hero Section -->
+<div class="absolute inset-0 z-0">
+<img alt="Cinematic fitness background" class="w-full h-full object-cover grayscale brightness-50" src="https://lh3.googleusercontent.com/aida/AP1WRLvQrRN1BzciJrejbjQWv4-NIMQya00fiDN8Y26Cbrx2xJClRKtNIBbEwFaCQoJhjH-t98QONSWpokfbbQ5VxlV5iw2FYAsMbBDGHuHUjQRIDwqidwh1XF8ZHOweHsp2a0YbmJ4JIfCJbv3a9ihy_Twa4KbmKkDAaZy1lS6TEmigt3YNLUHNA6QUzsGiT1mB4cUWjRDFQpLhWopasd-s7HHlWxoqBG2_ZY7IRE_kIsave4bP4Co-KDEjjPSL">
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background opacity-80"></div>
+<div class="absolute inset-0 vignette"></div>
+</div>
+<!-- Top Navigation (Shell Implementation) -->
+<header class="relative z-10 flex justify-between items-center w-full px-container-padding py-stack-md h-20 bg-transparent">
+<div class="font-display-xl text-display-xl text-primary-fixed tracking-tight italic uppercase">
+      FUEL &amp; FLOW
+    </div>
+<div class="flex gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant/20 transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-primary-fixed">help_outline</span>
+</button>
+</div>
+</header>
+<!-- Login Content Canvas -->
+<main class="relative z-10 flex-grow flex items-center justify-center px-gutter">
+<div class="w-full max-w-md space-y-stack-lg">
+<!-- Headline -->
+<div class="text-center md:text-left space-y-stack-sm">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg italic uppercase text-primary tracking-tight">
+          RETURN TO <span class="text-primary-fixed">ELITE</span>
+</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">
+          Enter your credentials to unlock performance
+        </p>
+</div>
+<!-- Login Form -->
+<form class="space-y-stack-md" onsubmit="event.preventDefault();">
+<!-- Email Input -->
+<div class="group relative glow-effect border-b border-outline-variant focus-within:border-primary-fixed transition-all duration-300">
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Email</label>
+<div class="flex items-center gap-base pb-stack-sm">
+<span class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary-fixed text-[20px]">mail</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-primary font-label-sm text-label-sm placeholder:text-surface-variant uppercase tracking-wider" placeholder="ATHLETE@FUELFLOW.COM" required="" type="email">
+</div>
+</div>
+<!-- Password Input -->
+<div class="group relative glow-effect border-b border-outline-variant focus-within:border-primary-fixed transition-all duration-300">
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Password</label>
+<div class="flex items-center gap-base pb-stack-sm">
+<span class="material-symbols-outlined text-on-surface-variant group-focus-within:text-primary-fixed text-[20px]">lock</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-primary font-label-sm text-label-sm placeholder:text-surface-variant tracking-widest" placeholder="••••••••" required="" type="password">
+<button class="text-on-surface-variant hover:text-primary-fixed transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Utility Links -->
+<div class="flex justify-between items-center py-base">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="rounded-none border-outline-variant bg-transparent checked:bg-primary-fixed focus:ring-0 w-4 h-4 transition-all" type="checkbox">
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-primary transition-colors">REMEMBER ME</span>
+</label>
+<a class="font-label-sm text-label-sm text-primary-fixed hover:underline italic" href="#forgot-password">FORGOT PASSWORD?</a>
+</div>
+<!-- Primary Action -->
+<button class="w-full h-16 bg-primary-fixed text-on-primary-fixed font-headline-lg-mobile text-headline-lg-mobile uppercase italic tracking-tighter flex items-center justify-center group relative overflow-hidden transition-all duration-200 active:scale-95 shadow-[0_0_20px_rgba(195,244,0,0.2)]" type="submit"><span class="relative z-10 flex items-center gap-2" id="login-btn-text">LOGIN</span><div class="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-500 skew-x-12"></div></button>
+</form>
+<!-- Footer Action -->
+<div class="text-center pt-stack-md">
+<a href="#signup" class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors tracking-widest inline-block">DON'T HAVE AN ACCOUNT? <span class="text-primary-fixed font-bold border-b-2 border-primary-fixed pb-0.5 ml-2">SIGN UP</span></a>
+</div>
+</div>
+</main>
+<!-- Ambient Micro-interactions Script -->
+<script>
+    document.addEventListener('mousemove', (e) => {
+      const vignette = document.querySelector('.vignette');
+      const xAxis = (window.innerWidth / 2 - e.pageX) / 45;
+      const yAxis = (window.innerHeight / 2 - e.pageY) / 45;
+      vignette.style.transform = `translate(${xAxis}px, ${yAxis}px)`;
+    });
+
+    // Ripple effect on button click
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        let x = e.clientX - e.target.offsetLeft;
+        let y = e.clientY - e.target.offsetTop;
+        let ripples = document.createElement('span');
+        ripples.style.left = x + 'px';
+        ripples.style.top = y + 'px';
+        ripples.classList.add('ripple');
+        this.appendChild(ripples);
+        setTimeout(() => { ripples.remove() }, 1000);
+      });
+    });
+  </script>
+<style>
+    @keyframes ripple {
+      to { transform: scale(4); opacity: 0; }
+    }
+    .ripple {
+      position: absolute;
+      background: white;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      border-radius: 50%;
+      animation: ripple 0.6s linear;
+      opacity: 0.3;
+    }
+  </style>
+
+
+</body></html>

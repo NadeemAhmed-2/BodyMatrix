@@ -1,0 +1,216 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>Fuel &amp; Flow - Profile</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;display=swap" rel="stylesheet">
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#353534",
+                    "on-background": "#e5e2e1",
+                    "secondary": "#ffb5a0",
+                    "primary-container": "#c3f400",
+                    "on-secondary-fixed": "#3b0900",
+                    "error": "#ffb4ab",
+                    "inverse-primary": "#506600",
+                    "background": "#131313",
+                    "tertiary": "#ffffff",
+                    "on-secondary": "#601400",
+                    "primary-fixed-dim": "#abd600",
+                    "on-surface": "#e5e2e1",
+                    "primary": "#ffffff",
+                    "error-container": "#93000a",
+                    "primary-fixed": "#c3f400",
+                    "surface-container-high": "#2a2a2a",
+                    "on-tertiary-fixed": "#0b1d29",
+                    "on-secondary-container": "#541100",
+                    "tertiary-fixed": "#d2e5f5",
+                    "surface-bright": "#393939",
+                    "surface-container-highest": "#353534",
+                    "tertiary-fixed-dim": "#b6c9d8",
+                    "on-surface-variant": "#c4c9ac",
+                    "on-primary-fixed": "#161e00",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary": "#21323e",
+                    "surface-container-low": "#1c1b1b",
+                    "inverse-on-surface": "#313030",
+                    "on-primary-container": "#556d00",
+                    "secondary-fixed-dim": "#ffb5a0",
+                    "secondary-fixed": "#ffdbd1",
+                    "outline-variant": "#444933",
+                    "outline": "#8e9379",
+                    "on-secondary-fixed-variant": "#872000",
+                    "on-tertiary-fixed-variant": "#374956",
+                    "inverse-surface": "#e5e2e1",
+                    "tertiary-container": "#d2e5f5",
+                    "on-primary": "#283500",
+                    "secondary-container": "#ff5625",
+                    "on-primary-fixed-variant": "#3c4d00",
+                    "surface-container": "#201f1f",
+                    "surface-dim": "#131313",
+                    "on-tertiary-container": "#556774",
+                    "on-error": "#690005",
+                    "surface": "#131313",
+                    "surface-tint": "#abd600",
+                    "surface-container-lowest": "#0e0e0e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "stack-sm": "4px",
+                    "container-padding": "20px",
+                    "gutter": "16px",
+                    "base": "8px",
+                    "stack-md": "12px",
+                    "stack-lg": "32px"
+            },
+            "fontFamily": {
+                    "display-xl": ["Anton"],
+                    "headline-lg": ["Anton"],
+                    "label-sm": ["JetBrains Mono"],
+                    "headline-lg-mobile": ["Anton"],
+                    "body-md": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "display-xl": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Hanken Grotesk', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .gritty-filter {
+            filter: grayscale(1) contrast(1.4) brightness(0.9);
+        }
+        .vignette-overlay {
+            background: radial-gradient(circle, transparent 20%, rgba(19,19,19,0.8) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- Top AppBar (from JSON) -->
+<header class="w-full top-0 sticky z-40 bg-background border-b border-surface-container-highest flex justify-between items-center px-container-padding py-stack-md">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed" data-icon="bolt">bolt</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary-fixed uppercase tracking-tighter">Fuel &amp; Flow</h1>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-variant">
+<img alt="Profile" class="w-full h-full object-cover gritty-filter" data-alt="A close-up, high-contrast black and white portrait of a focused athlete with intense eyes. The lighting is dramatic, casting deep cinematic shadows across one side of the face, emphasizing muscle definition and grit. The background is a dark, moody gym environment, consistent with a high-performance kinetic aesthetic. The overall mood is serious and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_hTkPoK-C-p_Fd_nQc9DzfMCz6beAkWoVhPBSZ_zD8HVaPAXxwRc4Q779s11I5sVWLb_DBVPRE03xXQNcV6RVw_Rvmg8oviaS7XBd-WI4pCFqS7vTSoVQzszQX0-g8Onl3C2hjUx4nodK6TMpPDzO_lRpIFxk0BFfVmzkJmeC3T6Gn8IwcPfNNFNmpD06iwrUHDqfMM_fjvGux1_Ag-uQ5X_bs5Exmfo2_i5Z2KN55GovaJ6mIJUlLATjjgWrDiMGksqAVJAmc806">
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-container-padding py-stack-lg space-y-stack-lg overflow-y-auto pb-32">
+<!-- Profile Section -->
+<div class="flex flex-col items-center space-y-gutter">
+<!-- Gritty Profile Photo -->
+<div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-primary-fixed p-1" style="transform: rotateY(-3.51111deg) rotateX(-1.02222deg);">
+<div class="w-full h-full rounded-full overflow-hidden relative">
+<img alt="Main Profile Portrait" class="w-full h-full object-cover gritty-filter" data-alt="A gritty, high-contrast monochrome portrait of a powerful athlete, shot in a dark gym setting with sharp rim lighting that highlights the contours of the face and neck. The image is extremely dramatic with crushed blacks and bright highlights. The style is raw and minimalist, focused entirely on the user's intensity. No soft edges or friendly smiles, just raw determination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSdFVjeLAkFz03uSdDdlAMmkxgLc_H2CmSpt-nZqycqC1wtbhoeJVHmNW5TohtR2g9vXWoqSUigFv8xxnhiV69xvczOy4fOLCzHpJDrlNjnrBB-jVw3nFOVyvfZVQpNo-rvSXgzzrFHmFIqMC8pyeAOcZ9N3YZgConBtIeBSERtaAiQ83ZHdmeAFeqSwGEWtGpYTMCjMGG0hkbdc11PcXzMQQB6Xo1HuskzA_Bh6V3pZo9iXO1HXyfybqMxiPA5UpKioVKs9LcKBo0">
+<div class="absolute inset-0 vignette-overlay pointer-events-none"></div>
+</div>
+</div>
+<!-- Username -->
+<div class="text-center">
+<h2 class="font-display-xl text-display-xl text-primary uppercase tracking-tight">KAYDEN_REED</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">ELITE PERFORMANCE TIER</p>
+</div>
+</div>
+<!-- Stats Grid (Technical/Minimal) -->
+<div class="w-full max-w-xs grid grid-cols-1 gap-stack-md">
+<div class="flex justify-between items-center bg-surface-container py-4 px-6 border-l-4 border-primary-fixed">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Mass</span>
+<span class="font-label-sm text-label-sm text-primary tracking-widest">94.2 KG</span>
+</div>
+<div class="flex justify-between items-center bg-surface-container py-4 px-6 border-l-4 border-primary-fixed">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Height</span>
+<span class="font-label-sm text-label-sm text-primary tracking-widest">188 CM</span>
+</div><div class="flex justify-between items-center bg-surface-container py-4 px-6 border-l-4 border-primary-fixed">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Gender</span>
+<span class="font-label-sm text-label-sm text-primary tracking-widest">MALE</span>
+</div>
+
+</div>
+<!-- Edit Button (Signature Accent) -->
+<div class="w-full max-w-xs pt-stack-lg">
+<button class="w-full bg-primary-fixed text-on-primary-fixed font-headline-lg-mobile text-headline-lg-mobile py-4 uppercase active:scale-95 transition-transform duration-150 rounded-none">
+                EDIT PROFILE
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation Bar (from JSON) -->
+<!-- Active State Logic: 'ME' is active for Profile screen -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-surface-container-lowest/80 backdrop-blur-xl border-t border-surface-container-highest z-50"><a class="flex flex-col items-center justify-center text-on-surface-variant px-stack-md py-stack-sm hover:text-primary-fixed-dim transition-colors active:scale-90 duration-200" href="SCREEN_56">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">HOME</span>
+</a>
+<!-- CALC -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-stack-md py-stack-sm hover:text-primary-fixed-dim transition-colors active:scale-90 duration-200" href="SCREEN_60">
+<span class="material-symbols-outlined mb-1" data-icon="calculate">calculate</span>
+<span class="font-label-sm text-label-sm">CALC</span>
+</a>
+<!-- TRAIN -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-stack-md py-stack-sm hover:text-primary-fixed-dim transition-colors active:scale-90 duration-200" href="SCREEN_21">
+<span class="material-symbols-outlined mb-1" data-icon="fitness_center">fitness_center</span>
+<span class="font-label-sm text-label-sm">TRAIN</span>
+</a>
+<!-- FUEL -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-stack-md py-stack-sm hover:text-primary-fixed-dim transition-colors active:scale-90 duration-200" href="SCREEN_46">
+<span class="material-symbols-outlined mb-1" data-icon="restaurant">restaurant</span>
+<span class="font-label-sm text-label-sm">FUEL</span>
+</a>
+<!-- ME (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary-fixed text-on-primary-fixed rounded-xl px-stack-md py-stack-sm active:scale-90 transition-transform duration-200" href="SCREEN_62">
+<span class="material-symbols-outlined mb-1" data-icon="person" style="font-variation-settings: &quot;FILL&quot; 1;">person</span>
+<span class="font-label-sm text-label-sm">ME</span>
+</a>
+</nav>
+<!-- Micro-interaction script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Subtle parallax or focus effect can be added here
+            const profileImg = document.querySelector('.w-32.h-32');
+            
+            document.addEventListener('mousemove', (e) => {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 45;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 45;
+                profileImg.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+        });
+    </script>
+
+
+
+
+</body></html>

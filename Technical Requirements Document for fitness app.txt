@@ -1,0 +1,352 @@
+# Technical Requirements Document (TRD)
+## Smart Fitness & Nutrition Planning App
+
+**Version:** 1.0 (Draft)
+**Date:** June 15, 2026
+**Status:** Planning / Pre-development
+
+---
+
+## 1. Introduction
+
+### 1.1 Purpose
+This document defines the technical requirements for a mobile fitness application that combines three core capabilities — a calorie calculator, an exercise planner, and a meal planner — into a single integrated experience. The calorie calculator output feeds directly into both the exercise and meal planning engines, ensuring all recommendations align with the user's specific goal.
+
+### 1.2 Scope
+The application covers three core features:
+1. Smart Calorie Calculator — computes maintenance, weight loss, and weight gain calorie targets plus a macronutrient breakdown and weekly projection.
+2. Intelligent Exercise Planner — generates goal-based, scheduled workout routines for home or gym use with exercise demonstrations.
+3. Personalized Meal Planner — generates daily/weekly meal plans matching calorie and macro targets, with grocery list generation.
+
+### 1.3 Target Platform
+- Mobile app (iOS & Android) built with React Native and Expo
+- Backend API built with Node.js and Express
+- Database: MongoDB (via MongoDB Atlas)
+- Hosting: Backend on Render, frontend distributed via Expo/EAS (optional web build on Vercel)
+
+---
+
+## 2. System Architecture
+
+### 2.1 High-Level Architecture
+
+```
+┌─────────────────────────────────────────────┐
+│              Mobile App (Client)             │
+│         React Native + Expo (iOS/Android)    │
+└───────────────────────┬───────────────────────┘
+                          │ REST API (HTTPS/JSON)
+┌───────────────────────▼───────────────────────┐
+│              Backend API (Node.js + Express)   │
+│  ┌───────────┐ ┌───────────────┐ ┌───────────┐ │
+│  │  Calorie  │ │    Workout     │ │   Meal    │ │
+│  │  Engine   │ │   Generator    │ │ Generator │ │
+│  └───────────┘ └───────────────┘ └───────────┘ │
+└──────────┬───────────────────────┬─────────────┘
+            │                       │
+┌───────────▼───────────┐ ┌─────────▼─────────────┐
+│   MongoDB (Atlas)      │ │   External APIs        │
+│  Users, Plans, Logs,    │ │  ExerciseDB, USDA       │
+│  Food/Exercise cache    │ │  FoodData, Spoonacular  │
+└─────────────────────────┘ └─────────────────────────┘
+```
+
+### 2.2 Technology Stack
+
+| Layer | Technology | Notes |
+|---|---|---|
+| Mobile frontend | React Native + Expo | Cross-platform iOS/Android, EAS Build for store binaries |
+| Backend | Node.js + Express | REST API, business logic for all three engines |
+| Database | MongoDB (Atlas) | Document model fits nested plan/profile data well |
+| Auth | JWT + bcrypt | Stateless token-based authentication |
+| Hosting (backend) | Render | Free tier for MVP (cold start ~30-50s on idle) |
+| Hosting (frontend) | Expo / EAS, optional Vercel for web build | Vercel only applies if Expo Web output is used |
+| Exercise data | oss.exercisedb.dev (free, no key) | 1,500+ exercises with GIFs, non-commercial use |
+| Nutrition data | USDA FoodData Central | Free, key required, raw ingredient macros |
+| Recipe/meal data | Spoonacular (free tier) | Recipe-level meal plan generation |
+| Custom food data | Internal `foodLibrary` collection | Curated regional (e.g. Indian) staples |
+
+---
+
+## 3. Functional Requirements
+
+### 3.1 Feature 1 — Smart Calorie Calculator
+
+**Inputs:** age, gender, height, weight, activity level, goal (lose / maintain / gain)
+
+**Calculation logic:**
+
+BMR (Mifflin-St Jeor equation):
+- Male: `BMR = 10 × weight(kg) + 6.25 × height(cm) − 5 × age + 5`
+- Female: `BMR = 10 × weight(kg) + 6.25 × height(cm) − 5 × age − 161`
+
+TDEE (maintenance calories) = `BMR × activity factor`
+
+| Activity level | Multiplier |
+|---|---|
+| Sedentary (little/no exercise) | 1.2 |
+| Light (1-3 days/week) | 1.375 |
+| Moderate (3-5 days/week) | 1.55 |
+| Active (6-7 days/week) | 1.725 |
+| Very active (athlete / physical job) | 1.9 |
+
+- **Weight loss calories** = TDEE − 15-20% (or ~500 kcal deficit)
+- **Weight gain calories** = TDEE + 10-15% (or ~300-500 kcal surplus)
+
+**Macro breakdown:**
+- Protein: 1.6-2.2 g/kg bodyweight (higher end for fat loss or muscle gain goals)
+- Fat: 20-30% of total calories
+- Carbohydrates: remaining calories
+
+**Weekly projection:** linear estimate using ~7,700 kcal ≈ 1 kg of bodyweight change, displayed as an estimate (not a guarantee).
+
+**Outputs:** maintenance calories, weight loss calories, weight gain calories, macro breakdown (protein/carbs/fat in grams), weekly weight change projection.
+
+**Processing location:** This calculation is pure math and runs client-side for instant results, then the result is POSTed to the backend to be stored on the user profile and used by the other two engines.
+
+---
+
+### 3.2 Feature 2 — Intelligent Exercise Planner
+
+**Inputs:** goal (from Feature 1), mode (home/gym), available equipment, days available per week, experience level.
+
+**Generation approach (MVP):** Template-based routine selection rather than fully dynamic generation. A library of pre-built workout splits (Full Body, Push/Pull/Legs, Cardio, HIIT, Strength) is filtered and scheduled based on the user's inputs.
+
+**Example output (Goal: Lose 5kg, 5 days available):**
+
+| Day | Workout |
+|---|---|
+| Monday | Full Body Workout |
+| Tuesday | Cardio |
+| Wednesday | Strength Training |
+| Thursday | HIIT |
+| Friday | Full Body Workout |
+
+**Exercise data:** Each exercise references the external exercise database (name, target muscle, equipment, GIF demonstration, instructions). Results are cached in a local `exerciseLibrary` collection to reduce repeat calls to the external API.
+
+**Outputs:** a weekly schedule, each day containing a workout type and a list of exercises with sets/reps/rest, plus demonstration media.
+
+---
+
+### 3.3 Feature 3 — Personalized Meal Planner
+
+**Inputs:** target calories and macros (from Feature 1), dietary preferences/restrictions, cuisine preference, budget level.
+
+**Generation approach (MVP):** Template-based meal assembly. A library of meal templates per calorie band (breakfast/lunch/snack/dinner combinations) is selected and portion-scaled to hit the target calorie and macro values, rather than free-form generation from raw ingredients.
+
+**Example output (Target: 2,200 kcal):**
+
+| Meal | Example |
+|---|---|
+| Breakfast | Oats + Eggs |
+| Lunch | Rice + Chicken + Vegetables |
+| Snack | Fruits + Nuts |
+| Dinner | Roti + Paneer + Salad |
+
+**Data sources:**
+- USDA FoodData Central for general ingredient-level macros
+- Spoonacular for recipe-level meal plan generation (free tier)
+- Internal `foodLibrary` collection for regional staples (e.g. roti, paneer, dal) not well covered by the above
+
+**Outputs:** a weekly meal plan with portions and macro totals per meal/day, plus an auto-generated grocery list aggregating ingredients across the week.
+
+---
+
+## 4. Data Model (MongoDB / Mongoose)
+
+### 4.1 User
+
+```js
+{
+  _id: ObjectId,
+  name: String,
+  email: String,
+  passwordHash: String,
+  profile: {
+    age: Number,
+    gender: String,        // "male" | "female"
+    heightCm: Number,
+    weightKg: Number,
+    activityLevel: String, // "sedentary" | "light" | "moderate" | "active" | "very_active"
+    goal: String           // "lose" | "maintain" | "gain"
+  },
+  targets: {
+    maintenanceCalories: Number,
+    weightLossCalories: Number,
+    weightGainCalories: Number,
+    macros: { protein: Number, carbs: Number, fat: Number },
+    weeklyProjectionKg: Number,
+    calculatedAt: Date
+  },
+  preferences: {
+    dietType: String,       // "vegetarian" | "non-vegetarian" | "vegan" | etc.
+    allergies: [String],
+    equipmentAccess: String, // "home" | "gym"
+    budgetLevel: String       // "low" | "medium" | "high"
+  },
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+### 4.2 WorkoutPlan
+
+```js
+{
+  _id: ObjectId,
+  userId: ObjectId,
+  weekStartDate: Date,
+  goal: String,
+  mode: String, // "home" | "gym"
+  days: [
+    {
+      day: String,        // "Monday"
+      type: String,       // "Full Body" | "Cardio" | "HIIT" | "Strength" | "Rest"
+      exercises: [
+        {
+          exerciseRefId: String, // external API id
+          name: String,
+          muscleGroup: String,
+          equipment: String,
+          sets: Number,
+          reps: String,
+          restSeconds: Number,
+          gifUrl: String
+        }
+      ]
+    }
+  ],
+  createdAt: Date
+}
+```
+
+### 4.3 MealPlan
+
+```js
+{
+  _id: ObjectId,
+  userId: ObjectId,
+  weekStartDate: Date,
+  targetCalories: Number,
+  targetMacros: { protein: Number, carbs: Number, fat: Number },
+  days: [
+    {
+      day: String,
+      meals: {
+        breakfast: [ { foodRefId: String, name: String, quantity: Number, unit: String, calories: Number, macros: Object } ],
+        lunch: [ /* same shape */ ],
+        snack: [ /* same shape */ ],
+        dinner: [ /* same shape */ ]
+      },
+      totalCalories: Number,
+      totalMacros: Object
+    }
+  ],
+  groceryList: [
+    { item: String, quantity: Number, unit: String, estimatedCost: Number }
+  ],
+  createdAt: Date
+}
+```
+
+### 4.4 FoodLibrary (cache + custom entries)
+
+```js
+{
+  _id: ObjectId,
+  name: String,
+  source: String,        // "USDA" | "Spoonacular" | "custom"
+  externalId: String,
+  caloriesPer100g: Number,
+  protein: Number,
+  carbs: Number,
+  fat: Number,
+  fiber: Number,
+  cuisineTags: [String], // e.g. ["indian", "vegetarian"]
+  dietTags: [String]     // e.g. ["vegetarian", "gluten-free"]
+}
+```
+
+### 4.5 ExerciseLibrary (cache)
+
+```js
+{
+  _id: ObjectId,
+  externalId: String,
+  name: String,
+  bodyPart: String,
+  targetMuscle: String,
+  equipment: String,
+  gifUrl: String,
+  instructions: [String]
+}
+```
+
+---
+
+## 5. API Design (REST Endpoints — Overview)
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/api/auth/register` | Create account |
+| POST | `/api/auth/login` | Authenticate, return JWT |
+| POST | `/api/calculator/calculate` | Compute and store calorie/macro targets |
+| GET | `/api/workout/plan` | Fetch current workout plan |
+| POST | `/api/workout/plan/generate` | Generate/regenerate workout plan |
+| GET | `/api/exercises` | Search exercises (proxied/cached from external API) |
+| GET | `/api/meal/plan` | Fetch current meal plan |
+| POST | `/api/meal/plan/generate` | Generate/regenerate meal plan |
+| GET | `/api/meal/grocery-list` | Get aggregated grocery list for the week |
+| GET | `/api/foods/search` | Search food/nutrition data (cached + external) |
+
+---
+
+## 6. Non-Functional Requirements
+
+| Category | Requirement |
+|---|---|
+| Performance | Calorie calculation returns instantly (client-side). Plan generation (workout/meal) completes in under ~2 seconds server-side. |
+| Security | Passwords hashed with bcrypt; JWT-based auth on all protected routes; HTTPS enforced via Render/Expo. |
+| Scalability | Stateless Express API allows horizontal scaling; external API responses cached in MongoDB to reduce repeat calls and respect free-tier rate limits. |
+| Offline support | Latest generated plans cached locally on-device (e.g. AsyncStorage) so users can view their current plan without connectivity. |
+| Data privacy | Health-related profile data (age, weight, etc.) stored per-user and not exposed via any public endpoint. |
+| Reliability | Render free tier cold-start (~30-50s after idle) should be communicated via a loading state on first request. |
+
+---
+
+## 7. External Integrations Summary
+
+| Integration | Used for | Notes |
+|---|---|---|
+| oss.exercisedb.dev | Exercise data, muscle targeting, GIF demonstrations | Free, no API key, 1,500+ exercises, non-commercial use / attribution required |
+| USDA FoodData Central | Ingredient-level nutrition data | Free, requires API key signup |
+| Spoonacular | Recipe-level meal plan generation | Free tier with daily call limits, suitable for prototyping |
+| Internal `foodLibrary` | Regional foods (e.g. Indian staples) not covered by above | Manually curated, one-time data entry |
+
+---
+
+## 8. MVP Roadmap
+
+| Phase | Deliverable |
+|---|---|
+| Phase 1 | Auth + Smart Calorie Calculator (client-side calc, profile storage, targets display) |
+| Phase 2 | Meal Planner (template-based, USDA + custom food library, calorie/macro matching) |
+| Phase 3 | Exercise Planner (template-based workout split selection, ExerciseDB integration) |
+| Phase 4 | Grocery list generation, plan scheduling, offline caching, polish |
+
+---
+
+## 9. Assumptions & Constraints
+
+- Free-tier limits on Spoonacular and the exercise API may require response caching and rate-limit handling as usage grows.
+- Indian/regional food coverage requires manual data curation in the `foodLibrary` collection; this is treated as a one-time content task, not an ongoing API dependency.
+- Render's free tier introduces cold-start latency; acceptable for MVP but should be revisited before scaling.
+- Weekly weight projections are estimates based on a linear calorie model and are presented to users as such, not as guarantees.
+
+---
+
+## 10. Open Items for Future Iteration
+
+- Move from template-based to adaptive/dynamic workout and meal generation as user data accumulates.
+- Evaluate paid tiers for exercise/recipe APIs once usage exceeds free-tier limits.
+- Add progress tracking (weight logs, workout completion logs) feeding back into plan adjustments.

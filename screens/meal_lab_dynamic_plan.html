@@ -1,0 +1,353 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Fuel &amp; Flow | Meal Lab</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Hanken+Grotesk:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #131313;
+            color: #e5e2e1;
+            font-family: 'Hanken Grotesk', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .glow-lime {
+            box-shadow: inset 0 0 10px rgba(204, 255, 0, 0.1);
+        }
+        .custom-scroll::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#393939",
+                        "tertiary-fixed": "#d2e5f5",
+                        "primary-fixed-dim": "#abd600",
+                        "surface-dim": "#131313",
+                        "on-secondary-container": "#541100",
+                        "on-primary-fixed": "#161e00",
+                        "on-error-container": "#ffdad6",
+                        "inverse-surface": "#e5e2e1",
+                        "primary": "#ffffff",
+                        "on-tertiary": "#21323e",
+                        "on-error": "#690005",
+                        "secondary-container": "#ff5625",
+                        "primary-fixed": "#c3f400",
+                        "secondary-fixed-dim": "#ffb5a0",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-tint": "#abd600",
+                        "secondary-fixed": "#ffdbd1",
+                        "tertiary-fixed-dim": "#b6c9d8",
+                        "surface": "#131313",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-surface-variant": "#c4c9ac",
+                        "on-secondary-fixed": "#3b0900",
+                        "inverse-on-surface": "#313030",
+                        "on-tertiary-fixed-variant": "#374956",
+                        "on-secondary-fixed-variant": "#872000",
+                        "outline-variant": "#444933",
+                        "on-primary": "#283500",
+                        "primary-container": "#c3f400",
+                        "on-surface": "#e5e2e1",
+                        "error-container": "#93000a",
+                        "surface-container-highest": "#353534",
+                        "outline": "#8e9379",
+                        "tertiary-container": "#d2e5f5",
+                        "on-secondary": "#601400",
+                        "background": "#131313",
+                        "inverse-primary": "#506600",
+                        "on-tertiary-container": "#556774",
+                        "surface-variant": "#353534",
+                        "on-primary-fixed-variant": "#3c4d00",
+                        "tertiary": "#ffffff",
+                        "surface-container": "#201f1f",
+                        "on-background": "#e5e2e1",
+                        "error": "#ffb4ab",
+                        "secondary": "#ffb5a0",
+                        "on-tertiary-fixed": "#0b1d29",
+                        "on-primary-container": "#556d00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "container-padding": "20px",
+                        "stack-lg": "32px",
+                        "stack-md": "12px",
+                        "stack-sm": "4px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Anton"],
+                        "headline-lg": ["Anton"],
+                        "label-sm": ["JetBrains Mono"],
+                        "display-xl": ["Anton"],
+                        "body-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "display-xl": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-background border-b border-surface-container-highest flex justify-between items-center px-container-padding py-stack-md"><button class="flex items-center justify-center w-10 h-10 rounded-lg bg-surface-container-high border border-primary-fixed/20 text-primary-fixed active:scale-90 transition-transform duration-150 mr-2">
+  <span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed" data-icon="bolt">bolt</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary-fixed uppercase tracking-tighter">Fuel &amp; Flow</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-surface-container-highest">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A professional studio portrait of a fit individual with a determined expression, lit with dramatic high-contrast side lighting. The background is a deep charcoal grey with subtle lens flare in electric lime. The overall aesthetic is high-performance, sleek, and modern, aligning with a premium fitness brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIZwZekCnBg3Fo-nZxi4_d16YYO6QeTPPglO7e0d2bmur5W5vH_jWV5ltWEum6214VFmu4YbqBIJh8WhTVWtS7J2i2JXWDU6jejO2ppjn1IPEqbWwgn4GDTVlXvULrG4njhuUcnnwKuOPPIqlf3VquxmITiKAUS556VzeCSybISDBsoEE103W97plfZwaUWR4OifF5q2XTFfFftVpwmbzfTsxJk178GBoUDl6VkO_2LbmBpkncUvC9BRdYAaFyHl5FJn_H666tlDvb">
+</div>
+</header>
+<main class="pb-32 px-container-padding space-y-stack-lg pb-40 overflow-y-auto">
+<!-- Header Title & Dynamic Badge -->
+<section class="mt-8 flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="px-2 py-1 bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm rounded uppercase tracking-widest">4+ Meal Expert Mode</span>
+<span class="material-symbols-outlined text-primary-fixed-dim" data-icon="settings_input_component">settings_input_component</span>
+</div>
+<h2 class="font-display-xl text-display-xl uppercase tracking-tight text-primary leading-none">Dynamic Protocol</h2>
+</section>
+<!-- Macro Summary Dashboard -->
+<section class="bg-surface-container-low p-stack-md rounded-xl border border-surface-container-highest glow-lime">
+<div class="flex justify-between items-end mb-6">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Daily Target</p>
+<p class="font-headline-lg text-headline-lg text-primary">2,850 <span class="text-on-surface-variant text-body-md font-body-md">KCAL</span></p>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-primary-fixed uppercase">Metabolic Surge Active</p>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Protein -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="">PROTEIN (P)</span>
+<span class="text-primary">185g / 210g</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-fixed w-[88%] transition-all duration-150"></div>
+</div>
+</div>
+<!-- Carbs -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="">CARBS (C)</span>
+<span class="text-primary">220g / 320g</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-fixed w-[68%] transition-all duration-150"></div>
+</div>
+</div>
+<!-- Fats -->
+<div class="space-y-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="">FATS (F)</span>
+<span class="text-primary">65g / 85g</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-fixed w-[76%] transition-all duration-150"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Dynamic Meal Cards -->
+<div class="space-y-gutter">
+<!-- Meal 1: Breakfast -->
+<article class="flex flex-col gap-stack-sm" style="opacity: 1; transform: translateY(0px); transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm text-primary-fixed">08:00 AM</span>
+<div class="h-[1px] flex-grow bg-surface-container-highest"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Pre-Load</span>
+</div>
+<div class="bg-surface-container overflow-hidden border border-surface-container-highest">
+<div class="relative h-48 w-full">
+<img alt="Ragi Dosa" class="w-full h-full object-cover" data-alt="A gourmet close-up of crispy Ragi Dosa served with vibrant coconut chutney and spicy sambar. The plate is rustic dark ceramic, placed on a slate surface. The lighting is moody and dramatic with sharp highlights on the texture of the dosa, reflecting an aggressive, high-energy culinary aesthetic with deep shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7-bTHvOt1D_W3hgxZBMNHzyIClVC-zRmfKXpCF-PtwyPsqolc9aESB9qPtNYIEZZ1bduWpYqPGnfI7jlLu6HYHd9u2TLG2wrPe0UjzafvRxYu76MEwLS3XsWMWH8AxaF1tc7JPNtTrY7IEcOkUUmlu7CN1CyLqUbFrTqqHnknA19H9j9upS9XYkNLvpl_avYMWOi5Lt48bdKAhiCUqMpZKnOlQbG9jeD_t2lZOjcfrx33Dt49FtUMaxb0N8hmBhei_AE2B0yHANpU">
+<div class="absolute bottom-0 left-0 p-stack-md bg-gradient-to-t from-background to-transparent w-full">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-primary uppercase">Ragi Dosa &amp; Egg White Bhurji</h3>
+</div>
+</div>
+<div class="p-stack-md space-y-4">
+<p class="text-body-md font-body-md text-on-surface-variant">Complex carb base with finger millet for sustained release energy. Scrambled egg whites with turmeric and curry leaves for lean protein recovery.</p>
+<div class="flex justify-between py-2 border-y border-surface-container-highest">
+<div class="text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">P</p>
+<p class="font-body-md font-bold text-primary">34g</p>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">F</p>
+<p class="font-body-md font-bold text-primary">12g</p>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">C</p>
+<p class="font-body-md font-bold text-primary">45g</p>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">KCAL</p>
+<p class="font-body-md font-bold text-primary-fixed">424</p>
+</div>
+</div>
+<!-- Performance Pairing -->
+<div class="bg-surface-container-high p-stack-md flex items-center gap-stack-md">
+<div class="w-12 h-12 flex items-center justify-center bg-background rounded-lg border border-primary-fixed/20">
+<span class="material-symbols-outlined text-primary-fixed" data-icon="coffee">coffee</span>
+</div>
+<div class="flex-grow">
+<p class="font-label-sm text-label-sm text-primary-fixed uppercase font-bold">Protein Coffee Pairing</p>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm">Whey-infused cold brew for immediate cognitive focus.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- Meal 2: Post-Workout Lunch -->
+<article class="flex flex-col gap-stack-sm" style="opacity: 1; transform: translateY(0px); transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm text-primary-fixed">01:30 PM</span>
+<div class="h-[1px] flex-grow bg-surface-container-highest"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Anabolic Window</span>
+</div>
+<div class="bg-surface-container overflow-hidden border border-surface-container-highest">
+<div class="relative h-48 w-full">
+<img alt="Paneer Tikka Salad" class="w-full h-full object-cover" data-alt="Top-down view of a vibrant Paneer Tikka Salad with grilled peppers, onions, and chickpeas on a dark matte plate. The paneer has perfect char marks. The scene is lit with bright, cold studio lights that emphasize the freshness of the greens and the texture of the grill. Dark, minimalist environment with pops of electric lime citrus slices." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2ANhL4o8p_Led60S3zNwGDKIUX4UkQE26WfTsSbITbhrg8VtP8UlCodgHIiuB8x2VRzvTWEHT4rIc1YPnRtCEjIyyjv_0aJF--0gX9PDBc866RUs5QuF4KJZgwFKsCuPqy9cvCaS15Z6Rbdb9-TOSWu5T1EDbCjS93VoMAh9LUyEPLubco6x5K8t_aBF1CdGAjld2RcKRwin4uuYd7HE8yB2akOgd34GCm0sl_C77YWK4rsvPvU_5gi2nnwiG1uYX92epDmKMVM8I">
+<div class="absolute bottom-0 left-0 p-stack-md bg-gradient-to-t from-background to-transparent w-full">
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-primary uppercase">Paneer Tikka High-Fiber Bowl</h3>
+</div>
+</div>
+<div class="p-stack-md space-y-4">
+<p class="text-body-md font-body-md text-on-surface-variant">Grilled paneer cubes marinated in Greek yogurt and spices. Served over a bed of sprouted moong and kale for massive micronutrient density.</p>
+<div class="flex justify-between py-2 border-y border-surface-container-highest">
+<div class="text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">P</p>
+<p class="font-body-md font-bold text-primary">42g</p>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">F</p>
+<p class="font-body-md font-bold text-primary">18g</p>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">C</p>
+<p class="font-body-md font-bold text-primary">28g</p>
+</div>
+<div class="text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant">KCAL</p>
+<p class="font-body-md font-bold text-primary-fixed">442</p>
+</div>
+</div>
+<!-- Performance Pairing -->
+<div class="bg-surface-container-high p-stack-md flex items-center gap-stack-md">
+<div class="w-12 h-12 flex items-center justify-center bg-background rounded-lg border border-primary-fixed/20">
+<span class="material-symbols-outlined text-primary-fixed" data-icon="local_drink">local_drink</span>
+</div>
+<div class="flex-grow">
+<p class="font-label-sm text-label-sm text-primary-fixed uppercase font-bold">Spiced Buttermilk</p>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm">Chilled probiotic blend with ginger to accelerate digestion.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- Meal 3: Evening Snack -->
+<article class="flex flex-col gap-stack-sm" style="opacity: 1; transform: translateY(0px); transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm text-primary-fixed">05:00 PM</span>
+<div class="h-[1px] flex-grow bg-surface-container-highest"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Mid-Day Fuel</span>
+</div>
+<div class="bg-surface-container p-stack-md border border-surface-container-highest flex items-center gap-4">
+<div class="w-20 h-20 rounded-lg overflow-hidden shrink-0 border border-surface-container-highest">
+<img alt="Tandoori Soya" class="w-full h-full object-cover" data-alt="A focused close-up of tandoori soya chunks skewered with bell peppers, with steam rising against a black background. The red tandoori spice is vivid, and the lighting is sharp and cinematic, capturing the charred edges. Minimalist, high-performance snack aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDTpZHMBjsXCbRqN7vxCxCnANlGJrBe2Cu7PhLKgtF4jDhqHohNVgmOuFRAgxCD2yvxg8Y3fRUuAJBay9ZPMDKLRkTay23X0m1OxFPyOqlYweZAub1Kc04Iu6RkVwznLRwRKYLHCgAwV8FA3Lz6jJ8Ljg29WXzzzuat8lzuV8Px0Amtro8HGRUT_QkDVWZvhfwwcoeFh1ulV14YNYbwCENRZXT7s5Q3RxgpN9mAsSW9SBlOjZ2W6QmpJ4QNY8kIZcxMc2SoRgcCkuW">
+</div>
+<div class="flex-grow">
+<h4 class="font-label-sm text-label-sm text-primary uppercase font-bold">Tandoori Soya Chunks</h4>
+<p class="text-sm text-on-surface-variant">High-density plant protein.</p>
+<div class="flex gap-4 mt-1">
+<span class="text-xs font-label-sm text-primary-fixed">24g P</span>
+<span class="text-xs font-label-sm text-on-surface-variant">180 kcal</span>
+</div>
+</div>
+<div class="bg-surface-container-high p-2 rounded">
+<span class="material-symbols-outlined text-primary-fixed text-lg" data-icon="check_circle" style="font-variation-settings: &quot;FILL&quot; 1;">check_circle</span>
+</div>
+</div>
+</article>
+</div>
+<!-- Call to Action -->
+<button class="w-full py-6 bg-primary-fixed text-on-primary-fixed font-display-xl text-[24px] uppercase tracking-widest active:scale-95 transition-transform duration-150 rounded-none border-b-4 border-primary-fixed-dim">
+            Log Protocol to Tracker
+        </button>
+</main>
+<!-- BottomNavBar -->
+
+<!-- Micro-interaction Scripts -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Simple tactile feedback simulation
+                    if(window.navigator.vibrate) window.navigator.vibrate(10);
+                });
+            });
+
+            // Intersection observer for card entry animation
+            const cards = document.querySelectorAll('article');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                observer.observe(card);
+            });
+        });
+    </script>
+
+
+
+
+
+
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 pb-safe bg-surface-container-lowest/80 backdrop-blur-xl border-t border-surface-container-highest z-50"><a class="flex flex-col items-center justify-center text-on-surface-variant px-stack-md py-stack-sm hover:text-primary-fixed-dim transition-colors active:scale-90 duration-200" href="#home"><span class="material-symbols-outlined mb-1">home</span><span class="font-label-sm text-label-sm">HOME</span></a><a class="flex flex-col items-center justify-center text-on-surface-variant px-stack-md py-stack-sm hover:text-primary-fixed-dim transition-colors active:scale-90 duration-200" href="#calc"><span class="material-symbols-outlined mb-1">calculate</span><span class="font-label-sm text-label-sm">CALC</span></a><a class="flex flex-col items-center justify-center text-on-surface-variant px-stack-md py-stack-sm hover:text-primary-fixed-dim transition-colors active:scale-90 duration-200" href="#train"><span class="material-symbols-outlined mb-1">fitness_center</span><span class="font-label-sm text-label-sm">TRAIN</span></a><a class="flex flex-col items-center justify-center bg-primary-fixed text-on-primary-fixed rounded-xl px-stack-md py-stack-sm active:scale-90 transition-transform duration-200" href="#fuel"><span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">restaurant</span><span class="font-label-sm text-label-sm">FUEL</span></a><a class="flex flex-col items-center justify-center text-on-surface-variant px-stack-md py-stack-sm hover:text-primary-fixed-dim transition-colors active:scale-90 duration-200" href="#me"><span class="material-symbols-outlined mb-1">person</span><span class="font-label-sm text-label-sm">ME</span></a></nav></body></html>

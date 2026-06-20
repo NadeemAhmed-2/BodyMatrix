@@ -1,0 +1,246 @@
+<!DOCTYPE html><html class="dark" lang="en" style="width: 390px; height: 1394px; overflow: hidden; position: relative;"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Hanken+Grotesk:wght@400;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-tint": "#abd600",
+            "surface-container-highest": "#353534",
+            "primary": "#ffffff",
+            "inverse-surface": "#e5e2e1",
+            "surface-dim": "#131313",
+            "surface-container-high": "#2a2a2a",
+            "on-tertiary-fixed": "#0b1d29",
+            "secondary-fixed": "#ffdbd1",
+            "on-surface": "#e5e2e1",
+            "surface-container": "#201f1f",
+            "secondary": "#ffb5a0",
+            "error": "#ffb4ab",
+            "tertiary": "#ffffff",
+            "surface-bright": "#393939",
+            "secondary-fixed-dim": "#ffb5a0",
+            "secondary-container": "#ff5625",
+            "on-primary-container": "#556d00",
+            "tertiary-fixed-dim": "#b6c9d8",
+            "on-secondary-container": "#541100",
+            "inverse-on-surface": "#313030",
+            "surface-container-low": "#1c1b1b",
+            "surface-container-lowest": "#0e0e0e",
+            "outline-variant": "#444933",
+            "on-surface-variant": "#c4c9ac",
+            "on-primary-fixed": "#161e00",
+            "surface-variant": "#353534",
+            "on-primary-fixed-variant": "#3c4d00",
+            "inverse-primary": "#506600",
+            "primary-fixed-dim": "#abd600",
+            "error-container": "#93000a",
+            "on-tertiary-fixed-variant": "#374956",
+            "primary-container": "#c3f400",
+            "on-error": "#690005",
+            "on-error-container": "#ffdad6",
+            "on-secondary-fixed": "#3b0900",
+            "on-tertiary": "#21323e",
+            "tertiary-fixed": "#d2e5f5",
+            "on-background": "#e5e2e1",
+            "on-tertiary-container": "#556774",
+            "outline": "#8e9379",
+            "on-primary": "#283500",
+            "on-secondary-fixed-variant": "#872000",
+            "surface": "#131313",
+            "primary-fixed": "#c3f400",
+            "on-secondary": "#601400",
+            "tertiary-container": "#d2e5f5",
+            "background": "#131313"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "container-padding": "20px",
+            "base": "8px",
+            "stack-md": "12px",
+            "stack-lg": "32px",
+            "stack-sm": "4px",
+            "gutter": "16px"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Anton"],
+            "body-md": ["Hanken Grotesk"],
+            "headline-lg": ["Anton"],
+            "display-xl": ["Anton"],
+            "label-sm": ["JetBrains Mono"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "headline-lg": ["32px", {"lineHeight": "36px", "fontWeight": "400"}],
+            "display-xl": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+            "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 0px;
+      display: none;
+    }
+    .glow-overlay {
+      background: radial-gradient(circle at 50% 50%, rgba(171, 214, 0, 0.15) 0%, transparent 80%);
+    }
+    .kinetic-text {
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+      color: transparent;
+    }
+    .active-lime-border {
+      border: 1px solid rgba(171, 214, 0, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-surface-tint selection:text-on-primary">
+<!-- Top AppBar (JSON Component Mapping) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-container-padding h-16 bg-background/80 dark:bg-background/80 backdrop-blur-md border-b border-surface-container-highest">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary-fixed cursor-pointer">menu</span>
+</div>
+<h1 class="font-display-xl text-display-xl text-surface-tint tracking-tighter">KINETIC</h1>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-primary-fixed cursor-pointer">notifications</span>
+</div>
+</header>
+<main class="pt-16 pb-24 overflow-y-auto h-full px-container-padding">
+<!-- Hero Section: Daily Grind -->
+<section class="relative mt-stack-md h-[400px] w-full overflow-hidden rounded-xl">
+<img class="absolute inset-0 w-full h-full object-cover grayscale-[0.3]" data-alt="A cinematic, high-contrast shot of a muscular man performing a heavy deadlift in a gritty, industrial gym. The lighting is dramatic, with a single bright overhead spotlight creating intense shadows and highlights on his muscles. Dust and mist hang in the air, catching the light. The gym setting features dark concrete walls with faint graffiti, and the lifting platform has a vibrant electric lime green glow along its edge, matching the KINETIC brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_N6rxj3pPzcDLclzKXPDIR2-yWGLDpEK-P7xGFNi08megRGOGvXB1f7d1QNOxJCcXo2FVyiKQH8bWYWqGbxeKaTPiINHacgDxD_C_zJqMqGBMVr9lQutZKsRhPixz_1fVDvS20ik-KW3Pt5Y7PqSMr-WSXWa3UlTy7XVzpCsWDho07WSFLP9dALwiAVYcTcbm0BZs_U0LZ-ckdcJkZ1LUi70AWhz13yRfFG8GDhFheGW41tdZpgLSXzRQi81ZPeEoehP0JbtG_V_i">
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 z-10">
+<p class="font-label-sm text-label-sm text-surface-tint uppercase tracking-[0.2em] mb-2">Current Session</p>
+<h2 class="font-display-xl text-display-xl leading-none text-white uppercase italic">DAILY GRIND</h2>
+<div class="mt-4 flex items-center space-x-4">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">ELAPSED</span>
+<span class="font-label-sm text-[20px] text-white">42:15</span>
+</div>
+<div class="w-[1px] h-8 bg-surface-container-highest"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">VOLUME</span>
+<span class="font-label-sm text-[20px] text-white">12,400KG</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Grid: Train Hub, Fuel Calc, Meal Lab -->
+<section class="mt-stack-lg grid grid-cols-2 gap-gutter">
+<!-- TRAIN HUB (Vertical/Large Tile) -->
+<div class="col-span-1 row-span-2 relative h-full bg-surface-container overflow-hidden rounded-xl border border-white/5 active:scale-95 transition-transform">
+<div class="absolute inset-0 glow-overlay"></div>
+<div class="p-stack-md relative z-10 flex flex-col h-full justify-between">
+<div>
+<span class="material-symbols-outlined text-surface-tint text-4xl mb-4" style="font-variation-settings: &quot;FILL&quot; 1;">fitness_center</span>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-white uppercase leading-none">TRAIN<br>HUB</h3>
+</div>
+<div class="mt-stack-lg">
+<p class="font-label-sm text-label-sm text-on-surface-variant">NEXT UP</p>
+<p class="font-body-md text-body-md text-white">Heavy Leg Press</p>
+<div class="mt-4 bg-surface-tint py-3 px-4 flex justify-center items-center">
+<span class="font-headline-lg-mobile text-[16px] text-on-primary">RESUME</span>
+</div>
+</div>
+</div>
+</div>
+<!-- FUEL CALC -->
+<div class="col-span-1 relative bg-surface-container h-44 overflow-hidden rounded-xl border border-white/5 active:scale-95 transition-transform">
+<div class="p-stack-md flex flex-col h-full justify-between">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-lg-mobile text-[22px] text-white uppercase leading-none">FUEL<br>CALC</h3>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: &quot;FILL&quot; 1;">calculate</span>
+</div>
+<div class="flex items-end justify-between">
+<span class="font-label-sm text-label-sm text-surface-tint">1.2K KCAL LEFT</span>
+<div class="w-12 h-12 relative">
+<svg class="w-full h-full -rotate-90">
+<circle cx="24" cy="24" fill="none" r="20" stroke="rgba(255,255,255,0.05)" stroke-width="4"></circle>
+<circle cx="24" cy="24" fill="none" r="20" stroke="#abd600" stroke-dasharray="125" stroke-dashoffset="40" stroke-width="4"></circle>
+</svg>
+</div>
+</div>
+</div>
+</div>
+<!-- MEAL LAB -->
+<div class="col-span-1 relative bg-surface-container h-44 overflow-hidden rounded-xl border border-white/5 active:scale-95 transition-transform">
+<img class="absolute inset-0 w-full h-full object-cover opacity-30" data-alt="A professional food photography shot of a high-protein meal prep bowl containing grilled salmon, quinoa, and vibrant green asparagus. The lighting is crisp and overhead, highlighting the textures of the food. The background is a dark, matte slate surface, and the bowl is a minimalist black ceramic. The overall mood is clean, healthy, and focused on athletic performance nutrition, fitting the gritty cinematic fitness aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8bqsUOkHgte1kD33AjTPuBeTMcTiSEPjihL-y7xbk5-5s_lAgnMmduhuIsMx4IGD-RjzxZ-SkBLw4oMehTVWrPlmwU01Xae0Mrwc6ohIbamOoekGjyVaCc-hyMiW2EjqZ4onAQdG_lybGKDsPBZhFOMnEjlxvuMhZeOfSevfbJ8r0JtV48KsY8_x7WUEltm8b92ms6kwbWXF06Mtrd2G8-0Rco-9U5qjCszOf0segdxVyl63lGq_lBa572S_Chu4pp1Umz76kFiQI">
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
+<div class="p-stack-md relative z-10 flex flex-col h-full justify-between">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-lg-mobile text-[22px] text-white uppercase leading-none">MEAL<br>LAB</h3>
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: &quot;FILL&quot; 1;">restaurant</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">RECIPE RECO: KETO BOWL</span>
+</div>
+</div>
+</section>
+<!-- Performance Stats / Bento Item -->
+
+<!-- Muscle Map Minimalist Peek -->
+<section class="mt-stack-lg relative rounded-xl border border-white/5 bg-surface-container overflow-hidden">
+
+</section>
+</main>
+<!-- Bottom Navigation (JSON Component Mapping) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-safe bg-surface-container-lowest/90 dark:bg-surface-container-lowest/90 backdrop-blur-xl border-t border-primary/10">
+<!-- Active Destination: Home -->
+<a class="flex flex-col items-center justify-center text-surface-tint bg-surface-container-highest/50 rounded-xl p-2 scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">home</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/60 p-2 hover:text-surface-tint/80 transition-colors" href="#">
+<span class="material-symbols-outlined">calculate</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest mt-1">Calc</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/60 p-2 hover:text-surface-tint/80 transition-colors" href="#">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest mt-1">Train</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/60 p-2 hover:text-surface-tint/80 transition-colors" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest mt-1">Fuel</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/60 p-2 hover:text-surface-tint/80 transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest mt-1">Me</span>
+</a>
+</nav>
+<!-- Floating Action Button (Contextual) -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-surface-tint text-on-primary flex items-center justify-center rounded-full shadow-[0_0_20px_rgba(171,214,0,0.4)] active:scale-90 transition-transform z-40">
+
+</button>
+<script>
+    // Lightweight interaction for button scale and active states
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('touchstart', () => {
+        el.classList.add('scale-95');
+      });
+      el.addEventListener('touchend', () => {
+        el.classList.remove('scale-95');
+      });
+    });
+  </script>
+
+
+</body></html>
