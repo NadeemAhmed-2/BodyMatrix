@@ -20,16 +20,8 @@ import ExercisePlannerScreen from './src/screens/ExercisePlannerScreen';
 import WorkoutPlanScreen from './src/screens/WorkoutPlanScreen';
 import Button from './src/components/Button';
 
-// Configure server API base URL
-const getBaseUrl = () => {
-  if (Platform.OS === 'web' && typeof window !== 'undefined') {
-    return `http://${window.location.hostname}:5001`;
-  }
-  // Default to localhost for emulator, can be replaced by computer's IP
-  return 'http://localhost:5001';
-};
-
-const BASE_URL = getBaseUrl();
+// Configure server API base URL — points to the live Render backend
+const BASE_URL = 'https://bodymatrix.onrender.com';
 
 export default function App() {
   const [loading, setLoading] = useState(true);
