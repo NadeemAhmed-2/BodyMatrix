@@ -20,8 +20,12 @@ if (Platform.OS !== 'web') {
   }
 }
 
-// Google OAuth client ID from Firebase Console
-const GOOGLE_WEB_CLIENT_ID = '368618655974-vfh01i3m2ghrbbmqavm4t9m7c8f5q1v2.apps.googleusercontent.com';
+// Google OAuth client IDs from Google Cloud / Firebase Console
+const GOOGLE_WEB_CLIENT_ID = '368618655974-lgfa63tp5qtv9gtu9ipg6i8fprgaj46r.apps.googleusercontent.com';
+// TODO: Replace with your native Android OAuth client ID from Google Cloud Console
+const GOOGLE_ANDROID_CLIENT_ID = '368618655974-14c9jd2q6udmjaabi120nshlqnb5utgk.apps.googleusercontent.com'; 
+// TODO: Replace with your native iOS OAuth client ID if targeting iOS
+const GOOGLE_IOS_CLIENT_ID = ''; 
 
 export default function LoginScreen({ onNavigate, onLoginSuccess, baseUrl }) {
   const [email, setEmail] = useState('');
@@ -35,6 +39,8 @@ export default function LoginScreen({ onNavigate, onLoginSuccess, baseUrl }) {
   const [request, response, promptAsync] = (AuthSession && discovery) 
     ? AuthSession.useAuthRequest({
         clientId: GOOGLE_WEB_CLIENT_ID,
+        androidClientId: GOOGLE_ANDROID_CLIENT_ID,
+        iosClientId: GOOGLE_IOS_CLIENT_ID,
         scopes: ['openid', 'profile', 'email'],
         responseType: 'id_token',
         redirectUri: AuthSession.makeRedirectUri({ preferLocalhost: false }),

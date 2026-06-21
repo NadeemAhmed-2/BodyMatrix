@@ -20,8 +20,12 @@ if (Platform.OS !== 'web') {
   }
 }
 
-// Google OAuth client ID from Firebase Console
-const GOOGLE_WEB_CLIENT_ID = '368618655974-vfh01i3m2ghrbbmqavm4t9m7c8f5q1v2.apps.googleusercontent.com';
+// Google OAuth client IDs from Google Cloud / Firebase Console
+const GOOGLE_WEB_CLIENT_ID = '368618655974-lgfa63tp5qtv9gtu9ipg6i8fprgaj46r.apps.googleusercontent.com';
+// TODO: Replace with your native Android OAuth client ID from Google Cloud Console
+const GOOGLE_ANDROID_CLIENT_ID = '368618655974-14c9jd2q6udmjaabi120nshlqnb5utgk.apps.googleusercontent.com';
+// TODO: Replace with your native iOS OAuth client ID if targeting iOS
+const GOOGLE_IOS_CLIENT_ID = '';
 
 export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) {
   const [name, setName] = useState('');
@@ -33,14 +37,16 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
 
   // Native Google Auth using expo-auth-session
   const discovery = AuthSession ? AuthSession.useAutoDiscovery('https://accounts.google.com') : null;
-  
-  const [request, response, promptAsync] = (AuthSession && discovery) 
+
+  const [request, response, promptAsync] = (AuthSession && discovery)
     ? AuthSession.useAuthRequest({
-        clientId: GOOGLE_WEB_CLIENT_ID,
-        scopes: ['openid', 'profile', 'email'],
-        responseType: 'id_token',
-        redirectUri: AuthSession.makeRedirectUri({ preferLocalhost: false }),
-      }, discovery)
+      clientId: GOOGLE_WEB_CLIENT_ID,
+      androidClientId: GOOGLE_ANDROID_CLIENT_ID,
+      iosClientId: GOOGLE_IOS_CLIENT_ID,
+      scopes: ['openid', 'profile', 'email'],
+      responseType: 'id_token',
+      redirectUri: AuthSession.makeRedirectUri({ preferLocalhost: false }),
+    }, discovery)
     : [null, null, null];
 
   useEffect(() => {
@@ -57,10 +63,10 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
       const credential = GoogleAuthProvider.credential(googleIdToken);
       const firebaseResult = await signInWithCredential(auth, credential);
       const firebaseUser = firebaseResult.user;
-      
+
       // Get Firebase ID token (this is what the backend expects)
       const firebaseIdToken = await firebaseUser.getIdToken();
-      
+
       const backendResponse = await fetch(`${baseUrl}/api/auth/google`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -72,7 +78,7 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
       });
 
       const data = await backendResponse.json();
-      
+
       if (backendResponse.ok && data.success) {
         await AsyncStorage.setItem('userToken', data.token);
         await AsyncStorage.setItem('userData', JSON.stringify(data.user));
@@ -99,7 +105,7 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
     if (!email) tempErrors.email = 'Email is required';
     if (!password) tempErrors.password = 'Password is required';
     if (password !== confirmPassword) tempErrors.confirmPassword = 'Passwords do not match';
-    
+
     if (Object.keys(tempErrors).length > 0) {
       setErrors(tempErrors);
       return;
@@ -131,7 +137,7 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
       setLoading(false);
     }
   };
-  
+
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
@@ -143,7 +149,7 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
         const result = await signInWithPopup(auth, provider);
         const firebaseUser = result.user;
         const idToken = await firebaseUser.getIdToken();
-        
+
         const response = await fetch(`${baseUrl}/api/auth/google`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -153,9 +159,9 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
             name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
           }),
         });
-        
+
         const data = await response.json();
-        
+
         if (response.ok && data.success) {
           await AsyncStorage.setItem('userToken', data.token);
           await AsyncStorage.setItem('userData', JSON.stringify(data.user));
@@ -228,7 +234,7 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
           error={errors.confirmPassword}
         />
 
-         <Button
+        <Button
           title="CREATE ACCOUNT"
           onPress={handleRegister}
           loading={loading}
@@ -241,8 +247,8 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
           <View style={styles.separatorLine} />
         </View>
 
-        <TouchableOpacity 
-          style={styles.googleButton} 
+        <TouchableOpacity
+          style={styles.googleButton}
           onPress={handleGoogleSignIn}
           disabled={loading}
           activeOpacity={0.8}

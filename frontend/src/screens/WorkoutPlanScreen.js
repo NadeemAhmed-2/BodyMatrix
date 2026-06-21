@@ -16,7 +16,7 @@ import Button from '../components/Button';
 let WebView = null;
 if (Platform.OS !== 'web') {
   try {
-    WebView = require('expo-web-view').WebView;
+    WebView = require('react-native-webview').WebView;
   } catch (e) {
     console.log('WebView not available');
   }
