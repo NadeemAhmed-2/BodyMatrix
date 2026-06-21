@@ -6,10 +6,21 @@ import {
   ScrollView, 
   TouchableOpacity, 
   ActivityIndicator, 
-  Platform 
+  Platform,
+  Linking
 } from 'react-native';
 import { COLORS, SPACING, FONTS } from '../styles/theme';
 import Button from '../components/Button';
+
+// WebView for native YouTube embedding
+let WebView = null;
+if (Platform.OS !== 'web') {
+  try {
+    WebView = require('expo-web-view').WebView;
+  } catch (e) {
+    console.log('WebView not available');
+  }
+}
 
 export default function WorkoutPlanScreen({ plan, baseUrl, token, onBack, onStartWorkout }) {
   const [activeDayIndex, setActiveDayIndex] = useState(0); // Index of selected day in schedule (0-6)
@@ -217,10 +228,23 @@ export default function WorkoutPlanScreen({ plan, baseUrl, token, onBack, onStar
                               frameBorder="0"
                               allowFullScreen
                             />
+                          ) : WebView ? (
+                            <WebView
+                              source={{ uri: `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&playsinline=1` }}
+                              style={{ flex: 1 }}
+                              allowsFullscreenVideo={true}
+                              javaScriptEnabled={true}
+                              domStorageEnabled={true}
+                              mediaPlaybackRequiresUserAction={false}
+                            />
                           ) : (
-                            <View style={styles.mobileVideoPlaceholder}>
-                              <Text style={styles.mobileVideoText}>YouTube Video ID: {videoId}</Text>
-                            </View>
+                            <TouchableOpacity
+                              style={styles.mobileVideoPlaceholder}
+                              onPress={() => Linking.openURL(`https://www.youtube.com/watch?v=${videoId}`)}
+                            >
+                              <Text style={styles.mobileVideoPlayIcon}>▶</Text>
+                              <Text style={styles.mobileVideoText}>TAP TO OPEN IN YOUTUBE</Text>
+                            </TouchableOpacity>
                           )}
                         </View>
                       )}
@@ -556,6 +580,13 @@ const styles = StyleSheet.create({
   mobileVideoText: {
     color: COLORS.textMuted,
     fontSize: 12,
+    fontFamily: 'monospace',
+    letterSpacing: 1,
+    marginTop: 8,
+  },
+  mobileVideoPlayIcon: {
+    color: COLORS.primary,
+    fontSize: 36,
   },
   instructionsContainer: {
     marginTop: SPACING.md,

@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Alert, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS, SPACING } from '../styles/theme';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, signInWithPopup, signInWithCredential } from 'firebase/auth';
 import { auth } from '../config/firebase';
+
+// Native Google Sign-In via expo-auth-session
+let AuthSession = null;
+let WebBrowser = null;
+if (Platform.OS !== 'web') {
+  try {
+    AuthSession = require('expo-auth-session');
+    WebBrowser = require('expo-web-browser');
+    WebBrowser.maybeCompleteAuthSession();
+  } catch (e) {
+    console.log('expo-auth-session not available');
+  }
+}
+
+// Google OAuth client ID from Firebase Console
+const GOOGLE_WEB_CLIENT_ID = '368618655974-vfh01i3m2ghrbbmqavm4t9m7c8f5q1v2.apps.googleusercontent.com';
 
 export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) {
   const [name, setName] = useState('');
@@ -14,6 +30,67 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+
+  // Native Google Auth using expo-auth-session
+  const discovery = AuthSession ? AuthSession.useAutoDiscovery('https://accounts.google.com') : null;
+  
+  const [request, response, promptAsync] = (AuthSession && discovery) 
+    ? AuthSession.useAuthRequest({
+        clientId: GOOGLE_WEB_CLIENT_ID,
+        scopes: ['openid', 'profile', 'email'],
+        responseType: 'id_token',
+        redirectUri: AuthSession.makeRedirectUri({ preferLocalhost: false }),
+      }, discovery)
+    : [null, null, null];
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { id_token } = response.params;
+      handleNativeGoogleResponse(id_token);
+    }
+  }, [response]);
+
+  const handleNativeGoogleResponse = async (googleIdToken) => {
+    setLoading(true);
+    try {
+      // Create Firebase credential from Google ID token and sign in to Firebase
+      const credential = GoogleAuthProvider.credential(googleIdToken);
+      const firebaseResult = await signInWithCredential(auth, credential);
+      const firebaseUser = firebaseResult.user;
+      
+      // Get Firebase ID token (this is what the backend expects)
+      const firebaseIdToken = await firebaseUser.getIdToken();
+      
+      const backendResponse = await fetch(`${baseUrl}/api/auth/google`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token: firebaseIdToken,
+          email: firebaseUser.email,
+          name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+        }),
+      });
+
+      const data = await backendResponse.json();
+      
+      if (backendResponse.ok && data.success) {
+        await AsyncStorage.setItem('userToken', data.token);
+        await AsyncStorage.setItem('userData', JSON.stringify(data.user));
+        if (data.profile) {
+          await AsyncStorage.setItem('profileData', JSON.stringify(data.profile));
+        }
+        Alert.alert('Success', `Welcome, ${data.user.name}! Account registered and logged in successfully.`);
+        onLoginSuccess(data.token, data.user, data.profile);
+      } else {
+        Alert.alert('Registration Failed', data.error || 'Could not authenticate with server.');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Google Sign-In Error', error.message || 'An error occurred during Google Sign-In.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleRegister = async () => {
     // Basic validation
@@ -58,45 +135,46 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
   const handleGoogleSignIn = async () => {
     setLoading(true);
     try {
-      const provider = new GoogleAuthProvider();
-      provider.addScope('email');
-      provider.addScope('profile');
-      
-      let result;
       if (Platform.OS === 'web') {
-        result = await signInWithPopup(auth, provider);
-      } else {
-        throw new Error('Google Sign-In is optimized for the web platform. Please run in a web browser.');
-      }
-      
-      const firebaseUser = result.user;
-      const idToken = await firebaseUser.getIdToken();
-      
-      const response = await fetch(`${baseUrl}/api/auth/google`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token: idToken,
-          email: firebaseUser.email,
-          name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
-        }),
-      });
-      
-      const data = await response.json();
-      
-      if (response.ok && data.success) {
-        await AsyncStorage.setItem('userToken', data.token);
-        await AsyncStorage.setItem('userData', JSON.stringify(data.user));
-        if (data.profile) {
-          await AsyncStorage.setItem('profileData', JSON.stringify(data.profile));
-        }
+        // Web: use Firebase popup
+        const provider = new GoogleAuthProvider();
+        provider.addScope('email');
+        provider.addScope('profile');
+        const result = await signInWithPopup(auth, provider);
+        const firebaseUser = result.user;
+        const idToken = await firebaseUser.getIdToken();
         
-        Alert.alert('Success', `Welcome, ${data.user.name}! Account registered and logged in successfully.`);
-        onLoginSuccess(data.token, data.user, data.profile);
+        const response = await fetch(`${baseUrl}/api/auth/google`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            token: idToken,
+            email: firebaseUser.email,
+            name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+          }),
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          await AsyncStorage.setItem('userToken', data.token);
+          await AsyncStorage.setItem('userData', JSON.stringify(data.user));
+          if (data.profile) {
+            await AsyncStorage.setItem('profileData', JSON.stringify(data.profile));
+          }
+          Alert.alert('Success', `Welcome, ${data.user.name}! Account registered and logged in successfully.`);
+          onLoginSuccess(data.token, data.user, data.profile);
+        } else {
+          Alert.alert('Registration Failed', data.error || 'Could not authenticate with server.');
+        }
       } else {
-        Alert.alert('Registration Failed', data.error || 'Could not authenticate with server.');
+        // Native: use expo-auth-session
+        if (promptAsync) {
+          setLoading(false);
+          await promptAsync();
+        } else {
+          Alert.alert('Not Available', 'Google Sign-In is not configured for this platform.');
+        }
       }
     } catch (error) {
       console.error(error);

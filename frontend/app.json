@@ -4,10 +4,10 @@
     "slug": "bodymatrix",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/BodyMatrix-Logo.jpeg",
     "userInterfaceStyle": "dark",
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/BodyMatrix-Logo.jpeg",
       "resizeMode": "contain",
       "backgroundColor": "#131313"
     },
@@ -16,7 +16,7 @@
     },
     "android": {
       "package": "com.nadeemahmed.bodymatrix",
-      "versionCode": 1,
+      "versionCode": 2,
       "adaptiveIcon": {
         "backgroundColor": "#131313",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -31,6 +31,9 @@
       "eas": {
         "projectId": "658eac0f-1f8a-4982-9784-f33ec89ebacb"
       }
-    }
+    },
+    "plugins": [
+      "expo-web-browser"
+    ]
   }
 }

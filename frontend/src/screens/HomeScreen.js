@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.bg,
     padding: SPACING.lg,
     paddingTop: 50,
-    paddingBottom: 100, // Extra padding for the bottom nav bar
+    paddingBottom: 80,
   },
   header: {
     flexDirection: 'row',
@@ -210,8 +210,8 @@ const styles = StyleSheet.create({
   },
   heroBanner: {
     width: '100%',
-    height: 240,
-    marginBottom: SPACING.xl,
+    height: 300,
+    marginBottom: SPACING.md,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.05)',
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   },
   trainTile: {
     flex: 1,
-    height: 260,
+    height: 310,
     backgroundColor: COLORS.surfaceLow,
     borderWidth: 1,
     borderColor: COLORS.surfaceHigh,
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
     gap: SPACING.md,
   },
   fuelCalcTile: {
-    height: 122,
+    height: 147,
     backgroundColor: COLORS.surfaceLow,
     borderWidth: 1,
     borderColor: COLORS.surfaceHigh,
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primary,
   },
   mealLabTile: {
-    height: 122,
+    height: 147,
     borderWidth: 1,
     borderColor: COLORS.surfaceHigh,
     overflow: 'hidden',
