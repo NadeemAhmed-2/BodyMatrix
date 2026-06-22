@@ -4,16 +4,16 @@ const Exercise = require('../models/Exercise');
 
 // Premium mock video ID bank mapped by muscle group
 const MOCK_VIDEOS = {
-  chest: 'vthMCtgB86w', // Bench Press Tutorial
-  back: 'eGo4IYlbE5g', // Lat Pulldown Tutorial
-  legs: 'U3HlEV_sPk8', // Squat Tutorial
-  shoulders: 'B-aVuy51BO0', // Shoulder Press Tutorial
-  core: 'Xyd_fa5zoEU', // Plank Tutorial
-  biceps: 'ykJgrb560_Q', // Bicep Curl Tutorial
-  triceps: '6kALZHtoS9Y', // Triceps Pushdown Tutorial
-  cardio: '1Tq3yZ_v0LI', // HIIT Cardio Tutorial
-  flexibility: 'g_tea8ZNk5A', // Downward Dog Stretch Tutorial
-  full_body: 'vthMCtgB86w' // Bench Press / Compound Tutorial
+  chest: 'rT7DgCr-3pg',       // Bench Press Tutorial (Jeff Nippard)
+  back: 'eGo4IYlbE5g',        // Lat Pulldown Tutorial (ScottHerman)
+  legs: 'bEv6CCg2BC8',        // Squat Tutorial (Squat University)
+  shoulders: 'qEwKCR5JCog',   // Overhead Press Tutorial (Jeff Nippard)
+  core: 'ASdvN_XEl_c',        // Plank Tutorial (Athlean-X)
+  biceps: 'kwG2ipFRgFo',      // Bicep Curl Tutorial (ScottHerman)
+  triceps: '2-LAMcpzODU',     // Triceps Pushdown Tutorial (ScottHerman)
+  cardio: 'ml6cT4AZdqI',      // HIIT Cardio (MadFit)
+  flexibility: 'g_tea8ZNk5A',  // Downward Dog Stretch Tutorial
+  full_body: 'UItWltVZZmE'     // Full Body Compound Tutorial (Jeff Nippard)
 };
 
 const getYoutubeVideoId = async (exerciseId) => {
@@ -36,7 +36,7 @@ const getYoutubeVideoId = async (exerciseId) => {
     if (exercise.youtubeVideoId) {
       return {
         videoId: exercise.youtubeVideoId,
-        embedUrl: `https://www.youtube.com/embed/${exercise.youtubeVideoId}?autoplay=0&rel=0&modestbranding=1`,
+        embedUrl: `https://www.youtube-nocookie.com/embed/${exercise.youtubeVideoId}?autoplay=0&rel=0&modestbranding=1&playsinline=1`,
         fromCache: true
       };
     }
@@ -55,7 +55,7 @@ const getYoutubeVideoId = async (exerciseId) => {
 
       return {
         videoId: fallbackId,
-        embedUrl: `https://www.youtube.com/embed/${fallbackId}?autoplay=0&rel=0&modestbranding=1`,
+        embedUrl: `https://www.youtube-nocookie.com/embed/${fallbackId}?autoplay=0&rel=0&modestbranding=1&playsinline=1`,
         fromCache: false
       };
     }
@@ -64,99 +64,141 @@ const getYoutubeVideoId = async (exerciseId) => {
     console.log(`[YouTube] Querying live YouTube API for: ${exercise.name}`);
     let videoId = null;
 
-    // Search Stage 1: Fitonomy Coaching Shorts
+    // Stage 1: Fitonomy Coaching — exact exercise name
     try {
-      console.log(`[YouTube] Stage 1 Search: Fitonomy Coaching`);
       const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
         params: {
           part: 'snippet',
-          q: `${exercise.name} @fitonomycoaching shorts`,
+          q: `${exercise.name} exercise tutorial @fitonomycoaching`,
           type: 'video',
           videoDuration: 'short',
-          order: 'viewCount',
+          order: 'relevance',
           maxResults: 1,
           key: apiKey
         },
         timeout: 3000
       });
-      if (response.data && response.data.items && response.data.items.length > 0) {
+      if (response.data?.items?.length > 0) {
         videoId = response.data.items[0].id.videoId;
-        console.log(`[YouTube] Found video on Fitonomy: ${videoId}`);
       }
     } catch (err) {
-      console.warn(`[YouTube] Fitonomy Stage 1 failed: ${err.message}`);
+      console.warn(`[YouTube] Stage 1 failed: ${err.message}`);
     }
 
-    // Search Stage 2: Official Demic Shorts
+    // Stage 2: Official Demic — exact exercise name
     if (!videoId) {
       try {
-        console.log(`[YouTube] Stage 2 Search: Official Demic`);
         const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
           params: {
             part: 'snippet',
-            q: `${exercise.name} @officialdemic shorts`,
+            q: `${exercise.name} exercise tutorial @officialdemic`,
             type: 'video',
             videoDuration: 'short',
-            order: 'viewCount',
+            order: 'relevance',
             maxResults: 1,
             key: apiKey
           },
           timeout: 3000
         });
-        if (response.data && response.data.items && response.data.items.length > 0) {
+        if (response.data?.items?.length > 0) {
           videoId = response.data.items[0].id.videoId;
-          console.log(`[YouTube] Found video on Demic: ${videoId}`);
         }
       } catch (err) {
-        console.warn(`[YouTube] Demic Stage 2 failed: ${err.message}`);
+        console.warn(`[YouTube] Stage 2 failed: ${err.message}`);
       }
     }
 
-    // Search Stage 3: General Highest Viewed Shorts
+    // Stage 3: Athlean-X — known for proper form tutorials
     if (!videoId) {
       try {
-        console.log(`[YouTube] Stage 3 Search: General Shorts`);
         const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
           params: {
             part: 'snippet',
-            q: `${exercise.name} shorts`,
+            q: `${exercise.name} proper form @athleanx`,
             type: 'video',
-            videoDuration: 'short',
-            order: 'viewCount',
+            order: 'relevance',
             maxResults: 1,
             key: apiKey
           },
           timeout: 3000
         });
-        if (response.data && response.data.items && response.data.items.length > 0) {
+        if (response.data?.items?.length > 0) {
           videoId = response.data.items[0].id.videoId;
-          console.log(`[YouTube] Found general shorts video: ${videoId}`);
         }
       } catch (err) {
-        console.warn(`[YouTube] General Shorts Stage 3 failed: ${err.message}`);
+        console.warn(`[YouTube] Stage 3 failed: ${err.message}`);
       }
     }
 
-    // Search Stage 4: General Exercise Tutorial (Fallback)
+    // Stage 4: Jeff Nippard — science-based exercise tutorials
     if (!videoId) {
       try {
-        console.log(`[YouTube] Stage 4 Search: General Tutorial Fallback`);
         const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
           params: {
             part: 'snippet',
-            q: `${exercise.name} exercise tutorial proper form`,
+            q: `${exercise.name} how to @jeffnippard`,
             type: 'video',
+            order: 'relevance',
             maxResults: 1,
             key: apiKey
           },
           timeout: 3000
         });
-        if (response.data && response.data.items && response.data.items.length > 0) {
+        if (response.data?.items?.length > 0) {
           videoId = response.data.items[0].id.videoId;
-          console.log(`[YouTube] Found general tutorial fallback: ${videoId}`);
         }
       } catch (err) {
-        console.warn(`[YouTube] Stage 4 fallback failed: ${err.message}`);
+        console.warn(`[YouTube] Stage 4 failed: ${err.message}`);
+      }
+    }
+
+    // Stage 5: ScottHermanFitness — covers all muscle groups
+    if (!videoId) {
+      try {
+        const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
+          params: {
+            part: 'snippet',
+            q: `${exercise.name} tutorial @scotthermanfitness`,
+            type: 'video',
+            order: 'relevance',
+            maxResults: 1,
+            key: apiKey
+          },
+          timeout: 3000
+        });
+        if (response.data?.items?.length > 0) {
+          videoId = response.data.items[0].id.videoId;
+        }
+      } catch (err) {
+        console.warn(`[YouTube] Stage 5 failed: ${err.message}`);
+      }
+    }
+
+    // Stage 6: General fallback — strict relevance filter using exercise name
+    if (!videoId) {
+      try {
+        const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
+          params: {
+            part: 'snippet',
+            q: `"${exercise.name}" exercise how to proper form`,
+            type: 'video',
+            order: 'relevance',
+            maxResults: 3,
+            key: apiKey
+          },
+          timeout: 3000
+        });
+        if (response.data?.items?.length > 0) {
+          // Pick the result whose title contains the exercise name for relevance
+          const match = response.data.items.find(item =>
+            item.snippet.title.toLowerCase().includes(exercise.name.toLowerCase().split(' ')[0])
+          );
+          videoId = match 
+            ? match.id.videoId 
+            : response.data.items[0].id.videoId;
+        }
+      } catch (err) {
+        console.warn(`[YouTube] Stage 6 failed: ${err.message}`);
       }
     }
 
@@ -172,7 +214,7 @@ const getYoutubeVideoId = async (exerciseId) => {
 
     return {
       videoId,
-      embedUrl: `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1`,
+      embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&playsinline=1`,
       fromCache: false
     };
 
@@ -185,7 +227,7 @@ const getYoutubeVideoId = async (exerciseId) => {
         const fallbackId = MOCK_VIDEOS[exercise.muscleGroup] || MOCK_VIDEOS.full_body;
         return {
           videoId: fallbackId,
-          embedUrl: `https://www.youtube.com/embed/${fallbackId}?autoplay=0&rel=0&modestbranding=1`,
+          embedUrl: `https://www.youtube-nocookie.com/embed/${fallbackId}?autoplay=0&rel=0&modestbranding=1&playsinline=1`,
           fromCache: false
         };
       }
@@ -194,7 +236,7 @@ const getYoutubeVideoId = async (exerciseId) => {
     // Final absolute fallback
     return {
       videoId: 'vthMCtgB86w',
-      embedUrl: 'https://www.youtube.com/embed/vthMCtgB86w?autoplay=0&rel=0&modestbranding=1',
+      embedUrl: 'https://www.youtube-nocookie.com/embed/vthMCtgB86w?autoplay=0&rel=0&modestbranding=1&playsinline=1',
       fromCache: false
     };
   }

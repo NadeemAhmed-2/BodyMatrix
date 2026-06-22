@@ -38,6 +38,7 @@ export default function LoginScreen({ onNavigate, onLoginSuccess, baseUrl }) {
         scopes: ['openid', 'profile', 'email'],
         responseType: 'id_token',
         redirectUri: AuthSession.makeRedirectUri({ scheme: 'bodymatrix', preferLocalhost: false }),
+        usePKCE: false,
       }
       : null,
     discovery

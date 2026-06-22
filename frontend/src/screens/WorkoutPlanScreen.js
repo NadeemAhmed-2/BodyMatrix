@@ -7,7 +7,8 @@ import {
   TouchableOpacity, 
   ActivityIndicator, 
   Platform,
-  Linking
+  Linking,
+  Image
 } from 'react-native';
 import { COLORS, SPACING, FONTS } from '../styles/theme';
 import Button from '../components/Button';
@@ -171,7 +172,7 @@ export default function WorkoutPlanScreen({ plan, baseUrl, token, onBack, onStar
                             Platform.OS === 'web' ? (
                               <img src={ex.imageUrl} style={styles.exerciseImageWeb} alt={ex.name} />
                             ) : (
-                              <View style={styles.placeholderBox}><Text style={styles.placeholderIcon}>🏋️‍♂️</Text></View>
+                              <Image source={{ uri: ex.imageUrl }} style={{ width: 80, height: 80 }} resizeMode="cover" />
                             )
                           ) : (
                             <View style={styles.placeholderBox}>
@@ -223,16 +224,17 @@ export default function WorkoutPlanScreen({ plan, baseUrl, token, onBack, onStar
                         <View style={styles.videoContainer}>
                           {Platform.OS === 'web' ? (
                             <iframe 
-                              src={`https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1`}
+                              src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&playsinline=1`}
                               style={styles.youtubeIframe}
                               frameBorder="0"
                               allowFullScreen
                             />
                           ) : WebView ? (
                             <WebView
-                              source={{ uri: `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&playsinline=1` }}
+                              source={{ uri: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&playsinline=1` }}
                               style={{ flex: 1 }}
                               allowsFullscreenVideo={true}
+                              allowsInlineMediaPlayback={true}
                               javaScriptEnabled={true}
                               domStorageEnabled={true}
                               mediaPlaybackRequiresUserAction={false}

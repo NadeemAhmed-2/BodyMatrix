@@ -40,6 +40,7 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
         scopes: ['openid', 'profile', 'email'],
         responseType: 'id_token',
         redirectUri: AuthSession.makeRedirectUri({ scheme: 'bodymatrix', preferLocalhost: false }),
+        usePKCE: false,
       }
       : null,
     discovery
