@@ -172,6 +172,11 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
         }
       } else {
         // Native: use expo-auth-session
+        if (!request) {
+          Alert.alert('Please Wait', 'Google Sign-In is still loading. Try again in a moment.');
+          setLoading(false);
+          return;
+        }
         if (promptAsync) {
           setLoading(false);
           await promptAsync();

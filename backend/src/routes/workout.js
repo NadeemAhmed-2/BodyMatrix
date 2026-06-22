@@ -17,7 +17,7 @@ async function fetchExerciseImage(exerciseName) {
         headers: {
           Authorization: `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}`
         },
-        timeout: 3000
+        timeout: 8000
       });
       if (response.data && response.data.results && response.data.results.length > 0) {
         return response.data.results[0].urls.regular;
@@ -33,7 +33,7 @@ async function fetchExerciseImage(exerciseName) {
         headers: {
           Authorization: process.env.PEXELS_API_KEY
         },
-        timeout: 3000
+        timeout: 8000
       });
       if (response.data && response.data.photos && response.data.photos.length > 0) {
         return response.data.photos[0].src.medium;
@@ -49,27 +49,20 @@ async function fetchExerciseImage(exerciseName) {
 async function backfillExerciseImages(exercises) {
   if (!exercises || !Array.isArray(exercises)) return;
 
-  const promises = exercises.map(async (ex) => {
+  for (const ex of exercises) {
     const doc = ex.exercise ? ex.exercise : ex;
-    if (!doc || doc.imageUrl) return;
-
+    if (!doc || doc.imageUrl) continue;
     const img = await fetchExerciseImage(doc.name);
     if (img) {
       doc.imageUrl = img;
       try {
-        if (typeof doc.save === 'function') {
-          await doc.save();
-        } else {
-          await Exercise.findByIdAndUpdate(doc._id, { imageUrl: img });
-        }
+        await Exercise.findByIdAndUpdate(doc._id, { imageUrl: img });
         console.log(`Backfilled image for exercise: ${doc.name}`);
       } catch (saveErr) {
         console.error(`Failed to save backfilled image for ${doc.name}:`, saveErr.message);
       }
     }
-  });
-
-  await Promise.all(promises);
+  }
 }
 
 // @desc    Generate a new workout plan
