@@ -12,16 +12,8 @@ import {
 } from 'react-native';
 import { COLORS, SPACING, FONTS } from '../styles/theme';
 import Button from '../components/Button';
+import YoutubePlayer from 'react-native-youtube-iframe';
 
-// WebView for native YouTube embedding
-let WebView = null;
-if (Platform.OS !== 'web') {
-  try {
-    WebView = require('react-native-webview').WebView;
-  } catch (e) {
-    console.log('WebView not available');
-  }
-}
 
 export default function WorkoutPlanScreen({ plan, baseUrl, token, onBack, onStartWorkout }) {
   const [activeDayIndex, setActiveDayIndex] = useState(0); // Index of selected day in schedule (0-6)
@@ -223,32 +215,21 @@ export default function WorkoutPlanScreen({ plan, baseUrl, token, onBack, onStar
                       {hasVideo && videoId && (
                         <View style={styles.videoContainer}>
                           {Platform.OS === 'web' ? (
-                            <iframe 
-                              src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&playsinline=1`}
+                            <iframe
+                              src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1`}
                               style={styles.youtubeIframe}
                               frameBorder="0"
                               allowFullScreen
                             />
-                          ) : WebView ? (
-                            <WebView
-                              source={{ uri: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1&playsinline=1` }}
-                              style={{ flex: 1 }}
-                              allowsFullscreenVideo={true}
-                              allowsInlineMediaPlayback={true}
-                              javaScriptEnabled={true}
-                              domStorageEnabled={true}
-                              mediaPlaybackRequiresUserAction={false}
-                              userAgent="Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
-                              originWhitelist={['*']}
-                            />
                           ) : (
-                            <TouchableOpacity
-                              style={styles.mobileVideoPlaceholder}
-                              onPress={() => Linking.openURL(`https://www.youtube.com/watch?v=${videoId}`)}
-                            >
-                              <Text style={styles.mobileVideoPlayIcon}>▶</Text>
-                              <Text style={styles.mobileVideoText}>TAP TO OPEN IN YOUTUBE</Text>
-                            </TouchableOpacity>
+                            <YoutubePlayer
+                              height={200}
+                              videoId={videoId}
+                              play={false}
+                              webViewProps={{
+                                androidLayerType: 'hardware',
+                              }}
+                            />
                           )}
                         </View>
                       )}
