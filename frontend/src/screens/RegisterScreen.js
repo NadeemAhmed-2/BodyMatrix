@@ -8,17 +8,10 @@ import { GoogleAuthProvider, signInWithPopup, signInWithCredential } from 'fireb
 import { auth } from '../config/firebase';
 
 // Native Google Sign-In via expo-auth-session
-let AuthSession = null;
-let WebBrowser = null;
-if (Platform.OS !== 'web') {
-  try {
-    AuthSession = require('expo-auth-session');
-    WebBrowser = require('expo-web-browser');
-    WebBrowser.maybeCompleteAuthSession();
-  } catch (e) {
-    console.log('expo-auth-session not available');
-  }
-}
+import * as AuthSession from 'expo-auth-session';
+import * as WebBrowser from 'expo-web-browser';
+
+WebBrowser.maybeCompleteAuthSession();
 
 // Google OAuth client IDs from Google Cloud / Firebase Console
 const GOOGLE_WEB_CLIENT_ID = '368618655974-lgfa63tp5qtv9gtu9ipg6i8fprgaj46r.apps.googleusercontent.com';
@@ -36,18 +29,21 @@ export default function RegisterScreen({ onNavigate, onLoginSuccess, baseUrl }) 
   const [errors, setErrors] = useState({});
 
   // Native Google Auth using expo-auth-session
-  const discovery = AuthSession ? AuthSession.useAutoDiscovery('https://accounts.google.com') : null;
+  const discovery = AuthSession.useAutoDiscovery('https://accounts.google.com');
 
-  const [request, response, promptAsync] = (AuthSession && discovery)
-    ? AuthSession.useAuthRequest({
-      clientId: GOOGLE_WEB_CLIENT_ID,
-      androidClientId: GOOGLE_ANDROID_CLIENT_ID,
-      iosClientId: GOOGLE_IOS_CLIENT_ID,
-      scopes: ['openid', 'profile', 'email'],
-      responseType: 'id_token',
-      redirectUri: AuthSession.makeRedirectUri({ scheme: 'bodymatrix', preferLocalhost: false }),
-    }, discovery)
-    : [null, null, null];
+  const [request, response, promptAsync] = AuthSession.useAuthRequest(
+    Platform.OS !== 'web'
+      ? {
+        clientId: GOOGLE_WEB_CLIENT_ID,
+        androidClientId: GOOGLE_ANDROID_CLIENT_ID,
+        iosClientId: GOOGLE_IOS_CLIENT_ID,
+        scopes: ['openid', 'profile', 'email'],
+        responseType: 'id_token',
+        redirectUri: AuthSession.makeRedirectUri({ scheme: 'bodymatrix', preferLocalhost: false }),
+      }
+      : null,
+    discovery
+  );
 
   useEffect(() => {
     if (response?.type === 'success') {

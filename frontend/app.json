@@ -12,14 +12,14 @@
     },
     "android": {
       "package": "com.nadeemahmed.bodymatrix",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
-        "backgroundColor": "#131313",
-        "foregroundImage": "./assets/BodyMatrix-Logo.png"
+        "foregroundImage": "./assets/BodyMatrix-Logo.png",
+        "backgroundColor": "#131313"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/BodyMatrix-Logo.png"
     },
     "extra": {
       "eas": {
