@@ -43,7 +43,7 @@ export default function LoginScreen({ onNavigate, onLoginSuccess, baseUrl }) {
         iosClientId: GOOGLE_IOS_CLIENT_ID,
         scopes: ['openid', 'profile', 'email'],
         responseType: 'id_token',
-        redirectUri: AuthSession.makeRedirectUri({ preferLocalhost: false }),
+        redirectUri: AuthSession.makeRedirectUri({ scheme: 'bodymatrix', preferLocalhost: false }),
       }, discovery)
     : [null, null, null];
 
