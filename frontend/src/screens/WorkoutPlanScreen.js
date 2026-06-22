@@ -238,6 +238,8 @@ export default function WorkoutPlanScreen({ plan, baseUrl, token, onBack, onStar
                               javaScriptEnabled={true}
                               domStorageEnabled={true}
                               mediaPlaybackRequiresUserAction={false}
+                              userAgent="Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                              originWhitelist={['*']}
                             />
                           ) : (
                             <TouchableOpacity

@@ -2,7 +2,10 @@
   "expo": {
     "name": "BodyMatrix",
     "slug": "bodymatrix",
-    "scheme": "bodymatrix",
+    "scheme": [
+      "bodymatrix",
+      "com.nadeemahmed.bodymatrix"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/BodyMatrix-Logo.png",
@@ -27,6 +30,7 @@
       }
     },
     "plugins": [
+      "@react-native-google-signin/google-signin",
       "expo-web-browser",
       [
         "expo-splash-screen",
