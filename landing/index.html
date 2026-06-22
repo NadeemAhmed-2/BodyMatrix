@@ -1,1352 +1,1775 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BodyMatrix — Smart Fitness & Nutrition Planning App</title>
-    <meta name="description" content="BodyMatrix is your AI-powered fitness companion. Calculate your ideal calories, get personalized meal plans, and follow expert workout routines — all in one dark, sleek app. Download the APK now.">
-    <meta property="og:title" content="BodyMatrix — Smart Fitness & Nutrition App">
-    <meta property="og:description" content="Your smart fitness companion — calorie calculator, personalized meal planner, and intelligent workout generator in one app.">
-    <meta property="og:type" content="website">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <meta
+      name="description"
+      content="BodyMatrix is your AI-powered fitness companion. Calculate your ideal calories, get personalized meal plans, and follow expert workout routines — all in one dark, sleek app. Download the APK now."
+    />
+    <meta
+      property="og:title"
+      content="BodyMatrix — Smart Fitness & Nutrition App"
+    />
+    <meta
+      property="og:description"
+      content="Your smart fitness companion — calorie calculator, personalized meal planner, and intelligent workout generator in one app."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet"
+    />
     <style>
-        /* ─── DESIGN TOKENS ─────────────────────────────────── */
-        :root {
-            --bg:              #0d0d0d;
-            --surface-low:     #0e0e0e;
-            --surface:         #161616;
-            --surface-high:    #242424;
-            --surface-card:    #181818;
-            --primary:         #ccff00;
-            --primary-dim:     #abd600;
-            --secondary:       #ff5625;
-            --on-surface:      #e5e2e1;
-            --on-muted:        #c4c9ac;
-            --outline:         #8e9379;
-            --outline-subtle:  rgba(255,255,255,0.07);
+      /* ─── DESIGN TOKENS ─────────────────────────────────── */
+      :root {
+        --bg: #0d0d0d;
+        --surface-low: #0e0e0e;
+        --surface: #161616;
+        --surface-high: #242424;
+        --surface-card: #181818;
+        --primary: #ccff00;
+        --primary-dim: #abd600;
+        --secondary: #ff5625;
+        --on-surface: #e5e2e1;
+        --on-muted: #c4c9ac;
+        --outline: #8e9379;
+        --outline-subtle: rgba(255, 255, 255, 0.07);
 
-            --font-display: 'Anton', sans-serif;
-            --font-body: 'Hanken Grotesk', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
+        --font-display: "Anton", sans-serif;
+        --font-body: "Hanken Grotesk", sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
 
-            --radius-sm: 4px;
-            --radius-md: 8px;
-            --radius-lg: 16px;
-            --radius-pill: 999px;
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --radius-lg: 16px;
+        --radius-pill: 999px;
 
-            --glow-primary: 0 0 30px rgba(204,255,0,0.25);
-            --glow-primary-sm: 0 0 12px rgba(204,255,0,0.18);
-        }
+        --glow-primary: 0 0 30px rgba(204, 255, 0, 0.25);
+        --glow-primary-sm: 0 0 12px rgba(204, 255, 0, 0.18);
+      }
 
-        /* ─── RESET ─────────────────────────────────────────── */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
-        body {
-            background-color: var(--bg);
-            color: var(--on-surface);
-            font-family: var(--font-body);
-            min-height: 100vh;
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-        a { text-decoration: none; color: inherit; }
-        img { max-width: 100%; display: block; }
+      /* ─── RESET ─────────────────────────────────────────── */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background-color: var(--bg);
+        color: var(--on-surface);
+        font-family: var(--font-body);
+        min-height: 100vh;
+        overflow-x: hidden;
+        line-height: 1.6;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
 
-        /* ─── SCROLLBAR ──────────────────────────────────────── */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--surface-high); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary-dim); }
+      /* ─── SCROLLBAR ──────────────────────────────────────── */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--surface-high);
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-dim);
+      }
 
-        /* ─── UTILITIES ──────────────────────────────────────── */
-        .icon {
-            font-family: 'Material Symbols Outlined';
-            font-weight: normal;
-            font-style: normal;
-            line-height: 1;
-            letter-spacing: normal;
-            text-transform: none;
-            display: inline-block;
-            white-space: nowrap;
-            -webkit-font-smoothing: antialiased;
-        }
-        .container {
-            max-width: 1160px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        .section { padding: 7rem 0; }
-        .section-sm { padding: 4rem 0; }
-        .chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.14em;
-            color: var(--primary);
-            background: rgba(204,255,0,0.08);
-            border: 1px solid rgba(204,255,0,0.2);
-            border-radius: var(--radius-pill);
-            padding: 0.35rem 0.85rem;
-        }
-        .chip .icon { font-size: 14px; }
+      /* ─── UTILITIES ──────────────────────────────────────── */
+      .icon {
+        font-family: "Material Symbols Outlined";
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        -webkit-font-smoothing: antialiased;
+      }
+      .container {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+      .section {
+        padding: 7rem 0;
+      }
+      .section-sm {
+        padding: 4rem 0;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--primary);
+        background: rgba(204, 255, 0, 0.08);
+        border: 1px solid rgba(204, 255, 0, 0.2);
+        border-radius: var(--radius-pill);
+        padding: 0.35rem 0.85rem;
+      }
+      .chip .icon {
+        font-size: 14px;
+      }
 
-        /* ─── ANIMATED NOISE BACKGROUND ─────────────────────── */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.4;
-        }
+      /* ─── ANIMATED NOISE BACKGROUND ─────────────────────── */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0.4;
+      }
 
-        /* ─── NAV ─────────────────────────────────────────────  */
-        #navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 1.1rem 0;
-            transition: background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease;
-            border-bottom: 1px solid transparent;
-        }
-        #navbar.scrolled {
-            background: rgba(13,13,13,0.92);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-color: var(--outline-subtle);
-        }
-        .nav-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .nav-logo {
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #fff;
-        }
-        .nav-logo span { color: var(--primary); }
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            list-style: none;
-        }
-        .nav-links a {
-            font-family: var(--font-mono);
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--on-muted);
-            transition: color 0.2s;
-        }
-        .nav-links a:hover { color: var(--primary); }
-        .nav-cta {
-            font-family: var(--font-mono);
-            font-size: 0.78rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--bg);
-            background: var(--primary);
-            padding: 0.55rem 1.2rem;
-            border-radius: var(--radius-sm);
-            transition: transform 0.15s, box-shadow 0.15s;
-        }
-        .nav-cta:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--glow-primary);
-        }
-        .nav-hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 4px;
-            background: none;
-            border: none;
-        }
-        .nav-hamburger span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: var(--on-surface);
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
+      /* ─── NAV ─────────────────────────────────────────────  */
+      #navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 1.1rem 0;
+        transition:
+          background 0.4s ease,
+          backdrop-filter 0.4s ease,
+          border-color 0.4s ease;
+        border-bottom: 1px solid transparent;
+      }
+      #navbar.scrolled {
+        background: rgba(13, 13, 13, 0.92);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-color: var(--outline-subtle);
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-logo {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #fff;
+      }
+      .nav-logo span {
+        color: var(--primary);
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--on-muted);
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--primary);
+      }
+      .nav-cta {
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--bg);
+        background: var(--primary);
+        padding: 0.55rem 1.2rem;
+        border-radius: var(--radius-sm);
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+      }
+      .nav-cta:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--glow-primary);
+      }
+      .nav-hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+        padding: 4px;
+        background: none;
+        border: none;
+      }
+      .nav-hamburger span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: var(--on-surface);
+        border-radius: 2px;
+        transition: all 0.3s;
+      }
 
-        /* ─── HERO ────────────────────────────────────────────── */
-        #hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            padding-top: 80px;
+      /* ─── HERO ────────────────────────────────────────────── */
+      #hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        padding-top: 80px;
+      }
+      .hero-grid-bg {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(204, 255, 0, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(204, 255, 0, 0.04) 1px, transparent 1px);
+        background-size: 60px 60px;
+        mask-image: radial-gradient(
+          ellipse 80% 60% at 50% 50%,
+          black 30%,
+          transparent 100%
+        );
+        -webkit-mask-image: radial-gradient(
+          ellipse 80% 60% at 50% 50%,
+          black 30%,
+          transparent 100%
+        );
+      }
+      .hero-glow-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(100px);
+        pointer-events: none;
+      }
+      .hero-glow-orb.orb-1 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(
+          circle,
+          rgba(204, 255, 0, 0.12),
+          transparent 70%
+        );
+        top: -100px;
+        right: -50px;
+        animation: orbFloat 8s ease-in-out infinite;
+      }
+      .hero-glow-orb.orb-2 {
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 86, 37, 0.09),
+          transparent 70%
+        );
+        bottom: 50px;
+        left: -80px;
+        animation: orbFloat 10s ease-in-out infinite reverse;
+      }
+      @keyframes orbFloat {
+        0%,
+        100% {
+          transform: translate(0, 0);
         }
-        .hero-grid-bg {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(204,255,0,0.04) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(204,255,0,0.04) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
-            -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
+        33% {
+          transform: translate(15px, -20px);
         }
-        .hero-glow-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
-            pointer-events: none;
+        66% {
+          transform: translate(-10px, 10px);
         }
-        .hero-glow-orb.orb-1 {
-            width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(204,255,0,0.12), transparent 70%);
-            top: -100px; right: -50px;
-            animation: orbFloat 8s ease-in-out infinite;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+        width: 100%;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+      }
+      .hero-badge::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--primary);
+        box-shadow: var(--glow-primary-sm);
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
         }
-        .hero-glow-orb.orb-2 {
-            width: 350px; height: 350px;
-            background: radial-gradient(circle, rgba(255,86,37,0.09), transparent 70%);
-            bottom: 50px; left: -80px;
-            animation: orbFloat 10s ease-in-out infinite reverse;
+        50% {
+          transform: scale(1.3);
+          opacity: 0.7;
         }
-        @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0); }
-            33% { transform: translate(15px, -20px); }
-            66% { transform: translate(-10px, 10px); }
+      }
+      .hero-headline {
+        font-family: var(--font-display);
+        font-size: clamp(3.5rem, 6vw, 5.5rem);
+        line-height: 0.95;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: #fff;
+        margin-bottom: 1.5rem;
+      }
+      .hero-headline .accent {
+        color: var(--primary);
+      }
+      .hero-headline .stroke {
+        -webkit-text-stroke: 2px var(--primary);
+        color: transparent;
+      }
+      .hero-sub {
+        font-size: 1.05rem;
+        color: var(--on-muted);
+        max-width: 460px;
+        margin-bottom: 2.5rem;
+        line-height: 1.7;
+      }
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--bg);
+        background: var(--primary);
+        padding: 1rem 2rem;
+        border-radius: var(--radius-sm);
+        border: none;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .btn-primary::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.35),
+          transparent
+        );
+        transform: skewX(-20deg);
+        transition: left 0.5s;
+      }
+      .btn-primary:hover::after {
+        left: 160%;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(204, 255, 0, 0.35);
+      }
+      .btn-primary .icon {
+        font-size: 20px;
+      }
+      .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--on-muted);
+        border: 1px solid var(--outline-subtle);
+        padding: 1rem 1.5rem;
+        border-radius: var(--radius-sm);
+        transition:
+          color 0.2s,
+          border-color 0.2s,
+          transform 0.2s;
+      }
+      .btn-ghost:hover {
+        color: var(--on-surface);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+      .btn-ghost .icon {
+        font-size: 18px;
+      }
+      .hero-stats {
+        display: flex;
+        gap: 2rem;
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--outline-subtle);
+      }
+      .stat-item {
+      }
+      .stat-value {
+        font-family: var(--font-display);
+        font-size: 1.8rem;
+        line-height: 1;
+        color: var(--primary);
+      }
+      .stat-label {
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--on-muted);
+        margin-top: 0.3rem;
+      }
+      .hero-visual {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+      .hero-img-wrap {
+        position: relative;
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+      }
+      .hero-img-wrap::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(204, 255, 0, 0.15);
+        z-index: 2;
+        pointer-events: none;
+      }
+      .hero-img-wrap img {
+        width: 100%;
+        max-width: 520px;
+        border-radius: var(--radius-lg);
+        animation: floatImg 6s ease-in-out infinite;
+      }
+      @keyframes floatImg {
+        0%,
+        100% {
+          transform: translateY(0px);
         }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+      .hero-badge-floating {
+        position: absolute;
+        bottom: -20px;
+        left: -20px;
+        background: var(--surface-high);
+        border: 1px solid var(--outline-subtle);
+        border-radius: var(--radius-md);
+        padding: 0.85rem 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        backdrop-filter: blur(10px);
+        z-index: 3;
+        animation: floatBadge 5s ease-in-out infinite;
+      }
+      @keyframes floatBadge {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-6px);
+        }
+      }
+      .badge-icon-wrap {
+        width: 36px;
+        height: 36px;
+        background: rgba(204, 255, 0, 0.1);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+      }
+      .badge-text-main {
+        font-family: var(--font-display);
+        font-size: 1.1rem;
+        color: #fff;
+        line-height: 1;
+      }
+      .badge-text-sub {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        color: var(--on-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      /* ─── RENDER NOTICE BANNER ─────────────────────────── */
+      .render-notice {
+        background: rgba(255, 86, 37, 0.08);
+        border: 1px solid rgba(255, 86, 37, 0.2);
+        border-radius: var(--radius-md);
+        padding: 0.85rem 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-family: var(--font-mono);
+        font-size: 0.74rem;
+        color: #ff8a65;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        max-width: 460px;
+        margin-top: 1.25rem;
+      }
+      .render-notice .icon {
+        font-size: 18px;
+        color: var(--secondary);
+        flex-shrink: 0;
+      }
+
+      /* ─── FEATURES ─────────────────────────────────────── */
+      #features {
+        background: transparent;
+      }
+      .section-header {
+        text-align: center;
+        margin-bottom: 4rem;
+      }
+      .section-title {
+        font-family: var(--font-display);
+        font-size: clamp(2.2rem, 4vw, 3.5rem);
+        text-transform: uppercase;
+        line-height: 1;
+        letter-spacing: 0.03em;
+        color: #fff;
+        margin-top: 1rem;
+      }
+      .section-title span {
+        color: var(--primary);
+      }
+      .section-sub {
+        font-size: 1rem;
+        color: var(--on-muted);
+        max-width: 520px;
+        margin: 1rem auto 0;
+      }
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+      }
+      .feature-card {
+        background: var(--surface-card);
+        border: 1px solid var(--outline-subtle);
+        border-radius: var(--radius-md);
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+          border-color 0.3s,
+          box-shadow 0.3s;
+      }
+      .feature-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--primary), transparent);
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .feature-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(204, 255, 0, 0.15);
+        box-shadow:
+          0 20px 50px rgba(0, 0, 0, 0.4),
+          0 0 20px rgba(204, 255, 0, 0.06);
+      }
+      .feature-card:hover::before {
+        opacity: 1;
+      }
+      .feature-icon-wrap {
+        width: 52px;
+        height: 52px;
+        background: rgba(204, 255, 0, 0.07);
+        border: 1px solid rgba(204, 255, 0, 0.15);
+        border-radius: var(--radius-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+        font-size: 26px;
+        margin-bottom: 1.25rem;
+        transition:
+          background 0.3s,
+          box-shadow 0.3s;
+      }
+      .feature-card:hover .feature-icon-wrap {
+        background: rgba(204, 255, 0, 0.12);
+        box-shadow: var(--glow-primary-sm);
+      }
+      .feature-title {
+        font-family: var(--font-display);
+        font-size: 1.25rem;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: #fff;
+        margin-bottom: 0.75rem;
+      }
+      .feature-desc {
+        font-size: 0.9rem;
+        color: var(--on-muted);
+        line-height: 1.65;
+      }
+      .feature-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: 1.25rem;
+      }
+      .ftag {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        color: var(--on-muted);
+        background: var(--surface-high);
+        border-radius: var(--radius-pill);
+        padding: 0.2rem 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      /* ─── HOW IT WORKS ─────────────────────────────────── */
+      #how-it-works {
+        background: var(--surface-low);
+      }
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+        position: relative;
+      }
+      .steps-grid::before {
+        content: "";
+        position: absolute;
+        top: 40px;
+        left: calc(12.5% + 1rem);
+        right: calc(12.5% + 1rem);
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--primary-dim),
+          var(--primary-dim),
+          transparent
+        );
+        opacity: 0.3;
+      }
+      .step-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 1.5rem;
+      }
+      .step-num {
+        width: 80px;
+        height: 80px;
+        border: 1px solid rgba(204, 255, 0, 0.25);
+        border-radius: 50%;
+        background: var(--surface);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-display);
+        font-size: 1.6rem;
+        color: var(--primary);
+        position: relative;
+        z-index: 2;
+        margin-bottom: 1.5rem;
+        transition:
+          background 0.3s,
+          box-shadow 0.3s;
+      }
+      .step-item:hover .step-num {
+        background: rgba(204, 255, 0, 0.08);
+        box-shadow: var(--glow-primary-sm);
+      }
+      .step-title {
+        font-family: var(--font-display);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #fff;
+        margin-bottom: 0.6rem;
+      }
+      .step-desc {
+        font-size: 0.85rem;
+        color: var(--on-muted);
+        line-height: 1.6;
+      }
+
+      /* ─── DOWNLOAD SECTION ─────────────────────────────── */
+      #download {
+        background: transparent;
+        position: relative;
+        overflow: hidden;
+      }
+      .download-glow {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(204, 255, 0, 0.06),
+          transparent 70%
+        );
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+      }
+      .download-card {
+        background: var(--surface-card);
+        border: 1px solid rgba(204, 255, 0, 0.12);
+        border-radius: var(--radius-lg);
+        padding: 4rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        max-width: 740px;
+        margin: 0 auto;
+      }
+      .download-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--primary),
+          transparent
+        );
+      }
+      .download-headline {
+        font-family: var(--font-display);
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        text-transform: uppercase;
+        line-height: 0.95;
+        letter-spacing: 0.02em;
+        color: #fff;
+        margin: 1.5rem 0;
+      }
+      .download-headline span {
+        color: var(--primary);
+      }
+      .download-sub {
+        font-size: 1rem;
+        color: var(--on-muted);
+        max-width: 460px;
+        margin: 0 auto 2.5rem;
+        line-height: 1.7;
+      }
+      .download-btn-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      .btn-download {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-family: var(--font-mono);
+        font-size: 0.9rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--bg);
+        background: var(--primary);
+        padding: 1.1rem 2.5rem;
+        border-radius: var(--radius-sm);
+        border: none;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+        min-width: 280px;
+        justify-content: center;
+      }
+      .btn-download::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.4),
+          transparent
+        );
+        transform: skewX(-20deg);
+        transition: left 0.6s;
+      }
+      .btn-download:hover::after {
+        left: 160%;
+      }
+      .btn-download:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 50px rgba(204, 255, 0, 0.4);
+      }
+      .btn-download .icon {
+        font-size: 22px;
+      }
+      .download-note {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--on-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        justify-content: center;
+      }
+      .download-note .icon {
+        font-size: 14px;
+        color: var(--outline);
+      }
+
+      /* ─── TECH STACK ───────────────────────────────────── */
+      #tech {
+        background: var(--surface-low);
+      }
+      .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1rem;
+      }
+      .tech-item {
+        background: var(--surface-card);
+        border: 1px solid var(--outline-subtle);
+        border-radius: var(--radius-md);
+        padding: 1.25rem;
+        text-align: center;
+        transition:
+          border-color 0.3s,
+          transform 0.3s;
+      }
+      .tech-item:hover {
+        border-color: rgba(204, 255, 0, 0.2);
+        transform: translateY(-3px);
+      }
+      .tech-emoji {
+        font-size: 1.8rem;
+        margin-bottom: 0.6rem;
+      }
+      .tech-name {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--primary);
+        margin-bottom: 0.3rem;
+      }
+      .tech-role {
+        font-size: 0.75rem;
+        color: var(--on-muted);
+      }
+
+      /* ─── FOOTER ───────────────────────────────────────── */
+      footer {
+        border-top: 1px solid var(--outline-subtle);
+        padding: 2.5rem 0;
+      }
+      .footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .footer-logo {
+        font-family: var(--font-display);
+        font-size: 1.25rem;
+        text-transform: uppercase;
+        color: #fff;
+      }
+      .footer-logo span {
+        color: var(--primary);
+      }
+      .footer-links {
+        display: flex;
+        gap: 1.5rem;
+        list-style: none;
+      }
+      .footer-links a {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--on-muted);
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--primary);
+      }
+      .footer-copy {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        color: var(--outline);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      /* ─── INSTALL MODAL ─────────────────────────────────── */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(8px);
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+      }
+      .modal-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+      .modal {
+        background: var(--surface-card);
+        border: 1px solid rgba(204, 255, 0, 0.15);
+        border-radius: var(--radius-lg);
+        padding: 2.5rem;
+        max-width: 520px;
+        width: 100%;
+        position: relative;
+        transform: translateY(20px);
+        transition: transform 0.3s;
+      }
+      .modal-overlay.active .modal {
+        transform: translateY(0);
+      }
+      .modal-close {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        background: var(--surface-high);
+        border: none;
+        color: var(--on-muted);
+        width: 32px;
+        height: 32px;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .modal-close:hover {
+        background: var(--secondary);
+        color: #fff;
+      }
+      .modal-title {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: #fff;
+        margin-bottom: 0.5rem;
+      }
+      .modal-sub {
+        font-size: 0.85rem;
+        color: var(--on-muted);
+        margin-bottom: 1.75rem;
+      }
+      .modal-steps {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .modal-step {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+      .ms-num {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(204, 255, 0, 0.1);
+        border: 1px solid rgba(204, 255, 0, 0.25);
+        color: var(--primary);
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .ms-text {
+        font-size: 0.88rem;
+        color: var(--on-muted);
+        padding-top: 4px;
+        line-height: 1.55;
+      }
+      .ms-text strong {
+        color: var(--on-surface);
+        font-weight: 600;
+      }
+      .modal-dl-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        width: 100%;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--bg);
+        background: var(--primary);
+        padding: 0.9rem;
+        border-radius: var(--radius-sm);
+        border: none;
+        cursor: pointer;
+        transition:
+          box-shadow 0.2s,
+          transform 0.2s;
+      }
+      .modal-dl-btn:hover {
+        box-shadow: 0 8px 30px rgba(204, 255, 0, 0.35);
+        transform: translateY(-1px);
+      }
+      .modal-dl-btn .icon {
+        font-size: 20px;
+      }
+
+      /* ─── RESPONSIVE ─────────────────────────────────────── */
+      @media (max-width: 900px) {
         .hero-content {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            width: 100%;
-        }
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-        }
-        .hero-badge::before {
-            content: '';
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: var(--primary);
-            box-shadow: var(--glow-primary-sm);
-            animation: pulse 2s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.7; }
-        }
-        .hero-headline {
-            font-family: var(--font-display);
-            font-size: clamp(3.5rem, 6vw, 5.5rem);
-            line-height: 0.95;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
-            color: #fff;
-            margin-bottom: 1.5rem;
-        }
-        .hero-headline .accent { color: var(--primary); }
-        .hero-headline .stroke {
-            -webkit-text-stroke: 2px var(--primary);
-            color: transparent;
-        }
-        .hero-sub {
-            font-size: 1.05rem;
-            color: var(--on-muted);
-            max-width: 460px;
-            margin-bottom: 2.5rem;
-            line-height: 1.7;
-        }
-        .hero-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--bg);
-            background: var(--primary);
-            padding: 1rem 2rem;
-            border-radius: var(--radius-sm);
-            border: none;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 60%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-            transform: skewX(-20deg);
-            transition: left 0.5s;
-        }
-        .btn-primary:hover::after { left: 160%; }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(204,255,0,0.35);
-        }
-        .btn-primary .icon { font-size: 20px; }
-        .btn-ghost {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-family: var(--font-mono);
-            font-size: 0.78rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--on-muted);
-            border: 1px solid var(--outline-subtle);
-            padding: 1rem 1.5rem;
-            border-radius: var(--radius-sm);
-            transition: color 0.2s, border-color 0.2s, transform 0.2s;
-        }
-        .btn-ghost:hover {
-            color: var(--on-surface);
-            border-color: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
-        .btn-ghost .icon { font-size: 18px; }
-        .hero-stats {
-            display: flex;
-            gap: 2rem;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--outline-subtle);
-        }
-        .stat-item {}
-        .stat-value {
-            font-family: var(--font-display);
-            font-size: 1.8rem;
-            line-height: 1;
-            color: var(--primary);
-        }
-        .stat-label {
-            font-family: var(--font-mono);
-            font-size: 0.68rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--on-muted);
-            margin-top: 0.3rem;
+          grid-template-columns: 1fr;
+          text-align: center;
         }
         .hero-visual {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+          display: none;
         }
-        .hero-img-wrap {
-            position: relative;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
+        .hero-sub {
+          max-width: 100%;
         }
-        .hero-img-wrap::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(204,255,0,0.15);
-            z-index: 2;
-            pointer-events: none;
+        .hero-actions {
+          justify-content: center;
         }
-        .hero-img-wrap img {
-            width: 100%;
-            max-width: 520px;
-            border-radius: var(--radius-lg);
-            animation: floatImg 6s ease-in-out infinite;
+        .hero-stats {
+          justify-content: center;
         }
-        @keyframes floatImg {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
+        .hero-badge {
+          justify-content: center;
         }
-        .hero-badge-floating {
-            position: absolute;
-            bottom: -20px;
-            left: -20px;
-            background: var(--surface-high);
-            border: 1px solid var(--outline-subtle);
-            border-radius: var(--radius-md);
-            padding: 0.85rem 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            backdrop-filter: blur(10px);
-            z-index: 3;
-            animation: floatBadge 5s ease-in-out infinite;
-        }
-        @keyframes floatBadge {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
-        .badge-icon-wrap {
-            width: 36px; height: 36px;
-            background: rgba(204,255,0,0.1);
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-        }
-        .badge-text-main {
-            font-family: var(--font-display);
-            font-size: 1.1rem;
-            color: #fff;
-            line-height: 1;
-        }
-        .badge-text-sub {
-            font-family: var(--font-mono);
-            font-size: 0.65rem;
-            color: var(--on-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        /* ─── RENDER NOTICE BANNER ─────────────────────────── */
         .render-notice {
-            background: rgba(255,86,37,0.08);
-            border: 1px solid rgba(255,86,37,0.2);
-            border-radius: var(--radius-md);
-            padding: 0.85rem 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-family: var(--font-mono);
-            font-size: 0.74rem;
-            color: #ff8a65;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            max-width: 460px;
-            margin-top: 1.25rem;
-        }
-        .render-notice .icon { font-size: 18px; color: var(--secondary); flex-shrink: 0; }
-
-        /* ─── FEATURES ─────────────────────────────────────── */
-        #features { background: transparent; }
-        .section-header { text-align: center; margin-bottom: 4rem; }
-        .section-title {
-            font-family: var(--font-display);
-            font-size: clamp(2.2rem, 4vw, 3.5rem);
-            text-transform: uppercase;
-            line-height: 1;
-            letter-spacing: 0.03em;
-            color: #fff;
-            margin-top: 1rem;
-        }
-        .section-title span { color: var(--primary); }
-        .section-sub {
-            font-size: 1rem;
-            color: var(--on-muted);
-            max-width: 520px;
-            margin: 1rem auto 0;
+          margin: 1.25rem auto 0;
         }
         .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+          grid-template-columns: 1fr;
         }
-        .feature-card {
-            background: var(--surface-card);
-            border: 1px solid var(--outline-subtle);
-            border-radius: var(--radius-md);
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), border-color 0.3s, box-shadow 0.3s;
-        }
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .feature-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(204,255,0,0.15);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 20px rgba(204,255,0,0.06);
-        }
-        .feature-card:hover::before { opacity: 1; }
-        .feature-icon-wrap {
-            width: 52px; height: 52px;
-            background: rgba(204,255,0,0.07);
-            border: 1px solid rgba(204,255,0,0.15);
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 26px;
-            margin-bottom: 1.25rem;
-            transition: background 0.3s, box-shadow 0.3s;
-        }
-        .feature-card:hover .feature-icon-wrap {
-            background: rgba(204,255,0,0.12);
-            box-shadow: var(--glow-primary-sm);
-        }
-        .feature-title {
-            font-family: var(--font-display);
-            font-size: 1.25rem;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
-            color: #fff;
-            margin-bottom: 0.75rem;
-        }
-        .feature-desc {
-            font-size: 0.9rem;
-            color: var(--on-muted);
-            line-height: 1.65;
-        }
-        .feature-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-            margin-top: 1.25rem;
-        }
-        .ftag {
-            font-family: var(--font-mono);
-            font-size: 0.65rem;
-            color: var(--on-muted);
-            background: var(--surface-high);
-            border-radius: var(--radius-pill);
-            padding: 0.2rem 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        /* ─── HOW IT WORKS ─────────────────────────────────── */
-        #how-it-works { background: var(--surface-low); }
         .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0;
-            position: relative;
+          grid-template-columns: 1fr 1fr;
+          gap: 2.5rem;
         }
         .steps-grid::before {
-            content: '';
-            position: absolute;
-            top: 40px;
-            left: calc(12.5% + 1rem);
-            right: calc(12.5% + 1rem);
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary-dim), var(--primary-dim), transparent);
-            opacity: 0.3;
+          display: none;
         }
-        .step-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 0 1.5rem;
+        .nav-links,
+        .nav-cta {
+          display: none;
         }
-        .step-num {
-            width: 80px; height: 80px;
-            border: 1px solid rgba(204,255,0,0.25);
-            border-radius: 50%;
-            background: var(--surface);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-display);
-            font-size: 1.6rem;
-            color: var(--primary);
-            position: relative;
-            z-index: 2;
-            margin-bottom: 1.5rem;
-            transition: background 0.3s, box-shadow 0.3s;
+        .nav-hamburger {
+          display: flex;
         }
-        .step-item:hover .step-num {
-            background: rgba(204,255,0,0.08);
-            box-shadow: var(--glow-primary-sm);
-        }
-        .step-title {
-            font-family: var(--font-display);
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #fff;
-            margin-bottom: 0.6rem;
-        }
-        .step-desc {
-            font-size: 0.85rem;
-            color: var(--on-muted);
-            line-height: 1.6;
-        }
-
-        /* ─── DOWNLOAD SECTION ─────────────────────────────── */
-        #download {
-            background: transparent;
-            position: relative;
-            overflow: hidden;
-        }
-        .download-glow {
-            position: absolute;
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(204,255,0,0.06), transparent 70%);
-            border-radius: 50%;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
+      }
+      @media (max-width: 600px) {
+        .steps-grid {
+          grid-template-columns: 1fr;
         }
         .download-card {
-            background: var(--surface-card);
-            border: 1px solid rgba(204,255,0,0.12);
-            border-radius: var(--radius-lg);
-            padding: 4rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            max-width: 740px;
-            margin: 0 auto;
+          padding: 2.5rem 1.5rem;
         }
-        .download-card::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        .section {
+          padding: 4.5rem 0;
         }
-        .download-headline {
-            font-family: var(--font-display);
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            text-transform: uppercase;
-            line-height: 0.95;
-            letter-spacing: 0.02em;
-            color: #fff;
-            margin: 1.5rem 0;
-        }
-        .download-headline span { color: var(--primary); }
-        .download-sub {
-            font-size: 1rem;
-            color: var(--on-muted);
-            max-width: 460px;
-            margin: 0 auto 2.5rem;
-            line-height: 1.7;
-        }
-        .download-btn-wrap {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-        .btn-download {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--bg);
-            background: var(--primary);
-            padding: 1.1rem 2.5rem;
-            border-radius: var(--radius-sm);
-            border: none;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-            min-width: 280px;
-            justify-content: center;
-        }
-        .btn-download::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 60%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transform: skewX(-20deg);
-            transition: left 0.6s;
-        }
-        .btn-download:hover::after { left: 160%; }
-        .btn-download:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 16px 50px rgba(204,255,0,0.4);
-        }
-        .btn-download .icon { font-size: 22px; }
-        .download-note {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            color: var(--on-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            justify-content: center;
-        }
-        .download-note .icon { font-size: 14px; color: var(--outline); }
-
-        /* ─── TECH STACK ───────────────────────────────────── */
-        #tech { background: var(--surface-low); }
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 1rem;
-        }
-        .tech-item {
-            background: var(--surface-card);
-            border: 1px solid var(--outline-subtle);
-            border-radius: var(--radius-md);
-            padding: 1.25rem;
-            text-align: center;
-            transition: border-color 0.3s, transform 0.3s;
-        }
-        .tech-item:hover {
-            border-color: rgba(204,255,0,0.2);
-            transform: translateY(-3px);
-        }
-        .tech-emoji {
-            font-size: 1.8rem;
-            margin-bottom: 0.6rem;
-        }
-        .tech-name {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--primary);
-            margin-bottom: 0.3rem;
-        }
-        .tech-role {
-            font-size: 0.75rem;
-            color: var(--on-muted);
-        }
-
-        /* ─── FOOTER ───────────────────────────────────────── */
-        footer {
-            border-top: 1px solid var(--outline-subtle);
-            padding: 2.5rem 0;
+        .container {
+          padding: 0 1.25rem;
         }
         .footer-inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
+          flex-direction: column;
+          align-items: flex-start;
         }
-        .footer-logo {
-            font-family: var(--font-display);
-            font-size: 1.25rem;
-            text-transform: uppercase;
-            color: #fff;
-        }
-        .footer-logo span { color: var(--primary); }
-        .footer-links {
-            display: flex;
-            gap: 1.5rem;
-            list-style: none;
-        }
-        .footer-links a {
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--on-muted);
-            transition: color 0.2s;
-        }
-        .footer-links a:hover { color: var(--primary); }
-        .footer-copy {
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            color: var(--outline);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
+      }
 
-        /* ─── INSTALL MODAL ─────────────────────────────────── */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            z-index: 200;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .modal {
-            background: var(--surface-card);
-            border: 1px solid rgba(204,255,0,0.15);
-            border-radius: var(--radius-lg);
-            padding: 2.5rem;
-            max-width: 520px;
-            width: 100%;
-            position: relative;
-            transform: translateY(20px);
-            transition: transform 0.3s;
-        }
-        .modal-overlay.active .modal { transform: translateY(0); }
-        .modal-close {
-            position: absolute;
-            top: 1.25rem; right: 1.25rem;
-            background: var(--surface-high);
-            border: none;
-            color: var(--on-muted);
-            width: 32px; height: 32px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            transition: background 0.2s, color 0.2s;
-        }
-        .modal-close:hover { background: var(--secondary); color: #fff; }
-        .modal-title {
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-            color: #fff;
-            margin-bottom: 0.5rem;
-        }
-        .modal-sub {
-            font-size: 0.85rem;
-            color: var(--on-muted);
-            margin-bottom: 1.75rem;
-        }
-        .modal-steps {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .modal-step {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-        }
-        .ms-num {
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            background: rgba(204,255,0,0.1);
-            border: 1px solid rgba(204,255,0,0.25);
-            color: var(--primary);
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .ms-text {
-            font-size: 0.88rem;
-            color: var(--on-muted);
-            padding-top: 4px;
-            line-height: 1.55;
-        }
-        .ms-text strong { color: var(--on-surface); font-weight: 600; }
-        .modal-dl-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.6rem;
-            width: 100%;
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--bg);
-            background: var(--primary);
-            padding: 0.9rem;
-            border-radius: var(--radius-sm);
-            border: none;
-            cursor: pointer;
-            transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .modal-dl-btn:hover {
-            box-shadow: 0 8px 30px rgba(204,255,0,0.35);
-            transform: translateY(-1px);
-        }
-        .modal-dl-btn .icon { font-size: 20px; }
+      /* ─── SCROLL ANIMATIONS ──────────────────────────────── */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-delay-1 {
+        transition-delay: 0.1s;
+      }
+      .reveal-delay-2 {
+        transition-delay: 0.2s;
+      }
+      .reveal-delay-3 {
+        transition-delay: 0.3s;
+      }
+      .reveal-delay-4 {
+        transition-delay: 0.4s;
+      }
 
-        /* ─── RESPONSIVE ─────────────────────────────────────── */
-        @media (max-width: 900px) {
-            .hero-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .hero-visual { display: none; }
-            .hero-sub { max-width: 100%; }
-            .hero-actions { justify-content: center; }
-            .hero-stats { justify-content: center; }
-            .hero-badge { justify-content: center; }
-            .render-notice { margin: 1.25rem auto 0; }
-            .features-grid { grid-template-columns: 1fr; }
-            .steps-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
-            .steps-grid::before { display: none; }
-            .nav-links, .nav-cta { display: none; }
-            .nav-hamburger { display: flex; }
+      /* ─── TICKER TAPE ─────────────────────────────────────── */
+      .ticker-wrap {
+        background: var(--primary);
+        overflow: hidden;
+        padding: 0.55rem 0;
+      }
+      .ticker-track {
+        display: flex;
+        width: max-content;
+        animation: ticker 22s linear infinite;
+      }
+      .ticker-item {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--bg);
+        padding: 0 2rem;
+        white-space: nowrap;
+      }
+      .ticker-dot {
+        font-size: 0.5rem;
+        vertical-align: middle;
+      }
+      @keyframes ticker {
+        0% {
+          transform: translateX(0);
         }
-        @media (max-width: 600px) {
-            .steps-grid { grid-template-columns: 1fr; }
-            .download-card { padding: 2.5rem 1.5rem; }
-            .section { padding: 4.5rem 0; }
-            .container { padding: 0 1.25rem; }
-            .footer-inner { flex-direction: column; align-items: flex-start; }
+        100% {
+          transform: translateX(-50%);
         }
-
-        /* ─── SCROLL ANIMATIONS ──────────────────────────────── */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.3s; }
-        .reveal-delay-4 { transition-delay: 0.4s; }
-
-        /* ─── TICKER TAPE ─────────────────────────────────────── */
-        .ticker-wrap {
-            background: var(--primary);
-            overflow: hidden;
-            padding: 0.55rem 0;
-        }
-        .ticker-track {
-            display: flex;
-            width: max-content;
-            animation: ticker 22s linear infinite;
-        }
-        .ticker-item {
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--bg);
-            padding: 0 2rem;
-            white-space: nowrap;
-        }
-        .ticker-dot {
-            font-size: 0.5rem;
-            vertical-align: middle;
-        }
-        @keyframes ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <!-- ══════════════ NAVBAR ══════════════ -->
     <nav id="navbar">
-        <div class="container">
-            <div class="nav-inner">
-                <a href="#" class="nav-logo">Body<span>Matrix</span></a>
-                <ul class="nav-links">
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#tech">Tech</a></li>
-                    <li><a href="#download">Download</a></li>
-                </ul>
-                <a href="#download" class="nav-cta" id="nav-download-btn">Get APK</a>
-                <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
-                    <span></span><span></span><span></span>
-                </button>
-            </div>
+      <div class="container">
+        <div class="nav-inner">
+          <a href="#" class="nav-logo">Body<span>Matrix</span></a>
+          <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#tech">Tech</a></li>
+            <li><a href="#download">Download</a></li>
+          </ul>
+          <a href="#download" class="nav-cta" id="nav-download-btn">Get APK</a>
+          <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+          </button>
         </div>
+      </div>
     </nav>
 
     <!-- ══════════════ HERO ══════════════ -->
     <section id="hero">
-        <div class="hero-grid-bg"></div>
-        <div class="hero-glow-orb orb-1"></div>
-        <div class="hero-glow-orb orb-2"></div>
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <div class="hero-badge">
-                        <span class="icon" style="font-size:14px">fiber_new</span>
-                        Android APK — Now Available
-                    </div>
-                    <h1 class="hero-headline">
-                        Build Your<br>
-                        <span class="accent">Ideal</span><br>
-                        <span class="stroke">Body</span>
-                    </h1>
-                    <p class="hero-sub">
-                        BodyMatrix is your all-in-one smart fitness companion — calculate your calories, follow a personalized workout plan, and eat with precision using AI-powered meal planning.
-                    </p>
-                    <div class="hero-actions">
-                        <button class="btn-primary" id="hero-dl-btn" onclick="openModal()">
-                            <span class="icon">android</span>
-                            Download APK
-                        </button>
-                        <a href="https://github.com/NadeemAhmed-2/BodyMatrix.git" target="_blank" class="btn-ghost">
-                            <span class="icon">code</span>
-                            View Source
-                        </a>
-                    </div>
-                    <div class="render-notice">
-                        <span class="icon">info</span>
-                        Backend on Render — first request after idle may take 30–50s to wake up. Not a bug!
-                    </div>
-                    <div class="hero-stats">
-                        <div class="stat-item">
-                            <div class="stat-value">3</div>
-                            <div class="stat-label">Core Engines</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value">1.5K+</div>
-                            <div class="stat-label">Exercises</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value">100%</div>
-                            <div class="stat-label">Free APK</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="hero-visual">
-                    <div class="hero-img-wrap">
-                        <img src="app-mockup.png" alt="BodyMatrix app screens showing calorie calculator, workout planner, and meal planner">
-                        <div class="hero-badge-floating">
-                            <div class="badge-icon-wrap">
-                                <span class="icon">bolt</span>
-                            </div>
-                            <div>
-                                <div class="badge-text-main">Live Backend</div>
-                                <div class="badge-text-sub">Render · MongoDB Atlas</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div class="hero-grid-bg"></div>
+      <div class="hero-glow-orb orb-1"></div>
+      <div class="hero-glow-orb orb-2"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-text">
+            <div class="hero-badge">
+              <span class="icon" style="font-size: 14px">fiber_new</span>
+              Android APK — Now Available
             </div>
+            <h1 class="hero-headline">
+              Build Your<br />
+              <span class="accent">Ideal</span><br />
+              <span class="stroke">Body</span>
+            </h1>
+            <p class="hero-sub">
+              BodyMatrix is your all-in-one smart fitness companion — calculate
+              your calories, follow a personalized workout plan, and eat with
+              precision using AI-powered meal planning.
+            </p>
+            <div class="hero-actions">
+              <button
+                class="btn-primary"
+                id="hero-dl-btn"
+                onclick="openModal()"
+              >
+                <span class="icon">android</span>
+                Download APK
+              </button>
+              <a
+                href="https://github.com/NadeemAhmed-2/BodyMatrix.git"
+                target="_blank"
+                class="btn-ghost"
+              >
+                <span class="icon">code</span>
+                View Source
+              </a>
+            </div>
+            <div class="render-notice">
+              <span class="icon">info</span>
+              Backend on Render — first request after idle may take 30–50s to
+              wake up. Not a bug!
+            </div>
+            <div class="hero-stats">
+              <div class="stat-item">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Core Engines</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">1.5K+</div>
+                <div class="stat-label">Exercises</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Free APK</div>
+              </div>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="hero-img-wrap">
+              <img
+                src="app-mockup.png"
+                alt="BodyMatrix app screens showing calorie calculator, workout planner, and meal planner"
+              />
+              <div class="hero-badge-floating">
+                <div class="badge-icon-wrap">
+                  <span class="icon">bolt</span>
+                </div>
+                <div>
+                  <div class="badge-text-main">Live Backend</div>
+                  <div class="badge-text-sub">Render · MongoDB Atlas</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- ══════════════ TICKER ══════════════ -->
     <div class="ticker-wrap">
-        <div class="ticker-track">
-            <!-- Duplicated for seamless loop -->
-            <span class="ticker-item">Smart Calorie Calculator <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">Personalized Meal Plans <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">Expert Workout Routines <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">Macro Tracking <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">Grocery List Generator <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">Home & Gym Modes <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">React Native + Expo <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">JWT Auth <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">MongoDB Atlas <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">Smart Calorie Calculator <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">Personalized Meal Plans <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">Expert Workout Routines <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">Macro Tracking <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">Grocery List Generator <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">Home & Gym Modes <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">React Native + Expo <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">JWT Auth <span class="ticker-dot">◆</span></span>
-            <span class="ticker-item">MongoDB Atlas <span class="ticker-dot">◆</span></span>
-        </div>
+      <div class="ticker-track">
+        <!-- Duplicated for seamless loop -->
+        <span class="ticker-item"
+          >Smart Calorie Calculator <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >Personalized Meal Plans <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >Expert Workout Routines <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >Macro Tracking <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >Grocery List Generator <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >Home & Gym Modes <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >React Native + Expo <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >JWT Auth <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >MongoDB Atlas <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >Smart Calorie Calculator <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >Personalized Meal Plans <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >Expert Workout Routines <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >Macro Tracking <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >Grocery List Generator <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >Home & Gym Modes <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >React Native + Expo <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >JWT Auth <span class="ticker-dot">◆</span></span
+        >
+        <span class="ticker-item"
+          >MongoDB Atlas <span class="ticker-dot">◆</span></span
+        >
+      </div>
     </div>
 
     <!-- ══════════════ FEATURES ══════════════ -->
     <section id="features" class="section">
-        <div class="container">
-            <div class="section-header reveal">
-                <div class="chip"><span class="icon">auto_awesome</span> What's Inside</div>
-                <h2 class="section-title">Three Engines.<br><span>One App.</span></h2>
-                <p class="section-sub">Everything you need to transform your body — built into a single intelligent platform.</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card reveal reveal-delay-1">
-                    <div class="feature-icon-wrap"><span class="icon">local_fire_department</span></div>
-                    <h3 class="feature-title">Smart Calorie Calculator</h3>
-                    <p class="feature-desc">Instant BMR & TDEE calculation using the Mifflin-St Jeor equation. Get precise calorie targets for your goal — lose, maintain, or gain — plus a full macronutrient breakdown and weekly weight projection.</p>
-                    <div class="feature-tags">
-                        <span class="ftag">BMR</span>
-                        <span class="ftag">TDEE</span>
-                        <span class="ftag">Macros</span>
-                        <span class="ftag">Projection</span>
-                    </div>
-                </div>
-                <div class="feature-card reveal reveal-delay-2">
-                    <div class="feature-icon-wrap"><span class="icon">fitness_center</span></div>
-                    <h3 class="feature-title">Intelligent Exercise Planner</h3>
-                    <p class="feature-desc">Goal-based weekly workout splits tailored for home or gym. From Full Body to Push/Pull/Legs, HIIT, Cardio and Strength — each day includes exercises with sets, reps, rest times, and GIF demonstrations.</p>
-                    <div class="feature-tags">
-                        <span class="ftag">1500+ Exercises</span>
-                        <span class="ftag">Home/Gym</span>
-                        <span class="ftag">GIF Demos</span>
-                    </div>
-                </div>
-                <div class="feature-card reveal reveal-delay-3">
-                    <div class="feature-icon-wrap"><span class="icon">restaurant</span></div>
-                    <h3 class="feature-title">Personalized Meal Planner</h3>
-                    <p class="feature-desc">Weekly meal plans portion-scaled to hit your exact calorie and macro targets. Covers Indian & regional cuisines, dietary preferences, and auto-generates a smart grocery list for the entire week.</p>
-                    <div class="feature-tags">
-                        <span class="ftag">USDA Data</span>
-                        <span class="ftag">Indian Cuisine</span>
-                        <span class="ftag">Grocery List</span>
-                    </div>
-                </div>
-            </div>
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="chip">
+            <span class="icon">auto_awesome</span> What's Inside
+          </div>
+          <h2 class="section-title">
+            Three Engines.<br /><span>One App.</span>
+          </h2>
+          <p class="section-sub">
+            Everything you need to transform your body — built into a single
+            intelligent platform.
+          </p>
         </div>
+        <div class="features-grid">
+          <div class="feature-card reveal reveal-delay-1">
+            <div class="feature-icon-wrap">
+              <span class="icon">local_fire_department</span>
+            </div>
+            <h3 class="feature-title">Smart Calorie Calculator</h3>
+            <p class="feature-desc">
+              Instant BMR & TDEE calculation using the Mifflin-St Jeor equation.
+              Get precise calorie targets for your goal — lose, maintain, or
+              gain — plus a full macronutrient breakdown and weekly weight
+              projection.
+            </p>
+            <div class="feature-tags">
+              <span class="ftag">BMR</span>
+              <span class="ftag">TDEE</span>
+              <span class="ftag">Macros</span>
+              <span class="ftag">Projection</span>
+            </div>
+          </div>
+          <div class="feature-card reveal reveal-delay-2">
+            <div class="feature-icon-wrap">
+              <span class="icon">fitness_center</span>
+            </div>
+            <h3 class="feature-title">Intelligent Exercise Planner</h3>
+            <p class="feature-desc">
+              Goal-based weekly workout splits tailored for home or gym. From
+              Full Body to Push/Pull/Legs, HIIT, Cardio and Strength — each day
+              includes exercises with sets, reps, rest times, and GIF
+              demonstrations.
+            </p>
+            <div class="feature-tags">
+              <span class="ftag">1500+ Exercises</span>
+              <span class="ftag">Home/Gym</span>
+              <span class="ftag">GIF Demos</span>
+            </div>
+          </div>
+          <div class="feature-card reveal reveal-delay-3">
+            <div class="feature-icon-wrap">
+              <span class="icon">restaurant</span>
+            </div>
+            <h3 class="feature-title">Personalized Meal Planner</h3>
+            <p class="feature-desc">
+              Weekly meal plans portion-scaled to hit your exact calorie and
+              macro targets. Covers Indian & regional cuisines, dietary
+              preferences, and auto-generates a smart grocery list for the
+              entire week.
+            </p>
+            <div class="feature-tags">
+              <span class="ftag">USDA Data</span>
+              <span class="ftag">Indian Cuisine</span>
+              <span class="ftag">Grocery List</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ══════════════ HOW IT WORKS ══════════════ -->
     <section id="how-it-works" class="section">
-        <div class="container">
-            <div class="section-header reveal">
-                <div class="chip"><span class="icon">route</span> The Process</div>
-                <h2 class="section-title">From Install to<br><span>Results</span></h2>
-                <p class="section-sub">Four simple steps to unlock your personalized fitness system.</p>
-            </div>
-            <div class="steps-grid">
-                <div class="step-item reveal reveal-delay-1">
-                    <div class="step-num">01</div>
-                    <h4 class="step-title">Install APK</h4>
-                    <p class="step-desc">Download the APK from this page, enable install from unknown sources, and install on your Android device.</p>
-                </div>
-                <div class="step-item reveal reveal-delay-2">
-                    <div class="step-num">02</div>
-                    <h4 class="step-title">Create Account</h4>
-                    <p class="step-desc">Sign up with your email. Enter your body metrics — age, weight, height, activity level, and goal.</p>
-                </div>
-                <div class="step-item reveal reveal-delay-3">
-                    <div class="step-num">03</div>
-                    <h4 class="step-title">Get Your Plan</h4>
-                    <p class="step-desc">The calorie engine instantly calculates your targets and feeds both the workout and meal generators.</p>
-                </div>
-                <div class="step-item reveal reveal-delay-4">
-                    <div class="step-num">04</div>
-                    <h4 class="step-title">Execute & Track</h4>
-                    <p class="step-desc">Follow your personalized weekly workout schedule and eat by your meal plan. Plans are cached offline.</p>
-                </div>
-            </div>
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="chip"><span class="icon">route</span> The Process</div>
+          <h2 class="section-title">
+            From Install to<br /><span>Results</span>
+          </h2>
+          <p class="section-sub">
+            Four simple steps to unlock your personalized fitness system.
+          </p>
         </div>
+        <div class="steps-grid">
+          <div class="step-item reveal reveal-delay-1">
+            <div class="step-num">01</div>
+            <h4 class="step-title">Install APK</h4>
+            <p class="step-desc">
+              Download the APK from this page, enable install from unknown
+              sources, and install on your Android device.
+            </p>
+          </div>
+          <div class="step-item reveal reveal-delay-2">
+            <div class="step-num">02</div>
+            <h4 class="step-title">Create Account</h4>
+            <p class="step-desc">
+              Sign up with your email. Enter your body metrics — age, weight,
+              height, activity level, and goal.
+            </p>
+          </div>
+          <div class="step-item reveal reveal-delay-3">
+            <div class="step-num">03</div>
+            <h4 class="step-title">Get Your Plan</h4>
+            <p class="step-desc">
+              The calorie engine instantly calculates your targets and feeds
+              both the workout and meal generators.
+            </p>
+          </div>
+          <div class="step-item reveal reveal-delay-4">
+            <div class="step-num">04</div>
+            <h4 class="step-title">Execute & Track</h4>
+            <p class="step-desc">
+              Follow your personalized weekly workout schedule and eat by your
+              meal plan. Plans are cached offline.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ══════════════ DOWNLOAD CTA ══════════════ -->
     <section id="download" class="section">
-        <div class="container">
-            <div class="download-glow"></div>
-            <div class="download-card reveal">
-                <div class="chip"><span class="icon">android</span> Free Download</div>
-                <h2 class="download-headline">Download<br><span>BodyMatrix</span></h2>
-                <p class="download-sub">The APK is free to install on any Android device. No Play Store needed — just download, install, and start your transformation today.</p>
-                <div class="download-btn-wrap">
-                    <button class="btn-download" id="main-download-btn" onclick="openModal()">
-                        <span class="icon">download</span>
-                        Download APK  ·  v1.0.0
-                    </button>
-                    <div class="download-note">
-                        <span class="icon">shield</span>
-                        Android only &nbsp;·&nbsp; Enable "Install from Unknown Sources"
-                    </div>
-                </div>
+      <div class="container">
+        <div class="download-glow"></div>
+        <div class="download-card reveal">
+          <div class="chip">
+            <span class="icon">android</span> Free Download
+          </div>
+          <h2 class="download-headline">
+            Download<br /><span>BodyMatrix</span>
+          </h2>
+          <p class="download-sub">
+            The APK is free to install on any Android device. No Play Store
+            needed — just download, install, and start your transformation
+            today.
+          </p>
+          <div class="download-btn-wrap">
+            <button
+              class="btn-download"
+              id="main-download-btn"
+              onclick="openModal()"
+            >
+              <span class="icon">download</span>
+              Download APK · v1.0.0
+            </button>
+            <div class="download-note">
+              <span class="icon">shield</span>
+              Android only &nbsp;·&nbsp; Enable "Install from Unknown Sources"
             </div>
+          </div>
         </div>
+      </div>
     </section>
 
     <!-- ══════════════ TECH STACK ══════════════ -->
     <section id="tech" class="section-sm">
-        <div class="container">
-            <div class="section-header reveal">
-                <div class="chip"><span class="icon">memory</span> Built With</div>
-                <h2 class="section-title" style="font-size: clamp(1.8rem, 3vw, 2.5rem);">Tech <span>Stack</span></h2>
-            </div>
-            <div class="tech-grid reveal">
-                <div class="tech-item">
-                    <div class="tech-emoji">⚛️</div>
-                    <div class="tech-name">React Native</div>
-                    <div class="tech-role">Mobile UI</div>
-                </div>
-                <div class="tech-item">
-                    <div class="tech-emoji">📦</div>
-                    <div class="tech-name">Expo / EAS</div>
-                    <div class="tech-role">Build & Deploy</div>
-                </div>
-                <div class="tech-item">
-                    <div class="tech-emoji">🟢</div>
-                    <div class="tech-name">Node.js</div>
-                    <div class="tech-role">Backend API</div>
-                </div>
-                <div class="tech-item">
-                    <div class="tech-emoji">🚀</div>
-                    <div class="tech-name">Express</div>
-                    <div class="tech-role">REST API Layer</div>
-                </div>
-                <div class="tech-item">
-                    <div class="tech-emoji">🍃</div>
-                    <div class="tech-name">MongoDB</div>
-                    <div class="tech-role">Database (Atlas)</div>
-                </div>
-                <div class="tech-item">
-                    <div class="tech-emoji">🔐</div>
-                    <div class="tech-name">JWT + bcrypt</div>
-                    <div class="tech-role">Authentication</div>
-                </div>
-                <div class="tech-item">
-                    <div class="tech-emoji">🌐</div>
-                    <div class="tech-name">Render</div>
-                    <div class="tech-role">Hosting</div>
-                </div>
-                <div class="tech-item">
-                    <div class="tech-emoji">🏋️</div>
-                    <div class="tech-name">ExerciseDB</div>
-                    <div class="tech-role">Exercise Data</div>
-                </div>
-            </div>
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="chip"><span class="icon">memory</span> Built With</div>
+          <h2
+            class="section-title"
+            style="font-size: clamp(1.8rem, 3vw, 2.5rem)"
+          >
+            Tech <span>Stack</span>
+          </h2>
         </div>
+        <div class="tech-grid reveal">
+          <div class="tech-item">
+            <div class="tech-emoji">⚛️</div>
+            <div class="tech-name">React Native</div>
+            <div class="tech-role">Mobile UI</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-emoji">📦</div>
+            <div class="tech-name">Expo / EAS</div>
+            <div class="tech-role">Build & Deploy</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-emoji">🟢</div>
+            <div class="tech-name">Node.js</div>
+            <div class="tech-role">Backend API</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-emoji">🚀</div>
+            <div class="tech-name">Express</div>
+            <div class="tech-role">REST API Layer</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-emoji">🍃</div>
+            <div class="tech-name">MongoDB</div>
+            <div class="tech-role">Database (Atlas)</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-emoji">🔐</div>
+            <div class="tech-name">JWT + bcrypt</div>
+            <div class="tech-role">Authentication</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-emoji">🌐</div>
+            <div class="tech-name">Render</div>
+            <div class="tech-role">Hosting</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-emoji">🏋️</div>
+            <div class="tech-name">ExerciseDB</div>
+            <div class="tech-role">Exercise Data</div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ══════════════ FOOTER ══════════════ -->
     <footer>
-        <div class="container">
-            <div class="footer-inner">
-                <div class="footer-logo">Body<span>Matrix</span></div>
-                <ul class="footer-links">
-                    <li><a href="https://github.com/NadeemAhmed-2/BodyMatrix.git" target="_blank">GitHub</a></li>
-                    <li><a href="https://bodymatrix.onrender.com" target="_blank">Backend API</a></li>
-                    <li><a href="#download">Download</a></li>
-                </ul>
-                <div class="footer-copy">© 2026 BodyMatrix · Built with React Native & Expo</div>
-            </div>
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-logo">Body<span>Matrix</span></div>
+          <ul class="footer-links">
+            <li>
+              <a
+                href="https://github.com/NadeemAhmed-2/BodyMatrix.git"
+                target="_blank"
+                >GitHub</a
+              >
+            </li>
+            <li>
+              <a href="https://bodymatrix.onrender.com" target="_blank"
+                >Backend API</a
+              >
+            </li>
+            <li><a href="#download">Download</a></li>
+          </ul>
+          <div class="footer-copy">
+            © 2026 BodyMatrix · Built with React Native & Expo
+          </div>
         </div>
+      </div>
     </footer>
 
     <!-- ══════════════ INSTALL INSTRUCTIONS MODAL ══════════════ -->
-    <div class="modal-overlay" id="install-modal" onclick="handleOverlayClick(event)">
-        <div class="modal" id="modal-box">
-            <button class="modal-close" onclick="closeModal()" aria-label="Close">
-                <span class="icon" style="font-size:18px">close</span>
-            </button>
-            <div class="chip" style="margin-bottom:1rem"><span class="icon">android</span> APK Install Guide</div>
-            <h3 class="modal-title">Installing BodyMatrix</h3>
-            <p class="modal-sub">Follow these steps to install the APK on your Android device. This takes about 2 minutes.</p>
-            <ol class="modal-steps">
-                <li class="modal-step">
-                    <div class="ms-num">1</div>
-                    <div class="ms-text"><strong>Download the APK</strong> using the button below. The file will save to your Downloads folder.</div>
-                </li>
-                <li class="modal-step">
-                    <div class="ms-num">2</div>
-                    <div class="ms-text">On your Android phone, go to <strong>Settings → Security → Install Unknown Apps</strong> and enable it for your browser or Files app.</div>
-                </li>
-                <li class="modal-step">
-                    <div class="ms-num">3</div>
-                    <div class="ms-text">Open your <strong>Downloads folder</strong>, tap the <em>BodyMatrix.apk</em> file, and tap <strong>Install</strong> when prompted.</div>
-                </li>
-                <li class="modal-step">
-                    <div class="ms-num">4</div>
-                    <div class="ms-text">Once installed, <strong>open BodyMatrix</strong>, create your account, and start building your ideal body. 🔥</div>
-                </li>
-            </ol>
-            <a href="https://expo.dev/artifacts/eas/MmIt3OVvw6RuIqMbJK-umdNU4lfe0-btqRMonqOgepM.apk" target="_blank" download="BodyMatrix.apk" class="modal-dl-btn" id="modal-apk-link">
-                <span class="icon">download</span>
-                Download BodyMatrix APK
-            </a>
+    <div
+      class="modal-overlay"
+      id="install-modal"
+      onclick="handleOverlayClick(event)"
+    >
+      <div class="modal" id="modal-box">
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">
+          <span class="icon" style="font-size: 18px">close</span>
+        </button>
+        <div class="chip" style="margin-bottom: 1rem">
+          <span class="icon">android</span> APK Install Guide
         </div>
+        <h3 class="modal-title">Installing BodyMatrix</h3>
+        <p class="modal-sub">
+          Follow these steps to install the APK on your Android device. This
+          takes about 2 minutes.
+        </p>
+        <ol class="modal-steps">
+          <li class="modal-step">
+            <div class="ms-num">1</div>
+            <div class="ms-text">
+              <strong>Download the APK</strong> using the button below. The file
+              will save to your Downloads folder.
+            </div>
+          </li>
+          <li class="modal-step">
+            <div class="ms-num">2</div>
+            <div class="ms-text">
+              On your Android phone, go to
+              <strong>Settings → Security → Install Unknown Apps</strong> and
+              enable it for your browser or Files app.
+            </div>
+          </li>
+          <li class="modal-step">
+            <div class="ms-num">3</div>
+            <div class="ms-text">
+              Open your <strong>Downloads folder</strong>, tap the
+              <em>BodyMatrix.apk</em> file, and tap
+              <strong>Install</strong> when prompted.
+            </div>
+          </li>
+          <li class="modal-step">
+            <div class="ms-num">4</div>
+            <div class="ms-text">
+              Once installed, <strong>open BodyMatrix</strong>, create your
+              account, and start building your ideal body. 🔥
+            </div>
+          </li>
+        </ol>
+        <a
+          href="https://expo.dev/artifacts/eas/HelSc9JOAskAWbKEN05eG8P5PQv3F4R3j3wGBiFemcE.apk"
+          target="_blank"
+          download="BodyMatrix.apk"
+          class="modal-dl-btn"
+          id="modal-apk-link"
+        >
+          <span class="icon">download</span>
+          Download BodyMatrix APK
+        </a>
+      </div>
     </div>
 
     <!-- ══════════════ SCRIPTS ══════════════ -->
     <script>
-        // ── Navbar scroll effect
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 40);
-        }, { passive: true });
+      // ── Navbar scroll effect
+      const navbar = document.getElementById("navbar");
+      window.addEventListener(
+        "scroll",
+        () => {
+          navbar.classList.toggle("scrolled", window.scrollY > 40);
+        },
+        { passive: true },
+      );
 
-        // ── Scroll reveal
-        const reveals = document.querySelectorAll('.reveal');
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.classList.add('visible');
-                    revealObserver.unobserve(e.target);
-                }
-            });
-        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-        reveals.forEach(el => revealObserver.observe(el));
-
-        // ── Modal
-        function openModal() {
-            document.getElementById('install-modal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeModal() {
-            document.getElementById('install-modal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-        function handleOverlayClick(e) {
-            if (e.target === document.getElementById('install-modal')) closeModal();
-        }
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-        // ── Hamburger (mobile)
-        const hamburger = document.getElementById('hamburger');
-        hamburger.addEventListener('click', () => {
-            // simple scroll-to-download for mobile
-            closeModal();
-            document.getElementById('download').scrollIntoView({ behavior: 'smooth' });
-        });
-
-        // ── Smooth parallax for hero grid
-        window.addEventListener('scroll', () => {
-            const gridBg = document.querySelector('.hero-grid-bg');
-            if (gridBg) {
-                gridBg.style.transform = `translateY(${window.scrollY * 0.2}px)`;
+      // ── Scroll reveal
+      const reveals = document.querySelectorAll(".reveal");
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              revealObserver.unobserve(e.target);
             }
-        }, { passive: true });
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+      );
+      reveals.forEach((el) => revealObserver.observe(el));
+
+      // ── Modal
+      function openModal() {
+        document.getElementById("install-modal").classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+      function closeModal() {
+        document.getElementById("install-modal").classList.remove("active");
+        document.body.style.overflow = "";
+      }
+      function handleOverlayClick(e) {
+        if (e.target === document.getElementById("install-modal")) closeModal();
+      }
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+      });
+
+      // ── Hamburger (mobile)
+      const hamburger = document.getElementById("hamburger");
+      hamburger.addEventListener("click", () => {
+        // simple scroll-to-download for mobile
+        closeModal();
+        document
+          .getElementById("download")
+          .scrollIntoView({ behavior: "smooth" });
+      });
+
+      // ── Smooth parallax for hero grid
+      window.addEventListener(
+        "scroll",
+        () => {
+          const gridBg = document.querySelector(".hero-grid-bg");
+          if (gridBg) {
+            gridBg.style.transform = `translateY(${window.scrollY * 0.2}px)`;
+          }
+        },
+        { passive: true },
+      );
     </script>
-</body>
+  </body>
 </html>
