@@ -910,9 +910,10 @@ Respond ONLY in valid JSON, no markdown formatting, no preamble, in this exact s
 
     const openRouterModels = [
       'meta-llama/llama-3.3-70b-instruct:free',
-      'google/gemma-3-27b-it:free',
-      'mistralai/mistral-7b-instruct:free'
+      'meta-llama/llama-3.1-8b-instruct:free',
+      'qwen/qwen3-8b:free'
     ];
+
 
     for (const model of openRouterModels) {
       try {

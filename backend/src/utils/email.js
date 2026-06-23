@@ -21,7 +21,7 @@ const sendVerificationEmail = async (email, otp) => {
     });
 
     await transporter.sendMail({
-      from: `"Body Matrix" <${process.env.SMTP_USER}>`,
+      from: `"Body Matrix" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
       to: email,
       subject: 'VERIFY PROTOCOL - Verification Code',
       text: `Your Body Matrix verification code (OTP) is ${otp}. It will expire in 10 minutes.`,
