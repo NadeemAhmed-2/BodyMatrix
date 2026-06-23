@@ -235,6 +235,16 @@ export default function MealConfigScreen({ profile, targets, token, baseUrl, onG
               {loading ? 'GENERATING...' : 'GENERATE PLAN'}
             </Text>
           </TouchableOpacity>
+          <Text style={{
+            color: COLORS.textMuted,
+            fontFamily: 'monospace',
+            fontSize: 9,
+            textAlign: 'center',
+            marginTop: 6,
+            letterSpacing: 1.5
+          }}>
+            TARGET ±100 KCAL TOLERANCE
+          </Text>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

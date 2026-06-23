@@ -762,13 +762,13 @@ router.post('/plan/generate', async (req, res) => {
 
     if (!refresh) {
       const cachedPlan = await MealPlanCache.findOne({
-        targetCalories: tCals,
+        targetCalories: { $gte: tCals - 50, $lte: tCals + 50 },
         diet: diet.toLowerCase(),
         mealsPerDay: mPerDay
       });
 
       if (cachedPlan) {
-        console.log('Serving meal plan from MealPlanCache');
+        console.log('Serving meal plan from MealPlanCache (fuzzy match)');
         return res.json(cachedPlan.planData);
       }
     } else {
@@ -799,7 +799,7 @@ router.post('/plan/generate', async (req, res) => {
 
     const promptText = `You are an expert Indian fitness nutritionist who creates meal plans for gym-goers in India.
 
-Generate a ${mPerDay}-meal Indian diet plan totaling approximately ${tCals} calories for the day.
+Generate a ${mPerDay}-meal Indian diet plan totaling EXACTLY ${tCals} calories for the day. This is a strict requirement — the sum of all meal calories must be between ${tCals - 50} and ${tCals + 100}. Distribute the calories across meals so they add up precisely to this target. Do not exceed ${tCals + 100} total calories under any circumstance.
 Diet preference: ${vegOrNonveg}${extraRules}
 
 
@@ -835,60 +835,136 @@ Respond ONLY in valid JSON, no markdown formatting, no preamble, in this exact s
   ]
 }`;
 
-    if (!process.env.GEMINI_API_KEY) {
-      throw new Error('GEMINI_API_KEY environment variable is not defined.');
+    // Commented out Gemini block for history:
+    // if (!process.env.GEMINI_API_KEY) {
+    //   throw new Error('GEMINI_API_KEY environment variable is not defined.');
+    // }
+    // 
+    // let geminiRes;
+    // const modelsToTry = [
+    //   'gemini-3.5-flash',
+    //   'gemini-2.5-flash',
+    //   'gemini-2.0-flash',
+    //   'gemini-flash-latest'
+    // ];
+    // let lastGeminiError = null;
+    // 
+    // for (const modelName of modelsToTry) {
+    //   try {
+    //     console.log(`Trying Gemini model: ${modelName}`);
+    //     geminiRes = await axios.post(
+    //       `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${process.env.GEMINI_API_KEY}`,
+    //       {
+    //         contents: [{ parts: [{ text: promptText }] }],
+    //         generationConfig: {
+    //           responseMimeType: "application/json"
+    //         }
+    //       },
+    //       { timeout: 20000 } // 20s timeout per attempt
+    //     );
+    // 
+    //     if (
+    //       geminiRes.data.candidates &&
+    //       geminiRes.data.candidates.length > 0 &&
+    //       geminiRes.data.candidates[0].content &&
+    //       geminiRes.data.candidates[0].content.parts &&
+    //       geminiRes.data.candidates[0].content.parts.length > 0
+    //     ) {
+    //       console.log(`Successfully generated meal plan using model: ${modelName}`);
+    //       break;
+    //     }
+    //   } catch (err) {
+    //     console.error(`Gemini model ${modelName} failed:`, err.response?.data || err.message);
+    //     lastGeminiError = err;
+    //     geminiRes = null; // Reset to ensure fallback continues
+    //   }
+    // }
+    // 
+    // if (!geminiRes) {
+    //   throw lastGeminiError || new Error('All Gemini model fallbacks failed.');
+    // }
+    // 
+    // let geminiRawText = geminiRes.data.candidates[0].content.parts[0].text;
+    // geminiRawText = geminiRawText.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+    // 
+    // const geminiPlan = JSON.parse(geminiRawText);
+    // if (!geminiPlan.meals || !Array.isArray(geminiPlan.meals)) {
+    //   throw new Error('Gemini API returned an invalid meal plan structure.');
+    // }
+
+    if (!process.env.OPENROUTER_API_KEY) {
+      console.log('No OPENROUTER_API_KEY found, falling back to mock plan');
+      const mockPlan = generateMockPlan(tCals, diet, mPerDay);
+      const newCache = new MealPlanCache({
+        targetCalories: tCals,
+        diet: diet.toLowerCase(),
+        mealsPerDay: mPerDay,
+        planData: mockPlan
+      });
+      await newCache.save().catch(e => console.error('Cache save failed:', e.message));
+      return res.json(mockPlan);
     }
 
-    let geminiRes;
-    const modelsToTry = [
-      'gemini-3.5-flash',
-      'gemini-2.5-flash',
-      'gemini-2.0-flash',
-      'gemini-flash-latest'
-    ];
-    let lastGeminiError = null;
+    let aiResponseText = null;
+    let aiError = null;
 
-    for (const modelName of modelsToTry) {
+    const openRouterModels = [
+      'meta-llama/llama-3.3-70b-instruct:free',
+      'google/gemma-3-27b-it:free',
+      'mistralai/mistral-7b-instruct:free'
+    ];
+
+    for (const model of openRouterModels) {
       try {
-        console.log(`Trying Gemini model: ${modelName}`);
-        geminiRes = await axios.post(
-          `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${process.env.GEMINI_API_KEY}`,
+        console.log(`Trying OpenRouter model: ${model}`);
+        const orRes = await axios.post(
+          'https://openrouter.ai/api/v1/chat/completions',
           {
-            contents: [{ parts: [{ text: promptText }] }],
-            generationConfig: {
-              responseMimeType: "application/json"
-            }
+            model: model,
+            messages: [{ role: 'user', content: promptText }],
+            response_format: { type: 'json_object' }
           },
-          { timeout: 20000 } // 20s timeout per attempt
+          {
+            headers: {
+              'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+              'Content-Type': 'application/json',
+              'HTTP-Referer': 'https://bodymatrix.app'
+            },
+            timeout: 30000
+          }
         );
 
-        if (
-          geminiRes.data.candidates &&
-          geminiRes.data.candidates.length > 0 &&
-          geminiRes.data.candidates[0].content &&
-          geminiRes.data.candidates[0].content.parts &&
-          geminiRes.data.candidates[0].content.parts.length > 0
-        ) {
-          console.log(`Successfully generated meal plan using model: ${modelName}`);
+        const content = orRes.data?.choices?.[0]?.message?.content;
+        if (content) {
+          aiResponseText = content.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
+          console.log(`OpenRouter success with model: ${model}`);
           break;
         }
       } catch (err) {
-        console.error(`Gemini model ${modelName} failed:`, err.response?.data || err.message);
-        lastGeminiError = err;
-        geminiRes = null; // Reset to ensure fallback continues
+        console.error(`OpenRouter model ${model} failed:`, err.response?.data || err.message);
+        aiError = err;
       }
     }
 
-    if (!geminiRes) {
-      throw lastGeminiError || new Error('All Gemini model fallbacks failed.');
+    // If all AI models failed, fall back to mock plan instead of crashing
+    if (!aiResponseText) {
+      console.log('All AI models failed or quota exceeded. Falling back to mock plan.');
+      const mockPlan = generateMockPlan(tCals, diet, mPerDay);
+      const newCache = new MealPlanCache({
+        targetCalories: tCals,
+        diet: diet.toLowerCase(),
+        mealsPerDay: mPerDay,
+        planData: mockPlan
+      });
+      await newCache.save().catch(e => console.error('Cache save failed:', e.message));
+      return res.json(mockPlan);
     }
 
-    let geminiRawText = geminiRes.data.candidates[0].content.parts[0].text;
-    geminiRawText = geminiRawText.replace(/^```json\s*/i, '').replace(/```$/, '').trim();
-
-    const geminiPlan = JSON.parse(geminiRawText);
+    const geminiPlan = JSON.parse(aiResponseText);
     if (!geminiPlan.meals || !Array.isArray(geminiPlan.meals)) {
-      throw new Error('Gemini API returned an invalid meal plan structure.');
+      console.log('AI returned invalid structure. Falling back to mock plan.');
+      const mockPlan = generateMockPlan(tCals, diet, mPerDay);
+      return res.json(mockPlan);
     }
 
     const times = ['08:00 AM', '01:30 PM', '05:00 PM', '08:30 PM'];
@@ -978,12 +1054,12 @@ Respond ONLY in valid JSON, no markdown formatting, no preamble, in this exact s
         });
       }
 
-      if (recipeCalories === 0) {
-        recipeCalories = meal.calories || 300;
-        recipeProtein = meal.protein_g || 15;
-        recipeFat = meal.fat_g || 8;
-        recipeCarbs = meal.carbs_g || 30;
-      }
+      // Always trust AI-provided macro values as the source of truth.
+      // Ingredient-level recalculation is unreliable due to lookup fallbacks.
+      recipeCalories = meal.calories || recipeCalories || 300;
+      recipeProtein = meal.protein_g || recipeProtein || 15;
+      recipeFat = meal.fat_g || recipeFat || 8;
+      recipeCarbs = meal.carbs_g || recipeCarbs || 30;
 
       let pairing = { name: "Mineral Water", description: "Sparkling spring water with lime.", icon: "local_drink" };
       if (slot === 'breakfast') {
@@ -1024,6 +1100,30 @@ Respond ONLY in valid JSON, no markdown formatting, no preamble, in this exact s
       totalProtein += meal.nutrition.protein;
       totalFat += meal.nutrition.fat;
       totalCarbs += meal.nutrition.carbohydrates;
+    }
+
+    // Hard calorie guardrail: if total exceeds target + 100, scale everything down proportionally
+    const calorieTolerance = 100;
+    if (totalCalories > tCals + calorieTolerance) {
+      console.log(`Calorie overshoot detected: ${totalCalories} vs target ${tCals}. Scaling down.`);
+      const scaleFactor = tCals / totalCalories;
+
+      for (const meal of generatedMeals) {
+        meal.nutrition.calories = Math.round(meal.nutrition.calories * scaleFactor);
+        meal.nutrition.protein = Math.round(meal.nutrition.protein * scaleFactor);
+        meal.nutrition.fat = Math.round(meal.nutrition.fat * scaleFactor);
+        meal.nutrition.carbohydrates = Math.round(meal.nutrition.carbohydrates * scaleFactor);
+        meal.ingredients = meal.ingredients.map(ing => ({
+          ...ing,
+          amount: Math.round(ing.amount * scaleFactor * 10) / 10
+        }));
+      }
+
+      // Recompute totals after scaling
+      totalCalories = generatedMeals.reduce((s, m) => s + m.nutrition.calories, 0);
+      totalProtein = generatedMeals.reduce((s, m) => s + m.nutrition.protein, 0);
+      totalFat = generatedMeals.reduce((s, m) => s + m.nutrition.fat, 0);
+      totalCarbs = generatedMeals.reduce((s, m) => s + m.nutrition.carbohydrates, 0);
     }
 
     const finalPlan = {

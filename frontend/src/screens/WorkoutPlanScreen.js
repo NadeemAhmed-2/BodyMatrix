@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { COLORS, SPACING, FONTS } from '../styles/theme';
 import Button from '../components/Button';
-import YoutubePlayer from 'react-native-youtube-iframe';
+import YoutubePlayer from '../components/YoutubePlayer';
 
 
 export default function WorkoutPlanScreen({ plan, baseUrl, token, onBack, onStartWorkout }) {
@@ -214,23 +214,7 @@ export default function WorkoutPlanScreen({ plan, baseUrl, token, onBack, onStar
                       {/* YouTube Video Section */}
                       {hasVideo && videoId && (
                         <View style={styles.videoContainer}>
-                          {Platform.OS === 'web' ? (
-                            <iframe
-                              src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=0&rel=0&modestbranding=1`}
-                              style={styles.youtubeIframe}
-                              frameBorder="0"
-                              allowFullScreen
-                            />
-                          ) : (
-                            <YoutubePlayer
-                              height={200}
-                              videoId={videoId}
-                              play={false}
-                              webViewProps={{
-                                androidLayerType: 'hardware',
-                              }}
-                            />
-                          )}
+                          <YoutubePlayer videoId={videoId} height={200} style={styles.youtubeIframe} />
                         </View>
                       )}
 
