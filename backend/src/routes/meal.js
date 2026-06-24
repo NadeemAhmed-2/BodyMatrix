@@ -1202,11 +1202,11 @@ Respond ONLY in valid JSON, no markdown formatting, no preamble, in this exact s
     // ];
 
     const openRouterModels = [
-      "google/gemma-4-26b-a4b:free",
-      "qwen/qwen3-next-80b-a3b-instruct:free",
+      "deepseek/deepseek-chat-v3-0324:free",
       "meta-llama/llama-3.3-70b-instruct:free",
-      "nousresearch/hermes-3-405b-instruct:free",
-      "openrouter/auto:free",
+      "google/gemma-3-27b-it:free",
+      "meta-llama/llama-3.2-3b-instruct:free",
+      "openrouter/auto",
     ];
 
     for (const model of openRouterModels) {
