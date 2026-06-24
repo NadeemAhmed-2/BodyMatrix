@@ -10,7 +10,7 @@ const sendVerificationEmail = async (email, otp) => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      from: 'Body Matrix <onboarding@resend.dev>',
+      from: 'Body Matrix noreply@bodymatrix.site',
       to: email,
       subject: 'VERIFY PROTOCOL - Verification Code',
       html: `

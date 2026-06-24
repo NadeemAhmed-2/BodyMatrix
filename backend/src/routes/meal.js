@@ -1212,6 +1212,8 @@ Respond ONLY in valid JSON, no markdown formatting, no preamble, in this exact s
     const openRouterModels = [
       "meta-llama/llama-3.3-70b-instruct:free",
       "meta-llama/llama-3.2-3b-instruct:free",
+      "qwen/qwen3-next-80b-a3b-instruct:free",
+      "liquid/lfm2.5-1.2b-instruct:free",
       "openrouter/auto",
     ];
 
