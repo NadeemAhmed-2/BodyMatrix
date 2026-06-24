@@ -1,18 +1,18 @@
 const sendVerificationEmail = async (email, otp) => {
   if (!process.env.SMTP_PASS) {
-    throw new Error('SMTP_PASS (Resend API key) missing');
+    throw new Error("SMTP_PASS (Resend API key) missing");
   }
 
-  const response = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
     headers: {
-      'Authorization': `Bearer ${process.env.SMTP_PASS}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${process.env.SMTP_PASS}`,
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: 'Body Matrix noreply@bodymatrix.site',
+      from: "Body Matrix <noreply@bodymatrix.site>",
       to: email,
-      subject: 'VERIFY PROTOCOL - Verification Code',
+      subject: "VERIFY PROTOCOL - Verification Code",
       html: `
         <div style="background-color: #131313; color: #e5e2e1; font-family: sans-serif; padding: 30px; border-top: 4px solid #ccff00;">
           <h1 style="color: #ffffff; font-size: 28px; font-weight: 900; letter-spacing: 2px; margin-bottom: 20px;">VERIFY PROTOCOL</h1>
@@ -22,15 +22,17 @@ const sendVerificationEmail = async (email, otp) => {
           </div>
           <p style="font-size: 12px; color: #8e9379;">This code will expire in 10 minutes. If you did not request this, you can safely ignore this email.</p>
         </div>
-      `
-    })
+      `,
+    }),
   });
 
   const data = await response.json();
 
   if (!response.ok) {
-    console.error('Resend API error:', data);
-    throw new Error(`Failed to send email: ${data.message || JSON.stringify(data)}`);
+    console.error("Resend API error:", data);
+    throw new Error(
+      `Failed to send email: ${data.message || JSON.stringify(data)}`,
+    );
   }
 
   console.log(`[Resend] Verification email sent to ${email}`);
