@@ -1201,10 +1201,16 @@ Respond ONLY in valid JSON, no markdown formatting, no preamble, in this exact s
     //   'qwen/qwen3-8b:free'
     // ];
 
+    // const openRouterModels = [
+    //   "deepseek/deepseek-chat-v3-0324:free",
+    //   "meta-llama/llama-3.3-70b-instruct:free",
+    //   "google/gemma-3-27b-it:free",
+    //   "meta-llama/llama-3.2-3b-instruct:free",
+    //   "openrouter/auto",
+    // ];
+
     const openRouterModels = [
-      "deepseek/deepseek-chat-v3-0324:free",
       "meta-llama/llama-3.3-70b-instruct:free",
-      "google/gemma-3-27b-it:free",
       "meta-llama/llama-3.2-3b-instruct:free",
       "openrouter/auto",
     ];
